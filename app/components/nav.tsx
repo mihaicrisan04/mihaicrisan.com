@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 
 const navItems = {
   '/': {
@@ -15,6 +16,15 @@ const navItems = {
 
 export function Navbar() {
   const router = useRouter()
+  const pathname = usePathname()
+  
+  // Prefetch the projects page when on the main page
+  useEffect(() => {
+    if (pathname === '/') {
+      // Pre-fetch the projects page data
+      router.prefetch('/projects')
+    }
+  }, [pathname, router])
   
   const handleNavigation = (href) => {
     if (document.startViewTransition) {

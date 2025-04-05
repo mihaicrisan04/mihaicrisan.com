@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased max-w-2xl mx-auto px-4 mt-8">
-        <SpriteCursor />
+        {/* <SpriteCursor /> */}
         <main className="min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />
           {children}

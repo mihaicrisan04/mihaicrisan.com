@@ -1,16 +1,20 @@
+import Link from 'next/link'
+
 export default function Page() {
   return (
     <section>
+      {/* Preload projects page */}
+      <Link href="/projects" prefetch={true} className="hidden" />
+      
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Hi, I'm Mihai, welcome to my homepage.</h3>
         
         <p className="mb-4">
-          I'm currently working as a Software Engineer at <a href="https://example.com" className="hover:underline">Company Name</a>, where I am focusing on web development and cloud solutions.
+          I'm a Computer Science student at <a href="https://www.cs.ubbcluj.ro" className="hover:underline">Babeș-Bolyai University</a> and a software engineer with a growing passion for AI and all things tech.
         </p>
 
         <p className="mb-4">
-          Before that, I earned my MSc in Computer Science at the University of Technology.
-          In my <a href="/files/thesis.pdf" className="hover:underline">thesis</a>, I worked on developing machine learning models for natural language processing.
+        I'm addicted to clean code and perfectly engineered solutions. I treat good architecture like an art form and see naming variables as a spiritual journey. I chase elegant logic like most people chase weekends😌.
         </p>
       </div>
 
@@ -31,12 +35,10 @@ export default function Page() {
         <h3 className="text-xl font-semibold mb-4">A bit more about me</h3>
         
         <p className="mb-4">
-          I was born in Romania but grew up in several countries due to my parents' work. In my free time, I enjoy hiking, playing chess, and experimenting with new programming languages. I like to talk and think about technology, sustainability, and the future of AI.
+        In my free time, I enjoy experimenting with the latest tools, optimizing workflows, and improving my typing speed on <a href="" className="hover:underline">Monkeytype</a>. I'm a Vim user who loves working in the terminal and pushing the limits of productivity, often tweaking my keyboard setup to perfection.
         </p>
-        
-        <p className="mb-4">
-          My favorite artistic period is contemporary art and design. For what I listen to, check out my <a href="https://open.spotify.com/user/yourusername" className="hover:underline">playlist</a>. For what I read, check out my <a href="https://goodreads.com/user/yourusername" className="hover:underline">goodreads</a>.
-        </p>
+
+        <p className="mb-4">Outside of tech, I'm passionate about sports and inspired by clever design. For a peek into the movies that inspire me, check out my <a href="https://letterboxd.com/MihaiCrisan/" className="hover:underline">Letterboxd</a>.</p>
       </div>
     </section>
   )
