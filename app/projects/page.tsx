@@ -46,31 +46,39 @@ export default function ProjectsPage() {
 
 const projects = [
   {
+    title: "Cluj-Napoca Bus Tracking App",
+    description: "A real-time public transportation tracking application for Cluj-Napoca, focusing on fast data processing and user-friendly features. Achieved near-instant data updates for bus locations through efficient network calls and optimized API data handling.",
+    technologies: ["Swift", "SwiftUI", "TranzyAPI"],
+    github: "https://github.com/mihaicrisan04/bus-map"
+  },
+  {
+    title: "Boccelute",
+    description: "A full-stack e-commerce website specializing in tote bag sales. Implemented robust backend logic for user account management with secure encryption of sensitive data and seamless signup functionality.",
+    technologies: ["JavaScript", "PHP", "SQL", "MySQL", "WampServer"],
+    github: "https://github.com/mihaicrisan04/boccelute"
+  },
+  {
+    title: "Obstruction Game",
+    description: "An implementation of the 'Obstruction' game with a scalable architecture and advanced AI opponent using Minimax algorithm with Alpha-Beta Pruning. Created using Python and Pygame for graphical rendering and interactive gameplay.",
+    technologies: ["Python", "PyGame", "AI Algorithms"],
+    github: "https://github.com/mihaicrisan04/obstruction"
+  },
+  {
+    title: "Medlog",
+    description: "Led the design and development of a healthcare communication platform in a team of 5. Optimized navigation system improving user efficiency by 50% and implemented responsive design for all screen sizes.",
+    technologies: ["Full-Stack Development", "UI/UX Design", "Responsive Design"],
+    demo: "https://medlog.app"
+  },
+  {
+    title: "Kindergarten Automation Project",
+    description: "Developed a Google Sheets automation system and email newsletter system for efficient parent-teacher communication. Transitioned from paper-based to digital reporting, improving data accuracy and accessibility.",
+    technologies: ["Google Apps Script", "Automation", "Email Systems"]
+  },
+  {
     title: "Personal Portfolio",
     description: "A responsive portfolio website built with Next.js and Tailwind CSS.",
     technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-    github: "https://github.com/yourusername/portfolio",
-    demo: "https://yourportfolio.com"
-  },
-  {
-    title: "E-commerce Platform",
-    description: "A full-stack e-commerce application with product management, cart functionality, and payment integration.",
-    technologies: ["React", "Node.js", "MongoDB", "Express", "Stripe"],
-    github: "https://github.com/yourusername/ecommerce",
-    demo: "https://yourecommerceapp.com"
-  },
-  {
-    title: "Weather App",
-    description: "A weather application that displays current weather conditions and forecasts using the OpenWeather API.",
-    technologies: ["JavaScript", "React", "CSS", "API Integration"],
-    github: "https://github.com/yourusername/weather-app",
-    demo: "https://yourweatherapp.com"
-  },
-  {
-    title: "Task Management System",
-    description: "A task management application with features like task creation, assignment, prioritization, and progress tracking.",
-    technologies: ["Vue.js", "Firebase", "Vuex", "CSS"],
-    github: "https://github.com/yourusername/task-manager",
-    demo: "https://yourtaskapp.com"
+    github: "https://github.com/mihaicrisan04/portfolio",
+    demo: "https://mihaicrisan.com"
   }
 ]; 

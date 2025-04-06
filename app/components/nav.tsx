@@ -41,7 +41,7 @@ export function Navbar() {
   
   return (
     <header className="mb-5">
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-3xl font-bold mb-6 mt-4">
         <Link href="/" className="text-[var(--text-primary)] hover:text-[var(--text-primary)] hover:underline">
           Mihai Crisan
         </Link>

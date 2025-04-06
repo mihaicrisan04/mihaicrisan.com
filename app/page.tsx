@@ -14,7 +14,7 @@ export default function Page() {
         </p>
 
         <p className="mb-4">
-        I'm addicted to clean code and perfectly engineered solutions. I treat good architecture like an art form and see naming variables as a spiritual journey. I chase elegant logic like most people chase weekends😌.
+        I'm addicted to clean code and perfectly engineered solutions. I treat good architecture like an art form and see naming variables as a spiritual journey. I chase elegant logic like most people chase weekends.
         </p>
       </div>
 

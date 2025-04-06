@@ -46,6 +46,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Footer />
+
           <Analytics />
           <SpeedInsights />
       </main>

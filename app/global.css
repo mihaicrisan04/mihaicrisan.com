@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
 
 @font-face {
   font-family: 'SF Pro';
@@ -88,7 +88,7 @@ html {
   min-width: 360px;
   color-scheme: dark;
   color: var(--text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Crimson Text', -apple-system, BlinkMacSystemFont, serif;
 }
 
 body {
