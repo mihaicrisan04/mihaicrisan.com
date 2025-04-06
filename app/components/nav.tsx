@@ -4,6 +4,19 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
+import { TransitionLink } from './TransitionLink'
+
+
+interface Document {
+  startViewTransition?: (callback: () => void | Promise<void>) => ViewTransition
+}
+
+interface ViewTransition {
+  finished: Promise<void>
+  ready: Promise<void>
+  updateCallbackDone: Promise<void>
+  skipTransition: () => void
+}
 
 const navItems = {
   '/': {
@@ -36,6 +49,7 @@ export function Navbar() {
     }
   }
   
+
   return (
     <header className="mb-5">
       <h1 className="text-3xl font-bold mb-6">
@@ -47,17 +61,23 @@ export function Navbar() {
         <div className="flex space-x-4">
           {Object.entries(navItems).map(([path, { name }], index) => {
             return (
-              <Link
+              <TransitionLink
                 key={path}
                 href={path}
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleNavigation(path)
-                }}
-                className={`text-white transition-all hover:text-white hover:underline hover:decoration-white py-1 ${index === 0 ? 'pl-0' : ''} px-2`}
               >
                 {name}
-              </Link>
+              </TransitionLink>
+              // <Link
+              //   key={path}
+              //   href={path}
+              //   className={`text-white transition-all hover:text-white hover:underline hover:decoration-white py-1 ${index === 0 ? 'pl-0' : ''} px-2`}
+              //   onClick={(e) => {
+              //     e.preventDefault()
+              //     handleNavigation(path)
+              //   }}
+              // >
+              //   {name}
+              // </Link>
             )
           })}
         </div>

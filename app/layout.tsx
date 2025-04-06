@@ -1,5 +1,6 @@
 import './global.css'
 import type { Metadata } from 'next'
+import { ViewTransitions } from 'next-view-transitions'
 import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -44,14 +45,14 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased max-w-2xl mx-auto px-4 mt-8">
         {/* <SpriteCursor /> */}
-        <main className="min-w-0 mt-6 flex flex-col px-2 md:px-0">
-          <Navbar />
-          {children}
-          <Footer />
-          <Analytics />
-          <SpeedInsights />
-        </main>
-      </body>
-    </html>
+      <main className="min-w-0 mt-6 flex flex-col px-2 md:px-0">
+        <Navbar />
+        {children}
+        <Footer />
+        <Analytics />
+        <SpeedInsights />
+      </main>
+    </body>
+  </html>
   )
 }
