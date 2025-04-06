@@ -1,7 +1,6 @@
 "use client";
 
 import Link, { LinkProps } from 'next/link'
-import { useTransitionRouter } from 'next-view-transitions'
 import { useRouter } from 'next/navigation';
 
 

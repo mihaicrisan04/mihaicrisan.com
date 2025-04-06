@@ -39,17 +39,6 @@ export function Navbar() {
     }
   }, [pathname, router])
   
-  const handleNavigation = (href) => {
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        router.push(href)
-      })
-    } else {
-      router.push(href)
-    }
-  }
-  
-
   return (
     <header className="mb-5">
       <h1 className="text-3xl font-bold mb-6">
@@ -67,17 +56,6 @@ export function Navbar() {
               >
                 {name}
               </TransitionLink>
-              // <Link
-              //   key={path}
-              //   href={path}
-              //   className={`text-white transition-all hover:text-white hover:underline hover:decoration-white py-1 ${index === 0 ? 'pl-0' : ''} px-2`}
-              //   onClick={(e) => {
-              //     e.preventDefault()
-              //     handleNavigation(path)
-              //   }}
-              // >
-              //   {name}
-              // </Link>
             )
           })}
         </div>
