@@ -1,84 +1,144 @@
-export default function ProjectsPage() {
-  return (
-    <section>
-      <h1 className="text-2xl font-semibold mb-8">Projects</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((project) => (
-          <div key={project.title} className="border border-gray-700 rounded-lg p-6 hover:border-[var(--accent-color)] transition-all">
-            <h2 className="text-xl font-medium mb-2">{project.title}</h2>
-            <p className="text-[var(--text-secondary)] mb-4">{project.description}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {project.technologies.map((tech) => (
-                <span key={tech} className="bg-gray-800 px-2 py-1 rounded text-sm">
-                  {tech}
-                </span>
-              ))}
-            </div>
-            <div className="flex gap-4 mt-4">
-              {project.github && (
-                <a 
-                  href={project.github} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:underline"
-                >
-                  GitHub
-                </a>
-              )}
-              {project.demo && (
-                <a 
-                  href={project.demo} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:underline"
-                >
-                  Live Demo
-                </a>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
+"use client"
+
+import { useState, useMemo } from "react"
+import { motion } from "motion/react"
+import { ProjectCard } from "@/components/project-card"
+import { ProjectModal } from "@/components/project-modal"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import projectsData from "@/data/projects.json"
+
+interface Project {
+  id: string
+  name: string
+  shortDescription: string
+  fullDescription: string
+  status: string
+  category: string
+  featured: boolean
+  startDate: string
+  endDate: string | null
+  techStack: Array<{
+    name: string
+    category: string
+  }>
+  links: Array<{
+    name: string
+    url: string
+    type: string
+  }>
+  images: Array<{
+    url: string
+    alt: string
+    caption?: string
+  }>
 }
 
-const projects = [
-  {
-    title: "Cluj-Napoca Bus Tracking App",
-    description: "A real-time public transportation tracking application for Cluj-Napoca, focusing on fast data processing and user-friendly features. Achieved near-instant data updates for bus locations through efficient network calls and optimized API data handling.",
-    technologies: ["Swift", "SwiftUI", "TranzyAPI"],
-    github: "https://github.com/mihaicrisan04/bus-map"
-  },
-  {
-    title: "Boccelute",
-    description: "A full-stack e-commerce website specializing in tote bag sales. Implemented robust backend logic for user account management with secure encryption of sensitive data and seamless signup functionality.",
-    technologies: ["JavaScript", "PHP", "SQL", "MySQL", "WampServer"],
-    github: "https://github.com/mihaicrisan04/boccelute"
-  },
-  {
-    title: "Obstruction Game",
-    description: "An implementation of the 'Obstruction' game with a scalable architecture and advanced AI opponent using Minimax algorithm with Alpha-Beta Pruning. Created using Python and Pygame for graphical rendering and interactive gameplay.",
-    technologies: ["Python", "PyGame", "AI Algorithms"],
-    github: "https://github.com/mihaicrisan04/obstruction"
-  },
-  {
-    title: "Medlog",
-    description: "Led the design and development of a healthcare communication platform in a team of 5. Optimized navigation system improving user efficiency by 50% and implemented responsive design for all screen sizes.",
-    technologies: ["Full-Stack Development", "UI/UX Design", "Responsive Design"],
-    demo: "https://medlog.app"
-  },
-  {
-    title: "Kindergarten Automation Project",
-    description: "Developed a Google Sheets automation system and email newsletter system for efficient parent-teacher communication. Transitioned from paper-based to digital reporting, improving data accuracy and accessibility.",
-    technologies: ["Google Apps Script", "Automation", "Email Systems"]
-  },
-  {
-    title: "Personal Portfolio",
-    description: "A responsive portfolio website built with Next.js and Tailwind CSS.",
-    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-    github: "https://github.com/mihaicrisan04/portfolio",
-    demo: "https://mihaicrisan.com"
-  }
-]; 
+const projects = projectsData as Project[]
+
+export default function Projects() {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+
+  const categories = useMemo(() => {
+    const cats = Array.from(new Set(projects.map(p => p.category)))
+    return ["all", ...cats]
+  }, [])
+
+  const filteredProjects = useMemo(() => {
+    if (selectedCategory === "all") return projects
+    return projects.filter(p => p.category === selectedCategory)
+  }, [selectedCategory])
+
+  return (
+    <div className="min-h-screen max-w-2xl mx-auto px-6 py-8">
+      {/* Projects Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="mb-12"
+      >
+        <h1 className="text-3xl font-bold mb-4">Projects</h1>
+        <p className="text-muted-foreground">
+          A collection of projects I've worked on, ranging from web applications to 
+          full-stack solutions. Each project represents a learning journey and exploration 
+          of different technologies and concepts.
+        </p>
+      </motion.div>
+
+      {/* Category Filter */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="mb-8"
+      >
+        <div className="flex flex-wrap gap-2">
+          {categories.map((category) => (
+            <motion.div
+              key={category}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                variant={selectedCategory === category ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedCategory(category)}
+                className="capitalize"
+              >
+                {category}
+                {category !== "all" && (
+                  <Badge variant="secondary" className="ml-2 text-xs">
+                    {projects.filter(p => p.category === category).length}
+                  </Badge>
+                )}
+              </Button>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Projects Grid */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
+        {filteredProjects.map((project, index) => (
+          <motion.div
+            key={project.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 * index }}
+            whileHover={{ y: -5 }}
+            className="cursor-pointer"
+            onClick={() => setSelectedProject(project)}
+          >
+            <ProjectCard project={project} />
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* Empty State */}
+      {filteredProjects.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center py-12"
+        >
+          <p className="text-muted-foreground">No projects found in this category.</p>
+        </motion.div>
+      )}
+
+      {/* Project Modal */}
+      <ProjectModal
+        project={selectedProject}
+        isOpen={!!selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
+    </div>
+  )
+} 

@@ -1,0 +1,208 @@
+[
+  {
+    "id": "ecommerce-platform",
+    "name": "E-Commerce Platform",
+    "shortDescription": "Full-stack e-commerce solution with payment integration",
+    "fullDescription": "A comprehensive e-commerce platform built with Next.js and React. Features include user authentication, product catalog with search and filtering, shopping cart functionality, secure payment processing with Stripe, order management system, and an admin dashboard for inventory management. The platform is optimized for performance with server-side rendering and includes responsive design for mobile and desktop users.",
+    "status": "completed",
+    "category": "web-app",
+    "featured": true,
+    "startDate": "2024-01-15",
+    "endDate": "2024-04-20",
+    "techStack": [
+      { "name": "Next.js", "category": "framework" },
+      { "name": "TypeScript", "category": "language" },
+      { "name": "Tailwind CSS", "category": "styling" },
+      { "name": "Prisma", "category": "database" },
+      { "name": "PostgreSQL", "category": "database" },
+      { "name": "Stripe", "category": "payment" },
+      { "name": "NextAuth.js", "category": "auth" }
+    ],
+    "links": [
+      { "name": "Live Demo", "url": "https://ecommerce-demo.vercel.app", "type": "demo" },
+      { "name": "Source Code", "url": "https://github.com/username/ecommerce-platform", "type": "source" }
+    ],
+    "images": [
+      { "url": "/projects/ecommerce-1.jpg", "alt": "Homepage screenshot", "type": "screenshot" },
+      { "url": "/projects/ecommerce-2.jpg", "alt": "Product page", "type": "screenshot" }
+    ],
+    "highlights": [
+      "Implemented secure payment processing with Stripe integration",
+      "Built responsive design supporting mobile and desktop users",
+      "Developed admin dashboard with real-time inventory management",
+      "Optimized performance with Next.js SSR and image optimization",
+      "Integrated advanced search and filtering capabilities"
+    ]
+  },
+  {
+    "id": "task-management-app",
+    "name": "Task Management App",
+    "shortDescription": "Collaborative project management tool with real-time updates",
+    "fullDescription": "A modern task management application designed for teams and individuals. Built with React and Node.js, it features real-time collaboration, drag-and-drop task organization, project timelines, team member assignments, file attachments, and detailed analytics. The app includes notifications, deadline tracking, and integrates with popular tools like Slack and Google Calendar.",
+    "status": "completed",
+    "category": "web-app",
+    "featured": true,
+    "startDate": "2023-09-10",
+    "endDate": "2024-01-05",
+    "techStack": [
+      { "name": "React", "category": "framework" },
+      { "name": "Node.js", "category": "backend" },
+      { "name": "Express", "category": "backend" },
+      { "name": "Socket.io", "category": "realtime" },
+      { "name": "MongoDB", "category": "database" },
+      { "name": "JWT", "category": "auth" },
+      { "name": "Material-UI", "category": "styling" }
+    ],
+    "links": [
+      { "name": "Live Demo", "url": "https://taskflow-app.netlify.app", "type": "demo" },
+      { "name": "GitHub", "url": "https://github.com/username/task-management", "type": "source" },
+      { "name": "Case Study", "url": "https://medium.com/@username/building-taskflow", "type": "article" }
+    ],
+    "images": [
+      { "url": "/projects/taskflow-1.jpg", "alt": "Dashboard view", "type": "screenshot" },
+      { "url": "/projects/taskflow-2.jpg", "alt": "Kanban board", "type": "screenshot" }
+    ],
+    "highlights": [
+      "Real-time collaboration with Socket.io for instant updates",
+      "Drag-and-drop interface for intuitive task organization",
+      "Advanced analytics and reporting features",
+      "Integration with Slack and Google Calendar APIs",
+      "Mobile-responsive design with offline capabilities"
+    ]
+  },
+  {
+    "id": "weather-dashboard",
+    "name": "Weather Analytics Dashboard",
+    "shortDescription": "Interactive weather data visualization with forecasting",
+    "fullDescription": "A comprehensive weather analytics platform that aggregates data from multiple weather APIs to provide detailed forecasts, historical data analysis, and interactive visualizations. Features include location-based weather tracking, severe weather alerts, customizable dashboards, and data export capabilities. Built with modern web technologies and optimized for performance.",
+    "status": "completed",
+    "category": "dashboard",
+    "featured": false,
+    "startDate": "2023-06-01",
+    "endDate": "2023-08-15",
+    "techStack": [
+      { "name": "Vue.js", "category": "framework" },
+      { "name": "D3.js", "category": "visualization" },
+      { "name": "Chart.js", "category": "visualization" },
+      { "name": "Node.js", "category": "backend" },
+      { "name": "Redis", "category": "cache" },
+      { "name": "OpenWeather API", "category": "api" }
+    ],
+    "links": [
+      { "name": "Live Demo", "url": "https://weather-analytics.herokuapp.com", "type": "demo" },
+      { "name": "Source Code", "url": "https://github.com/username/weather-dashboard", "type": "source" }
+    ],
+    "images": [
+      { "url": "/projects/weather-1.jpg", "alt": "Main dashboard", "type": "screenshot" }
+    ],
+    "highlights": [
+      "Interactive data visualizations with D3.js and Chart.js",
+      "Real-time weather data from multiple API sources",
+      "Geolocation-based weather tracking",
+      "Historical weather data analysis and trends",
+      "Responsive design with dark/light theme support"
+    ]
+  },
+  {
+    "id": "blog-cms",
+    "name": "Headless Blog CMS",
+    "shortDescription": "Modern content management system for bloggers and content creators",
+    "fullDescription": "A headless CMS built specifically for bloggers and content creators who want full control over their content and presentation. Features include a rich text editor, media management, SEO optimization tools, scheduled publishing, multi-author support, and a flexible API for frontend integration. The system supports markdown, has built-in analytics, and includes comment management.",
+    "status": "in-progress",
+    "category": "cms",
+    "featured": true,
+    "startDate": "2024-03-01",
+    "endDate": null,
+    "techStack": [
+      { "name": "Next.js", "category": "framework" },
+      { "name": "Sanity", "category": "cms" },
+      { "name": "GraphQL", "category": "api" },
+      { "name": "TypeScript", "category": "language" },
+      { "name": "Tailwind CSS", "category": "styling" },
+      { "name": "Vercel", "category": "deployment" }
+    ],
+    "links": [
+      { "name": "Work in Progress", "url": "https://blog-cms-preview.vercel.app", "type": "demo" },
+      { "name": "GitHub", "url": "https://github.com/username/headless-blog-cms", "type": "source" }
+    ],
+    "images": [
+      { "url": "/projects/cms-1.jpg", "alt": "Editor interface", "type": "screenshot" }
+    ],
+    "highlights": [
+      "Rich text editor with markdown support",
+      "SEO optimization tools and meta tag management",
+      "Scheduled publishing and content workflow",
+      "Multi-author collaboration features",
+      "Built-in analytics and performance tracking"
+    ]
+  },
+  {
+    "id": "mobile-fitness-app",
+    "name": "Fitness Tracking Mobile App",
+    "shortDescription": "React Native app for workout tracking and fitness goals",
+    "fullDescription": "A comprehensive fitness tracking mobile application built with React Native. The app helps users track workouts, set fitness goals, monitor progress, and maintain healthy habits. Features include exercise libraries, custom workout creation, progress photos, nutrition tracking, social sharing, and integration with health platforms like Apple Health and Google Fit.",
+    "status": "completed",
+    "category": "mobile-app",
+    "featured": false,
+    "startDate": "2023-11-01",
+    "endDate": "2024-02-28",
+    "techStack": [
+      { "name": "React Native", "category": "framework" },
+      { "name": "Expo", "category": "platform" },
+      { "name": "Firebase", "category": "backend" },
+      { "name": "React Navigation", "category": "navigation" },
+      { "name": "AsyncStorage", "category": "storage" },
+      { "name": "Health APIs", "category": "integration" }
+    ],
+    "links": [
+      { "name": "App Store", "url": "https://apps.apple.com/app/fitness-tracker", "type": "store" },
+      { "name": "Play Store", "url": "https://play.google.com/store/apps/fitness-tracker", "type": "store" },
+      { "name": "Source Code", "url": "https://github.com/username/fitness-app", "type": "source" }
+    ],
+    "images": [
+      { "url": "/projects/fitness-1.jpg", "alt": "App screenshots", "type": "screenshot" }
+    ],
+    "highlights": [
+      "Cross-platform mobile app with native performance",
+      "Integration with Apple Health and Google Fit",
+      "Offline functionality with data synchronization",
+      "Social features for sharing progress and motivation",
+      "Comprehensive exercise library with video demonstrations"
+    ]
+  },
+  {
+    "id": "ai-chatbot",
+    "name": "AI-Powered Customer Support Bot",
+    "shortDescription": "Intelligent chatbot with natural language processing",
+    "fullDescription": "An advanced AI chatbot designed for customer support automation. Built using modern NLP techniques and machine learning models, the bot can understand customer queries, provide relevant responses, escalate complex issues to human agents, and learn from interactions. The system includes an admin dashboard for monitoring conversations, training the bot, and analyzing customer satisfaction metrics.",
+    "status": "completed",
+    "category": "ai-ml",
+    "featured": false,
+    "startDate": "2024-05-01",
+    "endDate": "2024-07-15",
+    "techStack": [
+      { "name": "Python", "category": "language" },
+      { "name": "FastAPI", "category": "backend" },
+      { "name": "OpenAI API", "category": "ai" },
+      { "name": "LangChain", "category": "ai" },
+      { "name": "PostgreSQL", "category": "database" },
+      { "name": "React", "category": "frontend" },
+      { "name": "Docker", "category": "deployment" }
+    ],
+    "links": [
+      { "name": "Live Demo", "url": "https://ai-support-bot.herokuapp.com", "type": "demo" },
+      { "name": "Documentation", "url": "https://docs.ai-support-bot.com", "type": "docs" },
+      { "name": "GitHub", "url": "https://github.com/username/ai-chatbot", "type": "source" }
+    ],
+    "images": [
+      { "url": "/projects/chatbot-1.jpg", "alt": "Chat interface", "type": "screenshot" }
+    ],
+    "highlights": [
+      "Natural language processing with OpenAI GPT integration",
+      "Intelligent conversation routing and escalation",
+      "Real-time analytics and conversation monitoring",
+      "Multi-language support and customizable responses",
+      "Easy integration with existing customer support systems"
+    ]
+  }
+] 

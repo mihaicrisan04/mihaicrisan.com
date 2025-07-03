@@ -1,0 +1,29 @@
+[
+  {
+    "id": "current-role",
+    "company": "Your Current Company",
+    "position": "Software Engineer",
+    "startDate": "2024-01-01",
+    "endDate": null,
+    "description": "Building scalable web applications and leading frontend development initiatives.",
+    "current": true
+  },
+  {
+    "id": "previous-role-1",
+    "company": "Previous Company Name",
+    "position": "Junior Developer",
+    "startDate": "2023-06-01",
+    "endDate": "2023-12-31",
+    "description": "Developed and maintained web applications using React and Node.js.",
+    "current": false
+  },
+  {
+    "id": "previous-role-2",
+    "company": "Internship Company",
+    "position": "Software Development Intern",
+    "startDate": "2023-01-01",
+    "endDate": "2023-05-31",
+    "description": "Gained hands-on experience in full-stack development and agile methodologies.",
+    "current": false
+  }
+] 
