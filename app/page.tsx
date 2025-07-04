@@ -12,7 +12,7 @@ export default function Home() {
   const currentRole = workExperienceData.find(job => job.current)
   
   return (
-    <div className="py-8 space-y-16">
+    <div className="py-8 space-y-10">
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -35,7 +35,7 @@ export default function Home() {
         transition={{ duration: 0.6, delay: 0.15 }}
       >
         <ContentSection title="Work">
-          <div className="space-y-6">
+          <div className="space-y-4">
             {currentRole && <CurrentWork workData={currentRole} />}
             <WorkHistory workHistory={workExperienceData} />
           </div>

@@ -14,12 +14,12 @@ export function Navigation() {
 
   return (
     <div className="w-full bg-background">
-      <div className="flex justify-center px-4 py-8">
+      <div className="flex justify-center px-4 py-6">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-background/80 backdrop-blur-sm border border-border rounded-lg px-4 py-2"
+          className="bg-background/80 backdrop-blur-sm border border-border rounded-sm px-4 py-2"
         >
           <div className="flex items-center justify-between">
             <nav className="flex items-center gap-6">

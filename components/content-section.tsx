@@ -9,7 +9,7 @@ interface ContentSectionProps {
 
 export function ContentSection({ title, children, className = "" }: ContentSectionProps) {
   return (
-    <section className={`space-y-6 ${className}`}>
+    <section className={`space-y-4 ${className}`}>
       <div className="flex items-center gap-4">
         <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
           {title}

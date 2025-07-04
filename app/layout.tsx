@@ -39,7 +39,7 @@ export default function RootLayout({
           <div className="flex flex-col min-h-screen">
             <Navigation />
             <main className="flex-1">
-              <div className="max-w-2xl mx-auto px-6">
+              <div className="max-w-xl mx-auto px-6">
                 {children}
               </div>
             </main>
