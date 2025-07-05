@@ -2,68 +2,67 @@
 
 import { useState, useMemo } from "react"
 import { motion } from "motion/react"
-import { ProjectCard } from "@/components/project-card"
-import { ProjectModal } from "@/components/project-modal"
+import { BlogPostLink } from "@/components/blog-post-link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import projectsData from "@/data/projects.json"
+import blogPostsData from "@/data/blog-posts.json"
 
-interface Project {
+interface BlogPost {
   id: string
-  name: string
-  shortDescription: string
-  fullDescription: string
+  title: string
+  slug: string
+  excerpt: string
+  content: string
+  publishedAt: string
+  updatedAt: string
   status: string
-  category: string
   featured: boolean
-  startDate: string
-  endDate: string | null
-  techStack: Array<{
-    name: string
-    category: string
-  }>
-  links: Array<{
-    name: string
-    url: string
-    type: string
-  }>
-  images: Array<{
+  readTime: number
+  category: string
+  tags: string[]
+  coverImage: {
     url: string
     alt: string
-    caption?: string
-  }>
+  }
+  author: {
+    name: string
+    avatar: string
+  }
 }
 
-const projects = projectsData as Project[]
+const blogPosts = blogPostsData as BlogPost[]
 
 export default function Projects() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
 
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(projects.map(p => p.category)))
-    return ["all", ...cats]
+  const publishedPosts = useMemo(() => {
+    return blogPosts.filter(post => post.status === "published")
   }, [])
 
-  const filteredProjects = useMemo(() => {
-    if (selectedCategory === "all") return projects
-    return projects.filter(p => p.category === selectedCategory)
-  }, [selectedCategory])
+  const categories = useMemo(() => {
+    const cats = Array.from(new Set(publishedPosts.map(post => post.category)))
+    return ["all", ...cats]
+  }, [publishedPosts])
+
+  const filteredPosts = useMemo(() => {
+    if (selectedCategory === "all") return publishedPosts
+    return publishedPosts.filter(post => post.category === selectedCategory)
+  }, [selectedCategory, publishedPosts])
 
   return (
     <div className="min-h-screen max-w-2xl mx-auto px-6 py-8">
-      {/* Projects Header */}
+      {/* Blog Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
         className="mb-12"
       >
-        <h1 className="text-3xl font-bold mb-4">Projects</h1>
+        <h1 className="text-3xl font-bold mb-4">Blog</h1>
         <p className="text-muted-foreground">
-          A collection of projects I've worked on, ranging from web applications to 
-          full-stack solutions. Each project represents a learning journey and exploration 
-          of different technologies and concepts.
+          Thoughts, insights, and stories from my journey in software development, 
+          AI, and technology. Each post explores different aspects of building 
+          modern applications and solving interesting problems.
         </p>
       </motion.div>
 
@@ -90,7 +89,7 @@ export default function Projects() {
                 {category}
                 {category !== "all" && (
                   <Badge variant="secondary" className="ml-2 text-xs">
-                    {projects.filter(p => p.category === category).length}
+                    {publishedPosts.filter(post => post.category === category).length}
                   </Badge>
                 )}
               </Button>
@@ -99,46 +98,36 @@ export default function Projects() {
         </div>
       </motion.div>
 
-      {/* Projects Grid */}
+      {/* Blog Posts List */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        className="space-y-3"
       >
-        {filteredProjects.map((project, index) => (
+        {filteredPosts.map((post, index) => (
           <motion.div
-            key={project.id}
+            key={post.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 * index }}
-            whileHover={{ y: -5 }}
-            className="cursor-pointer"
-            onClick={() => setSelectedProject(project)}
           >
-            <ProjectCard project={project} />
+            <BlogPostLink post={post} />
           </motion.div>
         ))}
       </motion.div>
 
       {/* Empty State */}
-      {filteredProjects.length === 0 && (
+      {filteredPosts.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-center py-12"
         >
-          <p className="text-muted-foreground">No projects found in this category.</p>
+          <p className="text-muted-foreground">No blog posts found in this category.</p>
         </motion.div>
       )}
-
-      {/* Project Modal */}
-      <ProjectModal
-        project={selectedProject}
-        isOpen={!!selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
     </div>
   )
 } 

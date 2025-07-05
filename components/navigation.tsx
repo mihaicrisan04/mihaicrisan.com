@@ -50,9 +50,9 @@ export function Navigation() {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  Projects
+                  Blog
                   <span className="bg-muted text-muted-foreground px-2 py-1 rounded text-xs">
-                    6
+                    5
                   </span>
                 </Link>
               </motion.div>

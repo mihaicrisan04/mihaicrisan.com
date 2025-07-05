@@ -1,208 +1,188 @@
 [
   {
-    "id": "ecommerce-platform",
-    "name": "E-Commerce Platform",
-    "shortDescription": "Full-stack e-commerce solution with payment integration",
-    "fullDescription": "A comprehensive e-commerce platform built with Next.js and React. Features include user authentication, product catalog with search and filtering, shopping cart functionality, secure payment processing with Stripe, order management system, and an admin dashboard for inventory management. The platform is optimized for performance with server-side rendering and includes responsive design for mobile and desktop users.",
+    "id": "test-hover-card",
+    "name": "Hover Card Test",
+    "shortDescription": "Testing the new hover card design with public image",
+    "fullDescription": "A test project to demonstrate the new hover card functionality with image background and blurred text overlay.",
+    "status": "completed",
+    "category": "test",
+    "featured": true,
+    "startDate": "2024-01-01",
+    "endDate": "2024-01-02",
+    "techStack": [
+      { "name": "React", "category": "frontend" },
+      { "name": "TypeScript", "category": "language" },
+      { "name": "Tailwind CSS", "category": "styling" },
+      { "name": "Next.js", "category": "framework" },
+      { "name": "CSS", "category": "styling" }
+    ],
+    "links": [
+      { "name": "Demo", "url": "https://example.com", "type": "demo" },
+      { "name": "GitHub", "url": "https://github.com/test", "type": "code" }
+    ],
+    "images": [
+      { "url": "https://upload.wikimedia.org/wikipedia/commons/4/43/Aspect_ratio_4_3_example.jpg", "alt": "Test Image with 4:3 Aspect Ratio" }
+    ]
+  },
+  {
+    "id": "berlin-emergency-tracker",
+    "name": "Berlin Emergency Tracker",
+    "shortDescription": "Real-time emergency services tracker for Berlin",
+    "fullDescription": "A comprehensive web application that tracks emergency services in Berlin in real-time, providing citizens with up-to-date information about police, fire department, and medical emergency responses across the city.",
     "status": "completed",
     "category": "web-app",
     "featured": true,
     "startDate": "2024-01-15",
-    "endDate": "2024-04-20",
+    "endDate": "2024-03-20",
     "techStack": [
-      { "name": "Next.js", "category": "framework" },
+      { "name": "React", "category": "frontend" },
       { "name": "TypeScript", "category": "language" },
-      { "name": "Tailwind CSS", "category": "styling" },
-      { "name": "Prisma", "category": "database" },
+      { "name": "Node.js", "category": "backend" },
       { "name": "PostgreSQL", "category": "database" },
-      { "name": "Stripe", "category": "payment" },
-      { "name": "NextAuth.js", "category": "auth" }
+      { "name": "WebSocket", "category": "real-time" },
+      { "name": "Tailwind CSS", "category": "styling" }
     ],
     "links": [
-      { "name": "Live Demo", "url": "https://ecommerce-demo.vercel.app", "type": "demo" },
-      { "name": "Source Code", "url": "https://github.com/username/ecommerce-platform", "type": "source" }
+      { "name": "Live Demo", "url": "https://berlin-emergency.demo.com", "type": "demo" },
+      { "name": "GitHub", "url": "https://github.com/mihaicrisan/berlin-emergency", "type": "code" }
     ],
     "images": [
-      { "url": "/projects/ecommerce-1.jpg", "alt": "Homepage screenshot", "type": "screenshot" },
-      { "url": "/projects/ecommerce-2.jpg", "alt": "Product page", "type": "screenshot" }
-    ],
-    "highlights": [
-      "Implemented secure payment processing with Stripe integration",
-      "Built responsive design supporting mobile and desktop users",
-      "Developed admin dashboard with real-time inventory management",
-      "Optimized performance with Next.js SSR and image optimization",
-      "Integrated advanced search and filtering capabilities"
+      { "url": "/projects/berlin-emergency-1.jpg", "alt": "Berlin Emergency Tracker Dashboard" },
+      { "url": "/projects/berlin-emergency-2.jpg", "alt": "Real-time Map View" }
     ]
   },
   {
-    "id": "task-management-app",
-    "name": "Task Management App",
-    "shortDescription": "Collaborative project management tool with real-time updates",
-    "fullDescription": "A modern task management application designed for teams and individuals. Built with React and Node.js, it features real-time collaboration, drag-and-drop task organization, project timelines, team member assignments, file attachments, and detailed analytics. The app includes notifications, deadline tracking, and integrates with popular tools like Slack and Google Calendar.",
-    "status": "completed",
+    "id": "radiocast",
+    "name": "Radiocast",
+    "shortDescription": "Podcast streaming platform with AI recommendations",
+    "fullDescription": "A modern podcast streaming platform that uses AI to provide personalized recommendations, featuring a clean interface, offline listening capabilities, and social features for podcast enthusiasts.",
+    "status": "in-progress",
     "category": "web-app",
     "featured": true,
-    "startDate": "2023-09-10",
-    "endDate": "2024-01-05",
-    "techStack": [
-      { "name": "React", "category": "framework" },
-      { "name": "Node.js", "category": "backend" },
-      { "name": "Express", "category": "backend" },
-      { "name": "Socket.io", "category": "realtime" },
-      { "name": "MongoDB", "category": "database" },
-      { "name": "JWT", "category": "auth" },
-      { "name": "Material-UI", "category": "styling" }
-    ],
-    "links": [
-      { "name": "Live Demo", "url": "https://taskflow-app.netlify.app", "type": "demo" },
-      { "name": "GitHub", "url": "https://github.com/username/task-management", "type": "source" },
-      { "name": "Case Study", "url": "https://medium.com/@username/building-taskflow", "type": "article" }
-    ],
-    "images": [
-      { "url": "/projects/taskflow-1.jpg", "alt": "Dashboard view", "type": "screenshot" },
-      { "url": "/projects/taskflow-2.jpg", "alt": "Kanban board", "type": "screenshot" }
-    ],
-    "highlights": [
-      "Real-time collaboration with Socket.io for instant updates",
-      "Drag-and-drop interface for intuitive task organization",
-      "Advanced analytics and reporting features",
-      "Integration with Slack and Google Calendar APIs",
-      "Mobile-responsive design with offline capabilities"
-    ]
-  },
-  {
-    "id": "weather-dashboard",
-    "name": "Weather Analytics Dashboard",
-    "shortDescription": "Interactive weather data visualization with forecasting",
-    "fullDescription": "A comprehensive weather analytics platform that aggregates data from multiple weather APIs to provide detailed forecasts, historical data analysis, and interactive visualizations. Features include location-based weather tracking, severe weather alerts, customizable dashboards, and data export capabilities. Built with modern web technologies and optimized for performance.",
-    "status": "completed",
-    "category": "dashboard",
-    "featured": false,
-    "startDate": "2023-06-01",
-    "endDate": "2023-08-15",
-    "techStack": [
-      { "name": "Vue.js", "category": "framework" },
-      { "name": "D3.js", "category": "visualization" },
-      { "name": "Chart.js", "category": "visualization" },
-      { "name": "Node.js", "category": "backend" },
-      { "name": "Redis", "category": "cache" },
-      { "name": "OpenWeather API", "category": "api" }
-    ],
-    "links": [
-      { "name": "Live Demo", "url": "https://weather-analytics.herokuapp.com", "type": "demo" },
-      { "name": "Source Code", "url": "https://github.com/username/weather-dashboard", "type": "source" }
-    ],
-    "images": [
-      { "url": "/projects/weather-1.jpg", "alt": "Main dashboard", "type": "screenshot" }
-    ],
-    "highlights": [
-      "Interactive data visualizations with D3.js and Chart.js",
-      "Real-time weather data from multiple API sources",
-      "Geolocation-based weather tracking",
-      "Historical weather data analysis and trends",
-      "Responsive design with dark/light theme support"
-    ]
-  },
-  {
-    "id": "blog-cms",
-    "name": "Headless Blog CMS",
-    "shortDescription": "Modern content management system for bloggers and content creators",
-    "fullDescription": "A headless CMS built specifically for bloggers and content creators who want full control over their content and presentation. Features include a rich text editor, media management, SEO optimization tools, scheduled publishing, multi-author support, and a flexible API for frontend integration. The system supports markdown, has built-in analytics, and includes comment management.",
-    "status": "in-progress",
-    "category": "cms",
-    "featured": true,
-    "startDate": "2024-03-01",
+    "startDate": "2024-02-01",
     "endDate": null,
     "techStack": [
-      { "name": "Next.js", "category": "framework" },
-      { "name": "Sanity", "category": "cms" },
-      { "name": "GraphQL", "category": "api" },
+      { "name": "Next.js", "category": "frontend" },
       { "name": "TypeScript", "category": "language" },
+      { "name": "Prisma", "category": "database" },
+      { "name": "OpenAI", "category": "ai" },
       { "name": "Tailwind CSS", "category": "styling" },
       { "name": "Vercel", "category": "deployment" }
     ],
     "links": [
-      { "name": "Work in Progress", "url": "https://blog-cms-preview.vercel.app", "type": "demo" },
-      { "name": "GitHub", "url": "https://github.com/username/headless-blog-cms", "type": "source" }
+      { "name": "GitHub", "url": "https://github.com/mihaicrisan/radiocast", "type": "code" },
+      { "name": "Preview", "url": "https://radiocast-preview.vercel.app", "type": "preview" }
     ],
     "images": [
-      { "url": "/projects/cms-1.jpg", "alt": "Editor interface", "type": "screenshot" }
-    ],
-    "highlights": [
-      "Rich text editor with markdown support",
-      "SEO optimization tools and meta tag management",
-      "Scheduled publishing and content workflow",
-      "Multi-author collaboration features",
-      "Built-in analytics and performance tracking"
+      { "url": "/projects/radiocast-1.jpg", "alt": "Radiocast Home Interface" },
+      { "url": "/projects/radiocast-2.jpg", "alt": "Podcast Player View" }
     ]
   },
   {
-    "id": "mobile-fitness-app",
-    "name": "Fitness Tracking Mobile App",
-    "shortDescription": "React Native app for workout tracking and fitness goals",
-    "fullDescription": "A comprehensive fitness tracking mobile application built with React Native. The app helps users track workouts, set fitness goals, monitor progress, and maintain healthy habits. Features include exercise libraries, custom workout creation, progress photos, nutrition tracking, social sharing, and integration with health platforms like Apple Health and Google Fit.",
+    "id": "time-tracker",
+    "name": "Time",
+    "shortDescription": "Minimalist time tracking application",
+    "fullDescription": "A beautifully designed time tracking application focused on simplicity and productivity. Features project categorization, detailed analytics, and seamless integration with popular productivity tools.",
     "status": "completed",
-    "category": "mobile-app",
-    "featured": false,
-    "startDate": "2023-11-01",
-    "endDate": "2024-02-28",
+    "category": "productivity",
+    "featured": true,
+    "startDate": "2023-11-10",
+    "endDate": "2024-01-05",
     "techStack": [
-      { "name": "React Native", "category": "framework" },
-      { "name": "Expo", "category": "platform" },
-      { "name": "Firebase", "category": "backend" },
-      { "name": "React Navigation", "category": "navigation" },
-      { "name": "AsyncStorage", "category": "storage" },
-      { "name": "Health APIs", "category": "integration" }
+      { "name": "React", "category": "frontend" },
+      { "name": "Electron", "category": "desktop" },
+      { "name": "SQLite", "category": "database" },
+      { "name": "Chart.js", "category": "visualization" },
+      { "name": "Styled Components", "category": "styling" }
     ],
     "links": [
-      { "name": "App Store", "url": "https://apps.apple.com/app/fitness-tracker", "type": "store" },
-      { "name": "Play Store", "url": "https://play.google.com/store/apps/fitness-tracker", "type": "store" },
-      { "name": "Source Code", "url": "https://github.com/username/fitness-app", "type": "source" }
+      { "name": "Download", "url": "https://time-tracker.app/download", "type": "download" },
+      { "name": "GitHub", "url": "https://github.com/mihaicrisan/time-tracker", "type": "code" }
     ],
     "images": [
-      { "url": "/projects/fitness-1.jpg", "alt": "App screenshots", "type": "screenshot" }
-    ],
-    "highlights": [
-      "Cross-platform mobile app with native performance",
-      "Integration with Apple Health and Google Fit",
-      "Offline functionality with data synchronization",
-      "Social features for sharing progress and motivation",
-      "Comprehensive exercise library with video demonstrations"
+      { "url": "/projects/time-tracker-1.jpg", "alt": "Time Tracker Dashboard" },
+      { "url": "/projects/time-tracker-2.jpg", "alt": "Analytics View" }
     ]
   },
   {
-    "id": "ai-chatbot",
-    "name": "AI-Powered Customer Support Bot",
-    "shortDescription": "Intelligent chatbot with natural language processing",
-    "fullDescription": "An advanced AI chatbot designed for customer support automation. Built using modern NLP techniques and machine learning models, the bot can understand customer queries, provide relevant responses, escalate complex issues to human agents, and learn from interactions. The system includes an admin dashboard for monitoring conversations, training the bot, and analyzing customer satisfaction metrics.",
+    "id": "scoop",
+    "name": "Scoop",
+    "shortDescription": "News aggregation platform with smart filtering",
+    "fullDescription": "An intelligent news aggregation platform that uses machine learning to filter and categorize news from multiple sources, providing users with personalized news feeds and trending topic analysis.",
     "status": "completed",
-    "category": "ai-ml",
-    "featured": false,
-    "startDate": "2024-05-01",
-    "endDate": "2024-07-15",
+    "category": "web-app",
+    "featured": true,
+    "startDate": "2023-08-15",
+    "endDate": "2023-12-20",
     "techStack": [
+      { "name": "Vue.js", "category": "frontend" },
       { "name": "Python", "category": "language" },
       { "name": "FastAPI", "category": "backend" },
-      { "name": "OpenAI API", "category": "ai" },
-      { "name": "LangChain", "category": "ai" },
-      { "name": "PostgreSQL", "category": "database" },
-      { "name": "React", "category": "frontend" },
+      { "name": "MongoDB", "category": "database" },
+      { "name": "TensorFlow", "category": "ml" },
       { "name": "Docker", "category": "deployment" }
     ],
     "links": [
-      { "name": "Live Demo", "url": "https://ai-support-bot.herokuapp.com", "type": "demo" },
-      { "name": "Documentation", "url": "https://docs.ai-support-bot.com", "type": "docs" },
-      { "name": "GitHub", "url": "https://github.com/username/ai-chatbot", "type": "source" }
+      { "name": "Live Demo", "url": "https://scoop-news.app", "type": "demo" },
+      { "name": "GitHub", "url": "https://github.com/mihaicrisan/scoop", "type": "code" }
     ],
     "images": [
-      { "url": "/projects/chatbot-1.jpg", "alt": "Chat interface", "type": "screenshot" }
+      { "url": "/projects/scoop-1.jpg", "alt": "Scoop News Feed" },
+      { "url": "/projects/scoop-2.jpg", "alt": "Topic Analysis Dashboard" }
+    ]
+  },
+  {
+    "id": "mockmint",
+    "name": "Mockmint",
+    "shortDescription": "API mocking service for developers",
+    "fullDescription": "A comprehensive API mocking service that allows developers to create, manage, and deploy mock APIs quickly. Features include dynamic response generation, request logging, and team collaboration tools.",
+    "status": "in-progress",
+    "category": "developer-tools",
+    "featured": true,
+    "startDate": "2024-03-01",
+    "endDate": null,
+    "techStack": [
+      { "name": "React", "category": "frontend" },
+      { "name": "Node.js", "category": "backend" },
+      { "name": "Express", "category": "backend" },
+      { "name": "Redis", "category": "database" },
+      { "name": "TypeScript", "category": "language" },
+      { "name": "AWS", "category": "deployment" }
     ],
-    "highlights": [
-      "Natural language processing with OpenAI GPT integration",
-      "Intelligent conversation routing and escalation",
-      "Real-time analytics and conversation monitoring",
-      "Multi-language support and customizable responses",
-      "Easy integration with existing customer support systems"
+    "links": [
+      { "name": "Beta Access", "url": "https://mockmint.dev/beta", "type": "preview" },
+      { "name": "Documentation", "url": "https://docs.mockmint.dev", "type": "docs" }
+    ],
+    "images": [
+      { "url": "/projects/mockmint-1.jpg", "alt": "Mockmint Dashboard" },
+      { "url": "/projects/mockmint-2.jpg", "alt": "API Builder Interface" }
+    ]
+  },
+  {
+    "id": "peek-ai",
+    "name": "Peek AI",
+    "shortDescription": "AI-powered code review assistant",
+    "fullDescription": "An intelligent code review assistant that uses advanced AI to analyze code quality, suggest improvements, and identify potential bugs. Integrates seamlessly with popular version control systems.",
+    "status": "planning",
+    "category": "ai-tools",
+    "featured": true,
+    "startDate": "2024-04-01",
+    "endDate": null,
+    "techStack": [
+      { "name": "Python", "category": "language" },
+      { "name": "OpenAI GPT", "category": "ai" },
+      { "name": "GitHub API", "category": "integration" },
+      { "name": "FastAPI", "category": "backend" },
+      { "name": "React", "category": "frontend" },
+      { "name": "PostgreSQL", "category": "database" }
+    ],
+    "links": [
+      { "name": "Waitlist", "url": "https://peek-ai.dev/waitlist", "type": "waitlist" },
+      { "name": "Roadmap", "url": "https://peek-ai.dev/roadmap", "type": "roadmap" }
+    ],
+    "images": [
+      { "url": "/projects/peek-ai-1.jpg", "alt": "Peek AI Interface Mockup" },
+      { "url": "/projects/peek-ai-2.jpg", "alt": "Code Review Dashboard" }
     ]
   }
 ] 

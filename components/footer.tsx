@@ -1,41 +1,42 @@
 "use client"
 
-import { Github, Linkedin, Mail } from "lucide-react"
+import { CustomLink } from "@/components/custom-link"
 
 const socialLinks = [
-  { name: "GitHub", icon: Github, href: "https://github.com" },
-  { name: "LinkedIn", icon: Linkedin, href: "https://linkedin.com" },
-  { name: "Email", icon: Mail, href: "mailto:crisanmihai2004@gmail.com" }
+  { name: "GitHub", href: "https://github.com/mihaicrisan" },
+  { name: "LinkedIn", href: "https://linkedin.com/in/mihaicrisan" },
+  { name: "Twitter", href: "https://twitter.com/mihaicrisan" },
+  { name: "Threads", href: "https://threads.net/@mihaicrisan" },
+  { name: "Email", href: "mailto:crisanmihai2004@gmail.com" }
 ]
 
 export function Footer() {
   return (
-    <footer className="mt-24 py-8">
+    <footer className="mt-24 py-0  bg-background">
       <div className="max-w-2xl mx-auto px-6">
-        <div className="flex flex-col items-center gap-6">
-          {/* Logo/Name */}
-          <div className="text-lg font-medium">
-            Mihai Crisan
-          </div>
-
+        <div className="flex flex-col items-center gap-8">
           {/* Social Links */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-8 flex-wrap justify-center">
             {socialLinks.map((link) => (
-              <a
+              <CustomLink
                 key={link.name}
                 href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
+                external
+                className="text-muted-foreground hover:text-foreground text-base"
               >
-                <link.icon className="w-4 h-4" />
-              </a>
+                {link.name}
+              </CustomLink>
             ))}
           </div>
 
+          {/* Logo Placeholder */}
+          <div className="text-2xl font-light italic text-muted-foreground">
+            placeholder
+          </div>
+
           {/* Copyright */}
-          <div className="text-sm text-muted-foreground">
-            © 2025 Mihai Crisan
+          <div className="text-sm text-muted-foreground mb-4">
+            © 2025 All rights reserved
           </div>
         </div>
       </div>
