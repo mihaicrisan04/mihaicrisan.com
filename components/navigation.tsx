@@ -44,16 +44,13 @@ export function Navigation() {
               >
                 <Link 
                   href="/projects" 
-                  className={`text-sm font-medium transition-colors flex items-center gap-2 px-2 py-1 rounded ${
-                    pathname === "/projects" 
+                  className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
+                    pathname === "/projects" || pathname?.startsWith("/projects/")
                       ? "text-foreground" 
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  Blog
-                  <span className="bg-muted text-muted-foreground px-2 py-1 rounded text-xs">
-                    5
-                  </span>
+                  Projects
                 </Link>
               </motion.div>
             </nav>

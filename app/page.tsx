@@ -7,6 +7,7 @@ import { CurrentWork } from "@/components/current-work"
 import { WorkHistory } from "@/components/work-history"
 import { ProjectLink } from "@/components/project-link"
 import { CustomLink } from "@/components/custom-link"
+import { RecentWork } from "@/components/recent-work"
 import workExperienceData from "@/data/work-experience.json"
 import projectsData from "@/data/projects.json"
 
@@ -67,11 +68,7 @@ export default function Home() {
         transition={{ duration: 0.6, delay: 0.25 }}
       >
         <ContentSection title="Recent Work">
-          <div className="space-y-3">
-            {featuredProjects.map((project) => (
-              <ProjectLink key={project.id} project={project} />
-            ))}
-          </div>
+          <RecentWork projects={featuredProjects} />
         </ContentSection>
       </motion.div>
 

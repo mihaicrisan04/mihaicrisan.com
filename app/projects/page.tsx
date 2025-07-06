@@ -1,133 +1,72 @@
 "use client"
 
-import { useState, useMemo } from "react"
 import { motion } from "motion/react"
-import { BlogPostLink } from "@/components/blog-post-link"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import blogPostsData from "@/data/blog-posts.json"
+import { ProjectGridItem } from "@/components/project-grid-item"
+import projectsData from "@/data/projects.json"
 
-interface BlogPost {
+interface Project {
   id: string
-  title: string
-  slug: string
-  excerpt: string
-  content: string
-  publishedAt: string
-  updatedAt: string
+  name: string
+  shortDescription: string
+  fullDescription: string
   status: string
-  featured: boolean
-  readTime: number
   category: string
-  tags: string[]
-  coverImage: {
+  featured: boolean
+  startDate: string
+  endDate: string | null
+  techStack: Array<{
+    name: string
+    category: string
+  }>
+  links: Array<{
+    name: string
+    url: string
+    type: string
+  }>
+  images: Array<{
     url: string
     alt: string
-  }
-  author: {
-    name: string
-    avatar: string
-  }
+    caption?: string
+  }>
+  highlights?: string[]
 }
 
-const blogPosts = blogPostsData as BlogPost[]
-
-export default function Projects() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
-
-  const publishedPosts = useMemo(() => {
-    return blogPosts.filter(post => post.status === "published")
-  }, [])
-
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(publishedPosts.map(post => post.category)))
-    return ["all", ...cats]
-  }, [publishedPosts])
-
-  const filteredPosts = useMemo(() => {
-    if (selectedCategory === "all") return publishedPosts
-    return publishedPosts.filter(post => post.category === selectedCategory)
-  }, [selectedCategory, publishedPosts])
+export default function ProjectsPage() {
+  const projects = projectsData as Project[]
 
   return (
-    <div className="min-h-screen max-w-2xl mx-auto px-6 py-8">
-      {/* Blog Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="mb-12"
-      >
-        <h1 className="text-3xl font-bold mb-4">Blog</h1>
-        <p className="text-muted-foreground">
-          Thoughts, insights, and stories from my journey in software development, 
-          AI, and technology. Each post explores different aspects of building 
-          modern applications and solving interesting problems.
-        </p>
-      </motion.div>
+    <div className="py-8 space-y-8">
+      <div className="text-center space-y-4">
+        <motion.h1 
+          className="text-4xl font-bold text-foreground"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Projects
+        </motion.h1>
+        <motion.p 
+          className="text-lg text-muted-foreground max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          A collection of projects I've worked on, showcasing various technologies and approaches to problem-solving.
+        </motion.p>
+      </div>
 
-      {/* Category Filter */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="mb-8"
-      >
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <motion.div
-              key={category}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                variant={selectedCategory === category ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(category)}
-                className="capitalize"
-              >
-                {category}
-                {category !== "all" && (
-                  <Badge variant="secondary" className="ml-2 text-xs">
-                    {publishedPosts.filter(post => post.category === category).length}
-                  </Badge>
-                )}
-              </Button>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Blog Posts List */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="space-y-3"
-      >
-        {filteredPosts.map((post, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map((project, index) => (
           <motion.div
-            key={post.id}
+            key={project.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 * index }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
           >
-            <BlogPostLink post={post} />
+            <ProjectGridItem project={project} />
           </motion.div>
         ))}
-      </motion.div>
-
-      {/* Empty State */}
-      {filteredPosts.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center py-12"
-        >
-          <p className="text-muted-foreground">No blog posts found in this category.</p>
-        </motion.div>
-      )}
+      </div>
     </div>
   )
 } 
