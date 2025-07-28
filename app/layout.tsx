@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio - Mihai Crisan",
+  title: "Mihai Crisan Personal Portfolio",
   description: "Personal portfolio showcasing my projects and skills",
 };
 
@@ -35,13 +35,12 @@ export default function RootLayout({
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
+          storageKey="theme"
         >
           <div className="flex flex-col min-h-screen">
             <Navigation />
             <main className="flex-1">
-              <div className="max-w-xl mx-auto px-6">
-                {children}
-              </div>
+              {children}
             </main>
             <Footer />
           </div>

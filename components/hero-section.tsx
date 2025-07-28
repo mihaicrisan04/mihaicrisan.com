@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { SpringElement } from "@/components/ui/spring-element"
-import { motion } from "motion/react"
 
 interface HeroSectionProps {
   name: string

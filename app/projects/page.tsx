@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "motion/react"
-import { ProjectGridItem } from "@/components/project-grid-item"
+import Link from "next/link"
 import projectsData from "@/data/projects.json"
 
 interface Project {
@@ -31,41 +31,51 @@ interface Project {
   highlights?: string[]
 }
 
+function generateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
 export default function ProjectsPage() {
   const projects = projectsData as Project[]
 
   return (
-    <div className="py-8 space-y-8">
-      <div className="text-center space-y-4">
-        <motion.h1 
-          className="text-4xl font-bold text-foreground"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Projects
-        </motion.h1>
-        <motion.p 
-          className="text-lg text-muted-foreground max-w-2xl mx-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          A collection of projects I've worked on, showcasing various technologies and approaches to problem-solving.
-        </motion.p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-          >
-            <ProjectGridItem project={project} />
-          </motion.div>
-        ))}
+    <div className="max-w-xl mx-auto px-6">
+      <div className="min-h-[55vh] flex flex-col justify-start py-8">
+        <div className="space-y-3">
+          {projects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.05 }}
+            >
+              <Link href={`/projects/${generateSlug(project.name)}`}>
+                <motion.div
+                  className="flex items-center justify-between group hover:bg-muted/50 -mx-2 px-2 py-1 rounded transition-colors cursor-pointer"
+                  whileHover={{ x: 4 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <span className="text-sm hover:text-foreground transition-colors">
+                    {project.name}
+                  </span>
+                  <motion.svg 
+                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    whileHover={{ x: 4 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </motion.svg>
+                </motion.div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   )

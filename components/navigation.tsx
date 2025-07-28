@@ -18,7 +18,7 @@ export function Navigation() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.0 }}
           className="bg-background/80 backdrop-blur-sm border border-border rounded-sm px-4 py-2"
         >
           <div className="flex items-center justify-between">
@@ -51,6 +51,21 @@ export function Navigation() {
                   }`}
                 >
                   Projects
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link 
+                  href="/blog" 
+                  className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
+                    pathname === "/blog" || pathname?.startsWith("/blog/")
+                      ? "text-foreground" 
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Blog
                 </Link>
               </motion.div>
             </nav>

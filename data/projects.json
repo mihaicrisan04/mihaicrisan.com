@@ -49,6 +49,13 @@
     "images": [
       { "url": "/projects/berlin-emergency-1.jpg", "alt": "Berlin Emergency Tracker Dashboard" },
       { "url": "/projects/berlin-emergency-2.jpg", "alt": "Real-time Map View" }
+    ],
+    "highlights": [
+      "Real-time WebSocket integration for live emergency updates",
+      "Interactive map interface with geolocation services",
+      "PostgreSQL database with optimized queries for emergency data",
+      "Responsive design supporting mobile and desktop users",
+      "API integration with Berlin emergency services"
     ]
   },
   {
@@ -76,6 +83,13 @@
     "images": [
       { "url": "/projects/radiocast-1.jpg", "alt": "Radiocast Home Interface" },
       { "url": "/projects/radiocast-2.jpg", "alt": "Podcast Player View" }
+    ],
+    "highlights": [
+      "AI-powered recommendation engine using OpenAI",
+      "Progressive Web App with offline listening capabilities",
+      "Prisma ORM for efficient database management",
+      "Clean, modern interface inspired by Spotify",
+      "Social features for podcast sharing and discovery"
     ]
   },
   {
@@ -102,6 +116,13 @@
     "images": [
       { "url": "/projects/time-tracker-1.jpg", "alt": "Time Tracker Dashboard" },
       { "url": "/projects/time-tracker-2.jpg", "alt": "Analytics View" }
+    ],
+    "highlights": [
+      "Cross-platform desktop app built with Electron",
+      "Local SQLite database for privacy and offline use",
+      "Interactive charts and analytics with Chart.js",
+      "Minimal design focusing on productivity",
+      "Export capabilities to popular formats (CSV, PDF)"
     ]
   },
   {
