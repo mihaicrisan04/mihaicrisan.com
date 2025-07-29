@@ -63,10 +63,9 @@ export function BackButton() {
           trigger={shouldTrigger}
           interval={0.05}
           transition={{
-            type: 'spring',
-            stiffness: 150,
-            damping: 19,
-            mass: 1.2,
+            type: 'tween',
+            duration: 0.15,
+            ease: 'easeOut'
           }}
           onIndexChange={handleIndexChange}
           variants={{

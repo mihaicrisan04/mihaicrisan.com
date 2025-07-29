@@ -8,6 +8,13 @@ import {
   MorphingDialogImage,
   MorphingDialogClose
 } from "@/components/motion-primitives/morphing-dialog"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNavigation,
+} from "@/components/motion-primitives/carousel"
+import { Spotlight } from "@/components/motion-primitives/spotlight"
 import { XIcon } from 'lucide-react'
 import projectsData from "@/data/projects.json"
 
@@ -90,140 +97,138 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <div className="py-8">
-      <div className="max-w-2xl mx-auto px-6">
+    <div className="min-h-screen">
+      <div className="max-w-3xl mx-auto px-6 py-8">
         <BackButton />
         
         {/* Project Header */}
-        <div className="mb-12">
-          <h1 className="text-xl font-bold text-foreground mb-2">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             {project.name}
           </h1>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground text-sm">
             {formatDateRange(project.startDate, project.endDate)}
           </p>
-          <div className="mb-6">
-            <span className={`text-sm font-medium ${getStatusColor(project.status)}`}>
+        </div>
+
+        {/* Image Carousel */}
+        {project.images.length > 0 && (
+          <div className="mb-12 px-4">
+            <Carousel className="w-full" disableDrag={false}>
+              <CarouselContent className="-ml-4">
+                {project.images.map((image, index) => (
+                  <CarouselItem key={index} className="basis-[85%] pl-4 sm:basis-[70%] md:basis-[60%] lg:basis-1/2">
+                    <div className="relative">
+                      <Spotlight size={150} />
+                      <MorphingDialog
+                        transition={{
+                          duration: 0.3,
+                          ease: 'easeInOut',
+                        }}
+                      >
+                        <MorphingDialogTrigger>
+                          <div className="aspect-video w-full">
+                            <MorphingDialogImage
+                              src={`/${image.url}`}
+                              alt={image.alt}
+                              className='w-full h-full rounded-lg object-cover border border-border hover:border-border/60 transition-colors cursor-pointer'
+                            />
+                          </div>
+                        </MorphingDialogTrigger>
+                        <MorphingDialogContainer>
+                          <MorphingDialogContent className='relative'>
+                            <MorphingDialogImage
+                              src={`/${image.url}`}
+                              alt={image.alt}
+                              className='h-auto w-full max-w-[90vw] rounded-lg object-cover lg:h-[90vh]'
+                            />
+                          </MorphingDialogContent>
+                          <MorphingDialogClose
+                            className='fixed right-6 top-6 h-fit w-fit rounded-full bg-white p-1'
+                            variants={{
+                              initial: { opacity: 0 },
+                              animate: {
+                                opacity: 1,
+                                transition: { delay: 0.3, duration: 0.1 },
+                              },
+                              exit: { opacity: 0, transition: { duration: 0 } },
+                            }}
+                          >
+                            <XIcon className='h-5 w-5 text-zinc-500' />
+                          </MorphingDialogClose>
+                        </MorphingDialogContainer>
+                      </MorphingDialog>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {project.images.length > 1 && <CarouselNavigation />}
+            </Carousel>
+          </div>
+        )}
+
+        {/* Description as bullet points */}
+        <div className="mb-16 max-w-2xl">
+          {project.highlights && project.highlights.length > 0 ? (
+            <ul className="space-y-3">
+              {project.highlights.map((highlight, index) => (
+                <li key={index} className="text-foreground/80 leading-relaxed flex">
+                  <span className="text-muted-foreground mr-3">•</span>
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-foreground/80 leading-relaxed">
+              {project.fullDescription}
+            </p>
+          )}
+        </div>
+
+        {/* Status */}
+        {project.status && (
+        <div className="mb-8">
+          <span className={`text-sm font-medium px-3 py-1 rounded ${getStatusColor(project.status)} bg-secondary/50`}>
               {project.status.charAt(0).toUpperCase() + project.status.slice(1).replace('-', ' ')}
             </span>
           </div>
-          <p className="text-foreground/80 leading-relaxed">
-            {project.fullDescription}
-          </p>
+        )}
+
+        {/* Tech Stack */}
+        <div className="mb-8">
+          <h3 className="text-lg font-medium text-foreground mb-4">Tech Stack</h3>
+          <div className="flex flex-wrap gap-2">
+            {project.techStack.map((tech, index) => (
+              <span
+                key={index}
+                className="bg-secondary text-secondary-foreground px-3 py-1 rounded text-sm"
+              >
+                {tech.name}
+              </span>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Screenshots */}
-          <div className="lg:col-span-2 space-y-8">
-            {project.images.length > 0 && (
-              <div>
-                <h2 className="text-lg font-medium text-foreground mb-4">Screenshots</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {project.images.map((image, index) => (
-                    <MorphingDialog
-                      key={index}
-                      transition={{
-                        duration: 0.3,
-                        ease: 'easeInOut',
-                      }}
-                    >
-                      <MorphingDialogTrigger>
-                        <MorphingDialogImage
-                          src={image.url}
-                          alt={image.alt}
-                          className='w-full h-48 rounded-lg object-cover border border-border hover:border-border/60 transition-colors'
-                        />
-                      </MorphingDialogTrigger>
-                      <MorphingDialogContainer>
-                        <MorphingDialogContent className='relative'>
-                          <MorphingDialogImage
-                            src={image.url}
-                            alt={image.alt}
-                            className='h-auto w-full max-w-[90vw] rounded-lg object-cover lg:h-[90vh]'
-                          />
-                        </MorphingDialogContent>
-                        <MorphingDialogClose
-                          className='fixed right-6 top-6 h-fit w-fit rounded-full bg-white p-1'
-                          variants={{
-                            initial: { opacity: 0 },
-                            animate: {
-                              opacity: 1,
-                              transition: { delay: 0.3, duration: 0.1 },
-                            },
-                            exit: { opacity: 0, transition: { duration: 0 } },
-                          }}
-                        >
-                          <XIcon className='h-5 w-5 text-zinc-500' />
-                        </MorphingDialogClose>
-                      </MorphingDialogContainer>
-                    </MorphingDialog>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Highlights */}
-            {project.highlights && project.highlights.length > 0 && (
-              <div>
-                <h2 className="text-lg font-medium text-foreground mb-4">Key Highlights</h2>
-                <ul className="space-y-2">
-                  {project.highlights.map((highlight, index) => (
-                    <li key={index} className="text-foreground/80 leading-relaxed">
-                      • {highlight}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-8">
-            {/* Tech Stack */}
-            <div>
-              <h2 className="text-lg font-medium text-foreground mb-4">Tech Stack</h2>
-              <div className="flex flex-wrap gap-2">
-                {project.techStack.map((tech, index) => (
-                  <span
-                    key={index}
-                    className="bg-secondary text-secondary-foreground px-2 py-1 rounded text-sm"
+        {/* Links */}
+        {project.links.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-foreground mb-4">Links</h3>
+            <div className="space-y-2">
+              {project.links.map((link, index) => (
+                <div key={index}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 dark:text-blue-400 hover:underline text-sm block"
                   >
-                    {tech.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Category */}
-            <div>
-              <h2 className="text-lg font-medium text-foreground mb-4">Category</h2>
-              <p className="text-foreground/80 capitalize">
-                {project.category.replace('-', ' ')}
-              </p>
-            </div>
-
-            {/* Links */}
-            {project.links.length > 0 && (
-              <div>
-                <h2 className="text-lg font-medium text-foreground mb-4">Links</h2>
-                <div className="space-y-2">
-                  {project.links.map((link, index) => (
-                    <div key={index}>
-                      <a
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                      >
-                        {link.name}
-                      </a>
-                    </div>
-                  ))}
+                    {link.name}
+                  </a>
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="mt-24"></div>
       </div>
