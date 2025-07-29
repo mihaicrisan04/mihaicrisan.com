@@ -5,9 +5,9 @@ import { getBlogMarkdown } from "@/lib/markdown"
 import { BlogPostWrapper } from "@/components/blog-post-wrapper"
 
 interface BlogPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 function formatDate(dateString: string): string {
@@ -19,8 +19,11 @@ function formatDate(dateString: string): string {
 }
 
 export default async function BlogPostPage({ params }: BlogPageProps) {
+  // Await params for Next.js 15 compatibility
+  const { slug } = await params
+  
   // Get blog post markdown content
-  const markdownData = await getBlogMarkdown(params.slug)
+  const markdownData = await getBlogMarkdown(slug)
 
   if (!markdownData) {
     notFound()

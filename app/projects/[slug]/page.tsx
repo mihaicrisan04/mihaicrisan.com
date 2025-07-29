@@ -45,9 +45,9 @@ interface Project {
 }
 
 interface ProjectPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 function generateSlug(name: string): string {
@@ -88,8 +88,11 @@ function getStatusColor(status: string): string {
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
+  // Await params for Next.js 15 compatibility
+  const { slug } = await params
+  
   const project = (projectsData as Project[]).find(p => 
-    generateSlug(p.name) === params.slug
+    generateSlug(p.name) === slug
   )
 
   if (!project) {
