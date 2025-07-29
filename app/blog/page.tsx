@@ -15,14 +15,13 @@ export default async function BlogPage() {
   return (
     <div className="max-w-xl mx-auto px-6">
       <div className="min-h-[55vh] flex flex-col justify-start py-8">
-        <div className="mb-8">
-          <h1 className="text-xl font-bold text-foreground mb-2">Blog</h1>
+        <div className="mb-4">
           <p className="text-muted-foreground">
-            Technical insights, project deep-dives, and development thoughts.
+            Cool stuff i find on the internet mostly, or thoughts on things.
           </p>
         </div>
         
-        <div className="space-y-6">
+        <div className="space-y-3">
           {blogPosts.map((post, index) => (
             <BlogPostItem 
               key={post.slug} 

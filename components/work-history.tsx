@@ -43,7 +43,7 @@ export function WorkHistory({ workHistory }: WorkHistoryProps) {
   return (
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="work-history">
-        <AccordionTrigger className="text-sm hover:bg-muted/50 -mx-2 px-2 py-1 rounded transition-colors">
+        <AccordionTrigger className="text-sm hover:bg-muted/50 -mx-2 px-2 py-1 rounded transition-colors hover:no-underline">
           Previous Work Experience ({previousJobs.length})
         </AccordionTrigger>
         <AccordionContent>

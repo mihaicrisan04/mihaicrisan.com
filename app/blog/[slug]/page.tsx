@@ -33,9 +33,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
       <div className="py-8">
         <div className="max-w-2xl mx-auto px-6">
           {/* Back Button */}
-          <div className="mb-8">
-            <BackButton />
-          </div>
+          <BackButton />
           
           {/* Blog Post Header */}
           <header className="mb-12">

@@ -31,13 +31,15 @@ export function BackButton() {
   }, [isHovered, currentIndex])
   
   const handleIndexChange = (index: number) => {
-    setCurrentIndex(index)
-    setDirection(index === 0 ? -1 : 1)
-    // Stop triggering once we reach the desired index
-    const targetIndex = isHovered ? 1 : 0
-    if (index === targetIndex) {
-      setShouldTrigger(false)
-    }
+    setTimeout(() => { // trick to avoid 
+      setCurrentIndex(index)
+      setDirection(index === 0 ? -1 : 1)
+      // Stop triggering once we reach the desired index
+      const targetIndex = isHovered ? 1 : 0
+      if (index === targetIndex) {
+        setShouldTrigger(false)
+      }
+    }, 0)
   }
   
   return (
