@@ -36,7 +36,7 @@
     "id": "cluj-bus-tracking",
     "name": "Cluj-Napoca Bus Tracking App",
     "shortDescription": "Real-time public transportation tracking for Cluj-Napoca",
-    "fullDescription": "A real-time public transportation tracking application for Cluj-Napoca, focusing on fast data processing and user-friendly features. Achieved near-instant data updates for bus locations by implementing efficient network calls and optimizing API data handling.",
+    "fullDescription": "A real-time public transportation tracking application for Cluj-Napoca, focusing on fast data processing and user-friendly features. Achieved near-instant data updates for bus locations by implementing efficient network calls and optimizing API data handling, reducing app refresh times significantly.",
     "status": "completed",
     "category": "mobile-app",
     "featured": true,
@@ -52,10 +52,6 @@
       { "name": "GitHub", "url": "https://github.com/mihaicrisan04/bus-map", "type": "code" },
       { "name": "App Store", "url": "#", "type": "download" }
     ],
-    "images": [
-      { "url": "/content/projects/bus-map-1.jpeg", "alt": "Bus Tracking Map View" },
-      { "url": "/content/projects/bus-map-2.jpeg", "alt": "Route Selection Interface" }
-    ],
     "highlights": [
       "Near-instant data updates for bus locations",
       "Efficient network calls and optimized API data handling",
@@ -68,7 +64,7 @@
     "id": "boccelute",
     "name": "Boccelute",
     "shortDescription": "Full-stack e-commerce website for tote bag sales",
-    "fullDescription": "A full-stack e-commerce website specializing in tote bag sales, overseeing all aspects from database implementation to frontend design. Features robust backend logic for user account management with secure encryption and seamless signup functionality.",
+    "fullDescription": "A full-stack e-commerce website specializing in tote bag sales, overseeing all aspects from database implementation to frontend design. Implemented robust backend logic for user account management, ensuring secure encryption of sensitive data for each account and seamless signup functionality.",
     "status": "completed",
     "category": "e-commerce",
     "featured": true,
@@ -86,16 +82,97 @@
       { "name": "GitHub", "url": "https://github.com/mihaicrisan04/boccelute", "type": "code" },
       { "name": "Demo", "url": "#", "type": "demo" }
     ],
-    "images": [
-      { "url": "/content/projects/boccelute-1.jpeg", "alt": "Boccelute Homepage" },
-      { "url": "/content/projects/boccelute-2.jpeg", "alt": "Product Catalog" }
-    ],
     "highlights": [
       "Full-stack e-commerce solution from database to frontend",
       "Robust user account management system",
       "Secure encryption of sensitive user data",
       "Seamless user signup and authentication",
       "Complete product catalog and shopping cart functionality"
+    ]
+  },
+  {
+    "id": "obstruction-game",
+    "name": "Obstruction Game",
+    "shortDescription": "Strategic board game with AI opponent using Minimax algorithm",
+    "fullDescription": "Engineered the Obstruction game with a scalable and easily modifiable codebase by employing a layered architecture, ensuring flexibility for future enhancements without compromising existing functionality. Implemented an advanced AI opponent using the Minimax algorithm with Alpha-Beta Pruning, resulting in a nearly unbeatable and highly efficient gaming experience for players.",
+    "status": "completed",
+    "category": "game",
+    "featured": false,
+    "startDate": "2023-03-01",
+    "endDate": "2023-06-15",
+    "techStack": [
+      { "name": "Python", "category": "language" },
+      { "name": "PyGame", "category": "framework" },
+      { "name": "Minimax Algorithm", "category": "algorithm" },
+      { "name": "Alpha-Beta Pruning", "category": "optimization" }
+    ],
+    "links": [
+      { "name": "GitHub", "url": "https://github.com/mihaicrisan04/obstruction", "type": "code" },
+      { "name": "Demo", "url": "#", "type": "demo" }
+    ],
+    "highlights": [
+      "Scalable layered architecture for easy modifications",
+      "Advanced AI opponent using Minimax algorithm",
+      "Alpha-Beta Pruning for efficient AI decision making",
+      "Nearly unbeatable AI gaming experience",
+      "Clean, modular codebase for future enhancements"
+    ]
+  },
+  {
+    "id": "medlog-healthcare",
+    "name": "Medlog - Healthcare Communication Platform",
+    "shortDescription": "Doctor-patient communication and healthcare workflow optimization",
+    "fullDescription": "Led the design and development endeavors in a collaborative team of 5 individuals for the Medlog project, focused on transforming doctor-patient communication and optimizing healthcare workflows. Optimized the design of the Medlog application's navigation system, yielding a 50% improvement in user efficiency by streamlining access to specific functions and features.",
+    "status": "completed",
+    "category": "healthcare",
+    "featured": false,
+    "startDate": "2021-09-01",
+    "endDate": "2022-06-30",
+    "techStack": [
+      { "name": "JavaScript", "category": "language" },
+      { "name": "React", "category": "framework" },
+      { "name": "Node.js", "category": "backend" },
+      { "name": "MongoDB", "category": "database" },
+      { "name": "Responsive Design", "category": "frontend" }
+    ],
+    "links": [
+      { "name": "GitHub", "url": "#", "type": "code" },
+      { "name": "Demo", "url": "#", "type": "demo" }
+    ],
+    "highlights": [
+      "50% improvement in user efficiency through navigation optimization",
+      "Responsive design for all screen sizes",
+      "Streamlined doctor-patient communication",
+      "Healthcare workflow optimization",
+      "Collaborative team development of 5 members"
+    ]
+  },
+  {
+    "id": "kindergarten-automation",
+    "name": "Kindergarten Automation System",
+    "shortDescription": "Google Sheets automation for administrative processes and parent communication",
+    "fullDescription": "Developed a Google Sheets automation system using Apps Script, streamlining report generation and saving the kindergarten in administrative costs. Designed and implemented an email newsletter system, enabling educators to efficiently communicate daily child behavior updates to parents, enhancing parent-teacher communication.",
+    "status": "completed",
+    "category": "automation",
+    "featured": false,
+    "startDate": "2023-10-01",
+    "endDate": "2024-06-30",
+    "techStack": [
+      { "name": "Google Apps Script", "category": "automation" },
+      { "name": "Google Sheets", "category": "platform" },
+      { "name": "JavaScript", "category": "language" },
+      { "name": "Email Integration", "category": "communication" }
+    ],
+    "links": [
+      { "name": "GitHub", "url": "#", "type": "code" },
+      { "name": "Demo", "url": "#", "type": "demo" }
+    ],
+    "highlights": [
+      "Streamlined report generation and administrative processes",
+      "Email newsletter system for parent communication",
+      "Digital transition from paper-based reporting",
+      "Improved data accuracy and accessibility",
+      "Environmentally sustainable practices"
     ]
   }
 ] 

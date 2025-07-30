@@ -5,7 +5,7 @@ import { Cursor } from "@/components/motion-primitives/cursor"
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur"
 import Link from "next/link"
 
-interface Project {
+export interface Project {
   id: string
   name: string
   shortDescription: string

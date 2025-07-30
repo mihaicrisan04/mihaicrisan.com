@@ -1,5 +1,27 @@
 [
   {
+    "id": "this-website",
+    "title": "This Website",
+    "slug": "this-website",
+    "excerpt": "The journey of building my personal portfolio and blog - from idea to deployment, the challenges faced, and lessons learned along the way.",
+    "content": "Full blog post content will go here...",
+    "publishedAt": "2024-01-15",
+    "updatedAt": "2024-01-15",
+    "status": "published",
+    "featured": true,
+    "readTime": 5,
+    "category": "development",
+    "tags": ["nextjs", "typescript", "portfolio", "web-development", "personal-project"],
+    "coverImage": {
+      "url": "/blog/this-website-cover.jpg",
+      "alt": "Personal Website Development Journey"
+    },
+    "author": {
+      "name": "Mihai Crisan",
+      "avatar": "/avatar.jpeg"
+    }
+  },
+  {
     "id": "building-real-time-emergency-tracker",
     "title": "Building a Real-Time Emergency Tracker for Berlin",
     "slug": "building-real-time-emergency-tracker",

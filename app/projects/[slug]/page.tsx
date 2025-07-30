@@ -101,26 +101,28 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-3xl mx-auto px-6 py-8">
-        <BackButton />
-        
-        {/* Project Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            {project.name}
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            {formatDateRange(project.startDate, project.endDate)}
-          </p>
+      <div className="max-w-3xl mx-auto py-8">
+        <div className="px-6">
+          <BackButton />
+          
+          {/* Project Header */}
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-foreground mb-2">
+              {project.name}
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              {formatDateRange(project.startDate, project.endDate)}
+            </p>
+          </div>
         </div>
 
         {/* Image Carousel */}
-        {project.images.length > 0 && (
-          <div className="mb-12 px-4">
+        {project.images && project.images.length > 0 && (
+          <div className="mb-12 overflow-hidden">
             <Carousel className="w-full" disableDrag={false}>
-              <CarouselContent className="-ml-4">
+              <CarouselContent className="pl-4 sm:pl-6">
                 {project.images.map((image, index) => (
-                  <CarouselItem key={index} className="basis-[85%] pl-4 sm:basis-[70%] md:basis-[60%] lg:basis-1/2">
+                  <CarouselItem key={index} className="basis-[85%] pr-4 sm:basis-[70%] sm:pr-6 md:basis-[60%] lg:basis-1/2">
                     <div className="relative">
                       <Spotlight size={150} />
                       <MorphingDialog
@@ -170,70 +172,72 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         )}
 
-        {/* Description as bullet points */}
-        <div className="mb-16 max-w-2xl">
-          {project.highlights && project.highlights.length > 0 ? (
-            <ul className="space-y-3">
-              {project.highlights.map((highlight, index) => (
-                <li key={index} className="text-foreground/80 leading-relaxed flex">
-                  <span className="text-muted-foreground mr-3">•</span>
-                  <span>{highlight}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-foreground/80 leading-relaxed">
-              {project.fullDescription}
-            </p>
-          )}
-        </div>
-
-        {/* Status */}
-        {project.status && (
-        <div className="mb-8">
-          <span className={`text-sm font-medium px-3 py-1 rounded ${getStatusColor(project.status)} bg-secondary/50`}>
-              {project.status.charAt(0).toUpperCase() + project.status.slice(1).replace('-', ' ')}
-            </span>
+        <div className="px-6">
+          {/* Description as bullet points */}
+          <div className="mb-16 max-w-2xl">
+            {project.highlights && project.highlights.length > 0 ? (
+              <ul className="space-y-3">
+                {project.highlights.map((highlight, index) => (
+                  <li key={index} className="text-foreground/80 leading-relaxed flex">
+                    <span className="text-muted-foreground mr-3">•</span>
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-foreground/80 leading-relaxed">
+                {project.fullDescription}
+              </p>
+            )}
           </div>
-        )}
 
-        {/* Tech Stack */}
-        <div className="mb-8">
-          <h3 className="text-lg font-medium text-foreground mb-4">Tech Stack</h3>
-          <div className="flex flex-wrap gap-2">
-            {project.techStack.map((tech, index) => (
-              <span
-                key={index}
-                className="bg-secondary text-secondary-foreground px-3 py-1 rounded text-sm"
-              >
-                {tech.name}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Links */}
-        {project.links.length > 0 && (
+          {/* Status */}
+          {project.status && (
           <div className="mb-8">
-            <h3 className="text-lg font-medium text-foreground mb-4">Links</h3>
-            <div className="space-y-2">
-              {project.links.map((link, index) => (
-                <div key={index}>
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 dark:text-blue-400 hover:underline text-sm block"
-                  >
-                    {link.name}
-                  </a>
-                </div>
+            <span className={`text-sm font-medium px-3 py-1 rounded ${getStatusColor(project.status)} bg-secondary/50`}>
+                {project.status.charAt(0).toUpperCase() + project.status.slice(1).replace('-', ' ')}
+              </span>
+            </div>
+          )}
+
+          {/* Tech Stack */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-foreground mb-4">Tech Stack</h3>
+            <div className="flex flex-wrap gap-2">
+              {project.techStack.map((tech, index) => (
+                <span
+                  key={index}
+                  className="bg-secondary text-secondary-foreground px-3 py-1 rounded text-sm"
+                >
+                  {tech.name}
+                </span>
               ))}
             </div>
           </div>
-        )}
 
-        <div className="mt-24"></div>
+          {/* Links */}
+          {project.links.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-lg font-medium text-foreground mb-4">Links</h3>
+              <div className="space-y-2">
+                {project.links.map((link, index) => (
+                  <div key={index}>
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 dark:text-blue-400 hover:underline text-sm block"
+                    >
+                      {link.name}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="mt-24"></div>
+        </div>
       </div>
     </div>
   )

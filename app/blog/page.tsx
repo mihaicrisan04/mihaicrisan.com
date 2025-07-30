@@ -1,5 +1,6 @@
 import { getAllBlogPosts } from "@/lib/markdown"
 import { BlogPostItem } from "@/components/blog-post-item"
+import { AnimatedDescription } from "@/components/animated-description"
 
 interface BlogPost {
   slug: string
@@ -15,11 +16,9 @@ export default async function BlogPage() {
   return (
     <div className="max-w-xl mx-auto px-6">
       <div className="min-h-[55vh] flex flex-col justify-start py-8">
-        <div className="mb-4">
-          <p className="text-muted-foreground">
-            Cool stuff i find on the internet mostly, or thoughts on things.
-          </p>
-        </div>
+        <AnimatedDescription>
+          Cool stuff i find on the internet mostly, or thoughts on things.
+        </AnimatedDescription>
         
         <div className="space-y-3">
           {blogPosts.map((post, index) => (
