@@ -9,7 +9,7 @@ import { CustomLink } from "@/components/custom-link"
 import { TextLoop } from "./motion-primitives/text-loop"
 
 const socialLinks = [
-  { name: "GitHub", href: "https://github.com/mihaicrisan" },
+  { name: "GitHub", href: "https://github.com/mihaicrisan04" },
   { name: "LinkedIn", href: "https://linkedin.com/in/mihaicrisan04" },
   { name: "X", href: "https://x.com/mitzaqe" },
   { name: "Instagram", href: "https://instagram.com/mihaicrisann" },
