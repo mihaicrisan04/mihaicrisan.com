@@ -4,7 +4,7 @@
     "name": "rngo.ro",
     "shortDescription": "Personal portfolio and blog website",
     "fullDescription": "A modern personal portfolio and blog website showcasing projects, technical skills, and professional experience. Built with clean design principles and optimized for performance.",
-    "status": null,
+    "status": "completed",
     "category": "portfolio",
     "featured": true,
     "startDate": "2024-01-01",
