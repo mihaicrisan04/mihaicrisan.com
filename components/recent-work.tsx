@@ -4,15 +4,16 @@ import { motion } from "motion/react"
 import { ProjectListItem } from "@/components/project-list-item"
 
 interface Project {
-  id: string
+  _id: string
   name: string
+  slug: string
   shortDescription: string
   fullDescription: string
-  status: string
+  status?: string
   category: string
   featured: boolean
   startDate: string
-  endDate: string | null
+  endDate?: string | null
   techStack: Array<{
     name: string
     category: string
@@ -38,7 +39,7 @@ export function RecentWork({ projects }: RecentWorkProps) {
     <div className="space-y-3">
       {projects.map((project, index) => (
         <motion.div
-          key={project.id}
+          key={project._id}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: index * 0.1 }}

@@ -1,4 +1,9 @@
+"use client"
+
+import { use } from "react"
 import { notFound } from "next/navigation"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 import { BackButton } from "@/components/back-button"
 import { 
   MorphingDialog,
@@ -16,18 +21,19 @@ import {
 } from "@/components/motion-primitives/carousel"
 import { Spotlight } from "@/components/motion-primitives/spotlight"
 import { XIcon } from 'lucide-react'
-import projectsData from "@/data/projects.json"
+import { Image } from "@imagekit/next"
 
 interface Project {
-  id: string
+  _id: string
   name: string
+  slug: string
   shortDescription: string
   fullDescription: string
-  status: string
+  status?: string
   category: string
   featured: boolean
   startDate: string
-  endDate: string | null
+  endDate?: string | null
   techStack: Array<{
     name: string
     category: string
@@ -45,16 +51,9 @@ interface Project {
 }
 
 interface ProjectPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
-}
-
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
+  }>
 }
 
 function formatDate(dateString: string): string {
@@ -65,7 +64,7 @@ function formatDate(dateString: string): string {
   })
 }
 
-function formatDateRange(startDate: string, endDate: string | null): string {
+function formatDateRange(startDate: string, endDate: string | null | undefined): string {
   const start = formatDate(startDate)
   if (!endDate) {
     return `${start} - Present`
@@ -87,12 +86,21 @@ function getStatusColor(status: string): string {
   }
 }
 
-export default async function ProjectPage({ params }: ProjectPageProps) {
-  const project = (projectsData as Project[]).find(p => 
-    generateSlug(p.name) === params.slug
-  )
+export default function ProjectPage({ params }: ProjectPageProps) {
+  const { slug } = use(params)
+  const project = useQuery(api.projects.getProjectBySlug, { slug })
 
-  if (!project) {
+  if (project === undefined) {
+    return (
+      <div className="min-h-screen">
+        <div className="max-w-3xl mx-auto px-6 py-8">
+          <div className="text-muted-foreground">Loading project...</div>
+        </div>
+      </div>
+    )
+  }
+
+  if (project === null) {
     notFound()
   }
 
@@ -128,19 +136,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       >
                         <MorphingDialogTrigger>
                           <div className="aspect-video w-full">
-                            <MorphingDialogImage
-                              src={`/${image.url}`}
+                            <Image
+                              src={image.url}
                               alt={image.alt}
+                              width={600}
+                              height={400}
                               className='w-full h-full rounded-lg object-cover border border-border hover:border-border/60 transition-colors cursor-pointer'
+                              transformation={[
+                                { width: 600, height: 400, crop: "maintain_ratio" }
+                              ]}
                             />
                           </div>
                         </MorphingDialogTrigger>
                         <MorphingDialogContainer>
                           <MorphingDialogContent className='relative'>
-                            <MorphingDialogImage
-                              src={`/${image.url}`}
+                            <Image
+                              src={image.url}
                               alt={image.alt}
+                              width={1200}
+                              height={800}
                               className='h-auto w-full max-w-[90vw] rounded-lg object-cover lg:h-[90vh]'
+                              transformation={[
+                                { width: 1200, height: 800, crop: "maintain_ratio" }
+                              ]}
                             />
                           </MorphingDialogContent>
                           <MorphingDialogClose
@@ -235,9 +253,3 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     </div>
   )
 }
-
-export async function generateStaticParams() {
-  return (projectsData as Project[]).map((project) => ({
-    slug: generateSlug(project.name),
-  }))
-} 

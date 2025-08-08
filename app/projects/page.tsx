@@ -2,18 +2,20 @@
 
 import { motion } from "motion/react"
 import Link from "next/link"
-import projectsData from "@/data/projects.json"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 interface Project {
-  id: string
+  _id: string
   name: string
+  slug: string
   shortDescription: string
   fullDescription: string
-  status: string
+  status?: string
   category: string
   featured: boolean
   startDate: string
-  endDate: string | null
+  endDate?: string | null
   techStack: Array<{
     name: string
     category: string
@@ -26,20 +28,22 @@ interface Project {
   images: Array<{
     url: string
     alt: string
-    caption?: string
   }>
   highlights?: string[]
 }
 
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
-}
-
 export default function ProjectsPage() {
-  const projects = projectsData as Project[]
+  const projects = useQuery(api.projects.getAllProjects)
+
+  if (!projects) {
+    return (
+      <div className="max-w-xl mx-auto px-6">
+        <div className="min-h-[55vh] flex flex-col justify-center items-center">
+          {/* empty state */}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-xl mx-auto px-6">
@@ -47,12 +51,12 @@ export default function ProjectsPage() {
         <div className="space-y-3">
           {projects.map((project, index) => (
             <motion.div
-              key={project.id}
+              key={project._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.05 }}
             >
-              <Link href={`/projects/${generateSlug(project.name)}`}>
+              <Link href={`/projects/${project.slug}`}>
                 <motion.div
                   className="flex items-center justify-between group hover:bg-muted/50 -mx-2 px-2 py-1 rounded transition-colors cursor-pointer"
                   whileHover={{ x: 4 }}

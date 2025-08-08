@@ -1,0 +1,142 @@
+import { mutation } from "./_generated/server";
+
+function generateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+export const migrateProjects = mutation({
+  handler: async (ctx) => {
+    // Clear existing projects
+    const existingProjects = await ctx.db.query("projects").collect();
+    for (const project of existingProjects) {
+      await ctx.db.delete(project._id);
+    }
+
+    // Add projects from data/projects.json
+    const projectsData = [
+      {
+        id: "rngo-ro",
+        name: "rngo.ro",
+        shortDescription: "Personal portfolio and blog website",
+        fullDescription: "A modern personal portfolio and blog website showcasing projects, technical skills, and professional experience. Built with clean design principles and optimized for performance.",
+        status: null,
+        category: "portfolio",
+        featured: true,
+        startDate: "2024-01-01",
+        endDate: "2024-02-15",
+        techStack: [
+          { name: "Next.js", category: "framework" },
+          { name: "TypeScript", category: "language" },
+          { name: "Tailwind CSS", category: "styling" },
+          { name: "Vercel", category: "deployment" },
+          { name: "React", category: "frontend" }
+        ],
+        links: [
+          { name: "Live Site", url: "https://rngo.ro", type: "demo" },
+          { name: "GitHub", url: "https://github.com/mihaicrisan04/rngo.ro", type: "code" }
+        ],
+        images: [
+          { url: "projects/homepage.jpeg", alt: "rngo.ro Homepage" },
+          { url: "projects/cars-page.jpeg", alt: "Projects Page" }
+        ],
+        highlights: [
+          "Modern responsive design with dark/light mode support",
+          "Built with Next.js 14 and TypeScript for type safety",
+          "Optimized for performance and SEO",
+          "Clean, minimalist UI focusing on content",
+          "Deployed on Vercel with automatic deployments"
+        ]
+      },
+      {
+        id: "cluj-bus-tracking",
+        name: "Cluj-Napoca Bus Tracking App",
+        shortDescription: "Real-time public transportation tracking for Cluj-Napoca",
+        fullDescription: "A real-time public transportation tracking application for Cluj-Napoca, focusing on fast data processing and user-friendly features. Achieved near-instant data updates for bus locations by implementing efficient network calls and optimizing API data handling.",
+        status: "completed",
+        category: "mobile-app",
+        featured: true,
+        startDate: "2023-09-01",
+        endDate: "2024-01-20",
+        techStack: [
+          { name: "Swift", category: "language" },
+          { name: "SwiftUI", category: "framework" },
+          { name: "TranzyAPI", category: "api" },
+          { name: "iOS", category: "platform" }
+        ],
+        links: [
+          { name: "GitHub", url: "https://github.com/mihaicrisan04/bus-map", type: "code" },
+          { name: "App Store", url: "#", type: "download" }
+        ],
+        images: [
+          { url: "content/projects/bus-map-1.jpeg", alt: "Bus Tracking Map View" },
+          { url: "content/projects/bus-map-2.jpeg", alt: "Route Selection Interface" }
+        ],
+        highlights: [
+          "Near-instant data updates for bus locations",
+          "Efficient network calls and optimized API data handling",
+          "Reduced app refresh times significantly",
+          "User-friendly interface for public transportation",
+          "Real-time tracking of Cluj-Napoca public buses"
+        ]
+      },
+      {
+        id: "boccelute",
+        name: "Boccelute",
+        shortDescription: "Full-stack e-commerce website for tote bag sales",
+        fullDescription: "A full-stack e-commerce website specializing in tote bag sales, overseeing all aspects from database implementation to frontend design. Features robust backend logic for user account management with secure encryption and seamless signup functionality.",
+        status: "completed",
+        category: "e-commerce",
+        featured: true,
+        startDate: "2022-06-01",
+        endDate: "2023-02-15",
+        techStack: [
+          { name: "JavaScript", category: "language" },
+          { name: "PHP", category: "backend" },
+          { name: "MySQL", category: "database" },
+          { name: "SQL", category: "database" },
+          { name: "WampServer", category: "server" },
+          { name: "HTML/CSS", category: "frontend" }
+        ],
+        links: [
+          { name: "GitHub", url: "https://github.com/mihaicrisan04/boccelute", type: "code" },
+          { name: "Demo", url: "#", type: "demo" }
+        ],
+        images: [
+          { url: "content/projects/boccelute-1.jpeg", alt: "Boccelute Homepage" },
+          { url: "content/projects/boccelute-2.jpeg", alt: "Product Catalog" }
+        ],
+        highlights: [
+          "Full-stack e-commerce solution from database to frontend",
+          "Robust user account management system",
+          "Secure encryption of sensitive user data",
+          "Seamless user signup and authentication",
+          "Complete product catalog and shopping cart functionality"
+        ]
+      }
+    ];
+
+    // Insert projects into database
+    for (const projectData of projectsData) {
+      await ctx.db.insert("projects", {
+        name: projectData.name,
+        slug: generateSlug(projectData.name),
+        shortDescription: projectData.shortDescription,
+        fullDescription: projectData.fullDescription,
+        status: projectData.status || undefined,
+        category: projectData.category,
+        featured: projectData.featured,
+        startDate: projectData.startDate,
+        endDate: projectData.endDate || undefined,
+        techStack: projectData.techStack,
+        links: projectData.links,
+        images: projectData.images,
+        highlights: projectData.highlights,
+      });
+    }
+
+    return { success: true, message: "Projects migrated successfully" };
+  },
+});
