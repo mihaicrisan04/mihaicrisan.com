@@ -1,3 +1,5 @@
+"use client";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -6,6 +8,9 @@ import { Footer } from "@/components/footer";
 import { ThemeProvider } from "next-themes";
 import { ConvexClientProvider } from "./providers";
 import { ImageKitProvider } from "@imagekit/next";
+import { AIChatProvider, useAIChat } from "@/contexts/ai-chat-context";
+import { AIChatOverlay } from "@/components/ai-chat-overlay";
+import { MorphingPopover } from "@/components/motion-primitives/morphing-popover";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,10 +22,31 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Mihai Crisan Personal Portfolio",
-  description: "Personal portfolio showcasing my projects and skills",
-};
+// export const metadata: Metadata = {
+//   title: "Mihai Crisan Personal Portfolio",
+//   description: "Personal portfolio showcasing my projects and skills",
+// };
+
+function LayoutContent({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const { isOpen, setIsOpen } = useAIChat();
+  
+  return (
+    <MorphingPopover open={isOpen} onOpenChange={setIsOpen}>
+      <div className="flex flex-col min-h-screen">
+        <Navigation />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
+      </div>
+      <AIChatOverlay />
+    </MorphingPopover>
+  );
+}
 
 export default function RootLayout({
   children,
@@ -41,13 +67,11 @@ export default function RootLayout({
               disableTransitionOnChange
               storageKey="theme"
             >
-              <div className="flex flex-col min-h-screen">
-                <Navigation />
-                <main className="flex-1">
+              <AIChatProvider>
+                <LayoutContent>
                   {children}
-                </main>
-                <Footer />
-              </div>
+                </LayoutContent>
+              </AIChatProvider>
             </ThemeProvider>
           </ImageKitProvider>
         </ConvexClientProvider>

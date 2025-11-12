@@ -1,94 +1,70 @@
-"use client"
+"use client";
 
-import { use } from "react"
-import { notFound } from "next/navigation"
-import { useQuery } from "convex/react"
-import { api } from "@/convex/_generated/api"
-import { BackButton } from "@/components/back-button"
-import { 
+import { use } from "react";
+import { notFound } from "next/navigation";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { BackButton } from "@/components/back-button";
+import {
   MorphingDialog,
   MorphingDialogTrigger,
   MorphingDialogContainer,
   MorphingDialogContent,
   MorphingDialogImage,
-  MorphingDialogClose
-} from "@/components/motion-primitives/morphing-dialog"
+  MorphingDialogClose,
+} from "@/components/motion-primitives/morphing-dialog";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNavigation,
-} from "@/components/motion-primitives/carousel"
-import { Spotlight } from "@/components/motion-primitives/spotlight"
-import { XIcon } from 'lucide-react'
-import { Image } from "@imagekit/next"
-
-interface Project {
-  _id: string
-  name: string
-  slug: string
-  shortDescription: string
-  fullDescription: string
-  status?: string
-  category: string
-  featured: boolean
-  startDate: string
-  endDate?: string | null
-  techStack: Array<{
-    name: string
-    category: string
-  }>
-  links: Array<{
-    name: string
-    url: string
-    type: string
-  }>
-  images: Array<{
-    url: string
-    alt: string
-  }>
-  highlights?: string[]
-}
+} from "@/components/motion-primitives/carousel";
+import { Spotlight } from "@/components/motion-primitives/spotlight";
+import { XIcon } from "lucide-react";
+import { Image } from "@imagekit/next";
 
 interface ProjectPageProps {
   params: Promise<{
-    slug: string
-  }>
+    slug: string;
+  }>;
 }
 
 function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
-function formatDateRange(startDate: string, endDate: string | null | undefined): string {
-  const start = formatDate(startDate)
+function formatDateRange(
+  startDate: string,
+  endDate: string | null | undefined,
+): string {
+  const start = formatDate(startDate);
   if (!endDate) {
-    return `${start} - Present`
+    return `${start} - Present`;
   }
-  const end = formatDate(endDate)
-  return `${start} - ${end}`
+  const end = formatDate(endDate);
+  return `${start} - ${end}`;
 }
 
 function getStatusColor(status: string): string {
   switch (status) {
-    case 'completed':
-      return 'text-green-600 dark:text-green-400'
-    case 'in-progress':
-      return 'text-blue-600 dark:text-blue-400'
-    case 'planning':
-      return 'text-yellow-600 dark:text-yellow-400'
+    case "completed":
+      return "text-green-600 dark:text-green-400";
+    case "in-progress":
+      return "text-blue-600 dark:text-blue-400";
+    case "planning":
+      return "text-yellow-600 dark:text-yellow-400";
     default:
-      return 'text-muted-foreground'
+      return "text-muted-foreground";
   }
 }
 
 export default function ProjectPage({ params }: ProjectPageProps) {
-  const { slug } = use(params)
-  const project = useQuery(api.projects.getProjectBySlug, { slug })
+  const { slug } = use(params);
+  const project = useQuery(api.projects.getProjectBySlug, { slug });
 
   if (project === undefined) {
     return (
@@ -97,18 +73,18 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           <div className="text-muted-foreground">Loading project...</div>
         </div>
       </div>
-    )
+    );
   }
 
   if (project === null) {
-    notFound()
+    notFound();
   }
 
   return (
     <div className="min-h-screen">
       <div className="max-w-3xl mx-auto px-6 py-8">
         <BackButton />
-        
+
         {/* Project Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-foreground mb-2">
@@ -125,13 +101,16 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             <Carousel className="w-full" disableDrag={false}>
               <CarouselContent className="-ml-4">
                 {project.images.map((image, index) => (
-                  <CarouselItem key={index} className="basis-[85%] pl-4 sm:basis-[70%] md:basis-[60%] lg:basis-1/2">
+                  <CarouselItem
+                    key={index}
+                    className="basis-[85%] pl-4 sm:basis-[70%] md:basis-[60%] lg:basis-1/2"
+                  >
                     <div className="relative">
                       <Spotlight size={150} />
                       <MorphingDialog
                         transition={{
                           duration: 0.3,
-                          ease: 'easeInOut',
+                          ease: "easeInOut",
                         }}
                       >
                         <MorphingDialogTrigger>
@@ -141,28 +120,36 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                               alt={image.alt}
                               width={600}
                               height={400}
-                              className='w-full h-full rounded-lg object-cover border border-border hover:border-border/60 transition-colors cursor-pointer'
+                              className="w-full h-full rounded-lg object-cover border border-border hover:border-border/60 transition-colors cursor-pointer"
                               transformation={[
-                                { width: 600, height: 400, crop: "maintain_ratio" }
+                                {
+                                  width: 600,
+                                  height: 400,
+                                  crop: "maintain_ratio",
+                                },
                               ]}
                             />
                           </div>
                         </MorphingDialogTrigger>
                         <MorphingDialogContainer>
-                          <MorphingDialogContent className='relative'>
+                          <MorphingDialogContent className="relative">
                             <Image
                               src={image.url}
                               alt={image.alt}
                               width={1200}
                               height={800}
-                              className='h-auto w-full max-w-[90vw] rounded-lg object-cover lg:h-[90vh]'
+                              className="h-auto w-full max-w-[90vw] rounded-lg object-cover lg:h-[90vh]"
                               transformation={[
-                                { width: 1200, height: 800, crop: "maintain_ratio" }
+                                {
+                                  width: 1200,
+                                  height: 800,
+                                  crop: "maintain_ratio",
+                                },
                               ]}
                             />
                           </MorphingDialogContent>
                           <MorphingDialogClose
-                            className='fixed right-6 top-6 h-fit w-fit rounded-full bg-white p-1'
+                            className="fixed right-6 top-6 h-fit w-fit rounded-full bg-white p-1"
                             variants={{
                               initial: { opacity: 0 },
                               animate: {
@@ -172,7 +159,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                               exit: { opacity: 0, transition: { duration: 0 } },
                             }}
                           >
-                            <XIcon className='h-5 w-5 text-zinc-500' />
+                            <XIcon className="h-5 w-5 text-zinc-500" />
                           </MorphingDialogClose>
                         </MorphingDialogContainer>
                       </MorphingDialog>
@@ -190,7 +177,10 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           {project.highlights && project.highlights.length > 0 ? (
             <ul className="space-y-3">
               {project.highlights.map((highlight, index) => (
-                <li key={index} className="text-foreground/80 leading-relaxed flex">
+                <li
+                  key={index}
+                  className="text-foreground/80 leading-relaxed flex"
+                >
                   <span className="text-muted-foreground mr-3">•</span>
                   <span>{highlight}</span>
                 </li>
@@ -205,16 +195,21 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Status */}
         {project.status && (
-        <div className="mb-8">
-          <span className={`text-sm font-medium px-3 py-1 rounded ${getStatusColor(project.status)} bg-secondary/50`}>
-              {project.status.charAt(0).toUpperCase() + project.status.slice(1).replace('-', ' ')}
+          <div className="mb-8">
+            <span
+              className={`text-sm font-medium px-3 py-1 rounded ${getStatusColor(project.status)} bg-secondary/50`}
+            >
+              {project.status.charAt(0).toUpperCase() +
+                project.status.slice(1).replace("-", " ")}
             </span>
           </div>
         )}
 
         {/* Tech Stack */}
         <div className="mb-8">
-          <h3 className="text-lg font-medium text-foreground mb-4">Tech Stack</h3>
+          <h3 className="text-lg font-medium text-foreground mb-4">
+            Tech Stack
+          </h3>
           <div className="flex flex-wrap gap-2">
             {project.techStack.map((tech, index) => (
               <span
@@ -251,5 +246,5 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         <div className="mt-24"></div>
       </div>
     </div>
-  )
+  );
 }

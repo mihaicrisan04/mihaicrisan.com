@@ -45,7 +45,7 @@ export default function CommandButton({
                 )}
             />
             <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                {children || "+ K"}
+                {children || "+ I"}
             </span>
             <span
                 className={cn(

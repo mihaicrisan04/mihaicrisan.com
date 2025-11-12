@@ -1,21 +1,22 @@
-"use client"
+"use client";
 
-import { motion } from "motion/react"
-import { HeroSection } from "@/components/hero-section"
-import { ContentSection } from "@/components/content-section"
-import { CurrentWork } from "@/components/current-work"
-import { WorkHistory } from "@/components/work-history"
-import { ProjectLink } from "@/components/project-link"
-import { CustomLink } from "@/components/custom-link"
-import { RecentWork } from "@/components/recent-work"
-import workExperienceData from "@/data/work-experience.json"
-import { useQuery } from "convex/react"
-import { api } from "@/convex/_generated/api"
+import { motion } from "motion/react";
+import { HeroSection } from "@/components/hero-section";
+import { ContentSection } from "@/components/content-section";
+import { CurrentWork } from "@/components/current-work";
+import { WorkHistory } from "@/components/work-history";
+import { ProjectLink } from "@/components/project-link";
+import { CustomLink } from "@/components/custom-link";
+import { RecentWork } from "@/components/recent-work";
+import workExperienceData from "@/data/work-experience.json";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { MailQuestionMark } from "lucide-react";
 
 export default function Home() {
-  const currentRole = workExperienceData.find(job => job.current)
-  const featuredProjects = useQuery(api.projects.getFeaturedProjects)
-  
+  const currentRole = workExperienceData.find((job) => job.current);
+  const featuredProjects = useQuery(api.projects.getFeaturedProjects);
+
   return (
     <div className="max-w-xl mx-auto px-6">
       <div className="py-8 space-y-10">
@@ -56,9 +57,32 @@ export default function Home() {
         >
           <ContentSection title="About me">
             <p className="text-base text-muted-foreground leading-relaxed">
-              I'm into clean code and solid solutions. Good architecture feels like art to me, and choosing variable names is a big deal. I always aim for neat, elegant logic.
-              <br /><br />
-              Outside of tech, I'm passionate about sports and inspired by clever design. I'm also a speed typing enthusiast - you can check out my <a href="https://monkeytype.com/profile/mitzaqe" target="_blank" rel="noopener noreferrer" className="text-muted-foreground/65 hover:text-foreground hover:underline">Monkeytype</a> profile. For a peek into the movies that inspire me, check out my <a href="https://letterboxd.com/mihaicrisan" target="_blank" rel="noopener noreferrer" className="text-muted-foreground/65 hover:text-foreground hover:underline">Letterboxd</a>.
+              I'm into clean code and solid solutions. Good architecture feels
+              like art to me, and choosing variable names is a big deal. I
+              always aim for neat, elegant logic.
+              <br />
+              <br />
+              Outside of tech, I'm passionate about sports and inspired by
+              clever design. I'm also a speed typing enthusiast - you can check
+              out my{" "}
+              <a
+                href="https://monkeytype.com/profile/mitzaqe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground/65 hover:text-foreground hover:underline"
+              >
+                Monkeytype
+              </a>{" "}
+              profile. For a peek into the movies that inspire me, check out my{" "}
+              <a
+                href="https://letterboxd.com/mihaicrisan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground/65 hover:text-foreground hover:underline"
+              >
+                Letterboxd
+              </a>
+              .
             </p>
           </ContentSection>
         </motion.div>
@@ -77,8 +101,7 @@ export default function Home() {
             )}
           </ContentSection>
         </motion.div>
-
       </div>
     </div>
-  )
+  );
 }

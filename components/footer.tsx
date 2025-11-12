@@ -116,7 +116,7 @@ export function Footer() {
       <div className="relative z-10 max-w-2xl mx-auto px-6">
         <div className="flex flex-col items-center gap-8">
           {/* Social Links with Hill Bending Effect */}
-          <div className="flex items-baseline gap-6 md:gap-13 flex-wrap justify-center">
+          <div className="flex items-baseline gap-2 md:gap-13 flex-wrap justify-center">
             {socialLinks.map((link, index) => (
               <div
                 key={link.name}
