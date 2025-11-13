@@ -7,6 +7,13 @@ import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
 import { AIChatTrigger } from "@/components/ai-chat-trigger"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
 
 export function Navigation() {
   const { theme, setTheme } = useTheme()
@@ -73,12 +80,27 @@ export function Navigation() {
             <div className="h-4 w-px bg-border mx-4" />
 
             <div className="flex items-center gap-3">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <AIChatTrigger />
-              </motion.div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <AIChatTrigger />
+                    </motion.div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <div className="flex items-center gap-2">
+                      <span>Ask AI</span>
+                      <KbdGroup>
+                        <Kbd>⌘</Kbd>
+                        <Kbd>I</Kbd>
+                      </KbdGroup>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
 
             <div className="h-4 w-px bg-border mx-4" />

@@ -30,7 +30,6 @@ export const AIChatTrigger = forwardRef<HTMLButtonElement, React.ButtonHTMLAttri
       }}
       className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-all hover:bg-muted"
       aria-label="Open AI chat"
-      title="Ask AI (⌘I)"
       {...props}
     >
       <Sparkles className="h-4 w-4" />
