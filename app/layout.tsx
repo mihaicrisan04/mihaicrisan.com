@@ -8,9 +8,9 @@ import { Footer } from "@/components/footer";
 import { ThemeProvider } from "next-themes";
 import { ConvexClientProvider } from "./providers";
 import { ImageKitProvider } from "@imagekit/next";
-import { AIChatProvider, useAIChat } from "@/contexts/ai-chat-context";
-import { AIChatOverlay } from "@/components/ai-chat-overlay";
-import { MorphingPopover } from "@/components/motion-primitives/morphing-popover";
+import { AIChatProvider } from "@/contexts/ai-chat-context";
+import { AIChatPopover } from "@/components/ai-chat-popover";
+import { LayoutGroup } from "motion/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,27 +26,6 @@ const geistMono = Geist_Mono({
 //   title: "Mihai Crisan Personal Portfolio",
 //   description: "Personal portfolio showcasing my projects and skills",
 // };
-
-function LayoutContent({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const { isOpen, setIsOpen } = useAIChat();
-  
-  return (
-    <MorphingPopover open={isOpen} onOpenChange={setIsOpen}>
-      <div className="flex flex-col min-h-screen">
-        <Navigation />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
-      </div>
-      <AIChatOverlay />
-    </MorphingPopover>
-  );
-}
 
 export default function RootLayout({
   children,
@@ -68,9 +47,16 @@ export default function RootLayout({
               storageKey="theme"
             >
               <AIChatProvider>
-                <LayoutContent>
-                  {children}
-                </LayoutContent>
+                <LayoutGroup>
+                  <div className="flex flex-col min-h-screen">
+                    <Navigation />
+                    <main className="flex-1">
+                      {children}
+                    </main>
+                    <Footer />
+                  </div>
+                </LayoutGroup>
+                <AIChatPopover />
               </AIChatProvider>
             </ThemeProvider>
           </ImageKitProvider>
