@@ -47,13 +47,13 @@ type Message = {
 
 const MOCK_RESPONSES = [
   "Hi! I'm here to help you learn more about Mihai's work and experience. You can ask me about:\n\n- His technical skills and expertise\n- Projects he's worked on\n- His professional experience\n- How to get in touch",
-  
+
   "Mihai is a full-stack developer with expertise in:\n\n**Frontend:** React, Next.js, TypeScript, Tailwind CSS, Framer Motion\n\n**Backend:** Node.js, Python, REST APIs, GraphQL\n\n**Tools:** Git, Docker, CI/CD pipelines\n\nHe's passionate about creating performant, accessible web experiences with clean architecture and delightful user interactions.",
-  
+
   "Sure! Mihai has worked on several interesting projects:\n\n**Personal Portfolio** - The site you're on right now! Built with Next.js 15, featuring:\n- Advanced animations with Framer Motion\n- Custom morphing UI components\n- Responsive design with Tailwind CSS\n- AI-powered chat interface (that's me!)\n\n**E-commerce Platform** - A full-stack application with:\n- Real-time inventory management\n- Secure payment processing\n- Admin dashboard with analytics\n\nWould you like to know more about any specific project?",
-  
+
   "The SaaS Dashboard was a particularly challenging and rewarding project. Here are the key highlights:\n\n**Tech Stack:**\n- Frontend: React with TypeScript, Redux for state management\n- Backend: Node.js with Express, PostgreSQL database\n- Infrastructure: AWS (EC2, S3, RDS), Docker containers\n\n**Key Features:**\n- Multi-tenant architecture supporting 100+ organizations\n- Custom chart library for interactive data visualizations\n- Advanced filtering and search with Elasticsearch\n\nThe dashboard processes over 500K daily active users and handles millions of transactions.",
-  
+
   "Mihai has a strong technical background:\n\n**Education:**\n- Computer Science degree with focus on software engineering\n- Specialized coursework in algorithms, data structures, and system design\n- Continuous learner - regularly updates skills with new technologies\n\n**Professional Experience:**\n- 5+ years of professional development experience\n- Led teams on multiple high-impact projects\n- Contributed to open-source projects\n- Experience with agile methodologies\n\nHe believes in writing clean, maintainable code and creating intuitive user experiences.",
 ];
 
@@ -176,8 +176,8 @@ export function AIChatPopover() {
     messageIndexRef.current++;
 
     startStreaming(responseContent, () => {
-      setMessages(prev => prev.map(msg => 
-        msg.isStreaming 
+      setMessages(prev => prev.map(msg =>
+        msg.isStreaming
           ? { ...msg, content: responseContent, isStreaming: false }
           : msg
       ));
@@ -206,7 +206,7 @@ export function AIChatPopover() {
         >
           <motion.div
             initial={{ backdropFilter: 'blur(0px)' }}
-            animate={{ backdropFilter: 'blur(10px)' }}
+            animate={{ backdropFilter: 'blur(20px)' }}
             exit={{ backdropFilter: 'blur(0px)' }}
             transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             className="absolute inset-0 bg-background/60"
@@ -273,8 +273,8 @@ export function AIChatPopover() {
                               </div>
                               {!message.isStreaming && (
                                 <Actions>
-                                  <Action 
-                                    tooltip="Copy" 
+                                  <Action
+                                    tooltip="Copy"
                                     onClick={() => handleCopy(message.content)}
                                   >
                                     <Copy className="h-4 w-4" />
@@ -338,7 +338,7 @@ export function AIChatPopover() {
                       <MarqueeFade side="right" className="w-8" />
                     </Marquee>
                   </div>
-                  <PromptInputSubmit 
+                  <PromptInputSubmit
                     disabled={!input.trim() || isStreaming}
                     status={isStreaming ? 'streaming' : 'ready'}
                   />

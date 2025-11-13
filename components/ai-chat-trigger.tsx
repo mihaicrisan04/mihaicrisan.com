@@ -33,7 +33,7 @@ export const AIChatTrigger = forwardRef<HTMLButtonElement, React.ButtonHTMLAttri
       {...props}
     >
       <Sparkles className="h-4 w-4" />
-      <span className="text-sm">
+      <span className="hidden sm:inline text-sm">
         Ask AI
       </span>
     </button>

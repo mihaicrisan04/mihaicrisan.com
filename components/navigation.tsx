@@ -29,7 +29,7 @@ export function Navigation() {
           className="bg-background/80 backdrop-blur-sm border border-border rounded-sm px-4 py-2"
         >
           <div className="flex items-center justify-between">
-            <nav className="flex items-center gap-6">
+            <nav className="flex items-center gap-3 sm:gap-6">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -77,9 +77,9 @@ export function Navigation() {
               </motion.div>
             </nav>
 
-            <div className="h-4 w-px bg-border mx-4" />
+            <div className="h-4 w-px bg-border mx-2 sm:mx-4" />
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -103,9 +103,9 @@ export function Navigation() {
               </TooltipProvider>
             </div>
 
-            <div className="h-4 w-px bg-border mx-4" />
+            <div className="h-4 w-px bg-border mx-2 sm:mx-4" />
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
