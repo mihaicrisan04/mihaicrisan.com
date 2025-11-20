@@ -206,7 +206,7 @@ export function AIChatPopover() {
         >
           <motion.div
             initial={{ backdropFilter: 'blur(0px)' }}
-            animate={{ backdropFilter: 'blur(20px)' }}
+            animate={{ backdropFilter: 'blur(18px)' }}
             exit={{ backdropFilter: 'blur(0px)' }}
             transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             className="absolute inset-0 bg-background/60"
