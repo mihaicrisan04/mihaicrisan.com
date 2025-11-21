@@ -116,6 +116,7 @@ export function AIChatPopover() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const { streamingContent, isStreaming, startStreaming } = useStreamingResponse();
   const messageIndexRef = useRef(0);
 
@@ -130,6 +131,24 @@ export function AIChatPopover() {
       messageIndexRef.current = 1;
     }
   }, [isOpen, messages.length]);
+
+  // Focus input when chat opens
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      // Small delay to ensure the animation has started and DOM is ready
+      const timeoutId = setTimeout(() => {
+        const input = inputRef.current;
+        if (input) {
+          input.focus();
+          // Move cursor to end of text if input has content
+          const length = input.value.length;
+          input.setSelectionRange(length, length);
+        }
+      }, 100);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -316,6 +335,7 @@ export function AIChatPopover() {
             >
               <PromptInput onSubmit={handleSendMessage}>
                 <PromptInputTextarea
+                  ref={inputRef}
                   value={input}
                   onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.currentTarget.value)}
                   placeholder="Ask about Mihai's work..."

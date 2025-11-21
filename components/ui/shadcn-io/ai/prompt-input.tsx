@@ -17,7 +17,7 @@ import type {
   HTMLAttributes,
   KeyboardEventHandler,
 } from 'react';
-import { Children } from 'react';
+import { Children, forwardRef } from 'react';
 
 export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 
@@ -36,14 +36,14 @@ export type PromptInputTextareaProps = ComponentProps<typeof Textarea> & {
   maxHeight?: number;
 };
 
-export const PromptInputTextarea = ({
+export const PromptInputTextarea = forwardRef<HTMLTextAreaElement, PromptInputTextareaProps>(({
   onChange,
   className,
   placeholder = 'What would you like to know?',
   minHeight = 48,
   maxHeight = 164,
   ...props
-}: PromptInputTextareaProps) => {
+}, ref) => {
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
     if (e.key === 'Enter') {
       if (e.shiftKey) {
@@ -62,6 +62,7 @@ export const PromptInputTextarea = ({
 
   return (
     <Textarea
+      ref={ref}
       className={cn(
         'w-full resize-none rounded-none border-none p-3 shadow-none outline-none ring-0',
         'field-sizing-content max-h-[6lh] bg-transparent dark:bg-transparent',
@@ -77,7 +78,9 @@ export const PromptInputTextarea = ({
       {...props}
     />
   );
-};
+});
+
+PromptInputTextarea.displayName = 'PromptInputTextarea';
 
 export type PromptInputToolbarProps = HTMLAttributes<HTMLDivElement>;
 
