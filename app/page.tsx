@@ -5,13 +5,10 @@ import { HeroSection } from "@/components/hero-section";
 import { ContentSection } from "@/components/content-section";
 import { CurrentWork } from "@/components/current-work";
 import { WorkHistory } from "@/components/work-history";
-import { ProjectLink } from "@/components/project-link";
-import { CustomLink } from "@/components/custom-link";
 import { RecentWork } from "@/components/recent-work";
 import workExperienceData from "@/data/work-experience.json";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { MailQuestionMark } from "lucide-react";
 
 export default function Home() {
   const currentRole = workExperienceData.find((job) => job.current);
@@ -31,7 +28,8 @@ export default function Home() {
             title="I'm a Computer Science student at Babeș-Bolyai University and a software engineer with a growing passion for AI and all things tech."
             description="I'm addicted to clean code and perfectly engineered solutions. I treat good architecture like an art form and see naming variables as a spiritual journey. I chase elegant logic like most people chase weekends."
             contactHref="mailto:crisanmihai2004@gmail.com"
-            avatarSrc="/avatar.jpeg"
+            avatarSrcLight="/avatar-light.jpeg"
+            avatarSrcDark="/avatar-dark.jpeg"
           />
         </motion.div>
 
