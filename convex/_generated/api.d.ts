@@ -292,9 +292,9 @@ export declare const components: {
                 };
             model?: string;
             provider?: string;
-            providerMetadata?: Record<string, Record<string, any>>;
-            reasoning?: string;
-            reasoningDetails?: Array<
+            providerOptions?: Record<string, Record<string, any>>;
+            reasoningText?: string;
+            reasoningText?: Array<
               | { signature?: string; text: string; type: "text" }
               | { data: string; type: "redacted" }
             >;
@@ -457,10 +457,10 @@ export declare const components: {
             model?: string;
             order: number;
             provider?: string;
-            providerMetadata?: Record<string, Record<string, any>>;
             providerOptions?: Record<string, Record<string, any>>;
-            reasoning?: string;
-            reasoningDetails?: Array<
+            providerOptions?: Record<string, Record<string, any>>;
+            reasoningText?: string;
+            reasoningText?: Array<
               | { signature?: string; text: string; type: "text" }
               | { data: string; type: "redacted" }
             >;
@@ -628,10 +628,10 @@ export declare const components: {
           model?: string;
           order: number;
           provider?: string;
-          providerMetadata?: Record<string, Record<string, any>>;
           providerOptions?: Record<string, Record<string, any>>;
-          reasoning?: string;
-          reasoningDetails?: Array<
+          providerOptions?: Record<string, Record<string, any>>;
+          reasoningText?: string;
+          reasoningText?: Array<
             | { signature?: string; text: string; type: "text" }
             | { data: string; type: "redacted" }
           >;
@@ -811,10 +811,10 @@ export declare const components: {
             model?: string;
             order: number;
             provider?: string;
-            providerMetadata?: Record<string, Record<string, any>>;
             providerOptions?: Record<string, Record<string, any>>;
-            reasoning?: string;
-            reasoningDetails?: Array<
+            providerOptions?: Record<string, Record<string, any>>;
+            reasoningText?: string;
+            reasoningText?: Array<
               | { signature?: string; text: string; type: "text" }
               | { data: string; type: "redacted" }
             >;
@@ -976,10 +976,10 @@ export declare const components: {
           model?: string;
           order: number;
           provider?: string;
-          providerMetadata?: Record<string, Record<string, any>>;
           providerOptions?: Record<string, Record<string, any>>;
-          reasoning?: string;
-          reasoningDetails?: Array<
+          providerOptions?: Record<string, Record<string, any>>;
+          reasoningText?: string;
+          reasoningText?: Array<
             | { signature?: string; text: string; type: "text" }
             | { data: string; type: "redacted" }
           >;
@@ -1124,10 +1124,10 @@ export declare const components: {
           model?: string;
           order: number;
           provider?: string;
-          providerMetadata?: Record<string, Record<string, any>>;
           providerOptions?: Record<string, Record<string, any>>;
-          reasoning?: string;
-          reasoningDetails?: Array<
+          providerOptions?: Record<string, Record<string, any>>;
+          reasoningText?: string;
+          reasoningText?: Array<
             | { signature?: string; text: string; type: "text" }
             | { data: string; type: "redacted" }
           >;
@@ -1384,10 +1384,10 @@ export declare const components: {
           model?: string;
           order: number;
           provider?: string;
-          providerMetadata?: Record<string, Record<string, any>>;
           providerOptions?: Record<string, Record<string, any>>;
-          reasoning?: string;
-          reasoningDetails?: Array<
+          providerOptions?: Record<string, Record<string, any>>;
+          reasoningText?: string;
+          reasoningText?: Array<
             | { signature?: string; text: string; type: "text" }
             | { data: string; type: "redacted" }
           >;
