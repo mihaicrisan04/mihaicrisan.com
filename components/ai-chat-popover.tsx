@@ -2,7 +2,7 @@
 
 import { useAIChat } from '@/contexts/ai-chat-context';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Copy, ThumbsUp, ThumbsDown, RefreshCw } from 'lucide-react';
+import { X, Copy, RefreshCw, Check } from 'lucide-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -16,6 +16,10 @@ import {
   PromptInputToolbar,
   PromptInputSubmit,
 } from '@/components/ui/shadcn-io/ai/prompt-input';
+import { useAction } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { toast } from 'sonner';
+import { TextShimmer } from '@/components/motion-primitives/text-shimmer';
 
 function CloseButton({ onClick }: { onClick: () => void }) {
   return (
@@ -45,17 +49,12 @@ type Message = {
   isStreaming?: boolean;
 };
 
-const MOCK_RESPONSES = [
-  "Hi! I'm here to help you learn more about Mihai's work and experience. You can ask me about:\n\n- His technical skills and expertise\n- Projects he's worked on\n- His professional experience\n- How to get in touch",
+const WELCOME_MESSAGE = `Hi! I'm Mihai's portfolio assistant. I can help you learn more about his work and experience. Feel free to ask me about:
 
-  "Mihai is a full-stack developer with expertise in:\n\n**Frontend:** React, Next.js, TypeScript, Tailwind CSS, Framer Motion\n\n**Backend:** Node.js, Python, REST APIs, GraphQL\n\n**Tools:** Git, Docker, CI/CD pipelines\n\nHe's passionate about creating performant, accessible web experiences with clean architecture and delightful user interactions.",
-
-  "Sure! Mihai has worked on several interesting projects:\n\n**Personal Portfolio** - The site you're on right now! Built with Next.js 15, featuring:\n- Advanced animations with Framer Motion\n- Custom morphing UI components\n- Responsive design with Tailwind CSS\n- AI-powered chat interface (that's me!)\n\n**E-commerce Platform** - A full-stack application with:\n- Real-time inventory management\n- Secure payment processing\n- Admin dashboard with analytics\n\nWould you like to know more about any specific project?",
-
-  "The SaaS Dashboard was a particularly challenging and rewarding project. Here are the key highlights:\n\n**Tech Stack:**\n- Frontend: React with TypeScript, Redux for state management\n- Backend: Node.js with Express, PostgreSQL database\n- Infrastructure: AWS (EC2, S3, RDS), Docker containers\n\n**Key Features:**\n- Multi-tenant architecture supporting 100+ organizations\n- Custom chart library for interactive data visualizations\n- Advanced filtering and search with Elasticsearch\n\nThe dashboard processes over 500K daily active users and handles millions of transactions.",
-
-  "Mihai has a strong technical background:\n\n**Education:**\n- Computer Science degree with focus on software engineering\n- Specialized coursework in algorithms, data structures, and system design\n- Continuous learner - regularly updates skills with new technologies\n\n**Professional Experience:**\n- 5+ years of professional development experience\n- Led teams on multiple high-impact projects\n- Contributed to open-source projects\n- Experience with agile methodologies\n\nHe believes in writing clean, maintainable code and creating intuitive user experiences.",
-];
+- His technical skills and expertise
+- Projects he's worked on
+- His professional experience
+- How to get in touch`;
 
 const SUGGESTIONS = [
   'What technologies does Mihai work with?',
@@ -66,7 +65,7 @@ const SUGGESTIONS = [
   'Show me his skills',
 ];
 
-function useStreamingResponse() {
+function useStreamingSimulation() {
   const [streamingContent, setStreamingContent] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -82,14 +81,15 @@ function useStreamingResponse() {
       if (index < tokens.length) {
         setStreamingContent(prev => prev + tokens[index]);
         index++;
-        timeoutRef.current = setTimeout(streamToken, 30);
+        timeoutRef.current = setTimeout(streamToken, 20);
       } else {
         setIsStreaming(false);
         onComplete();
       }
     };
 
-    streamToken();
+    // Use setTimeout for the first token to avoid React batching with the empty string reset
+    timeoutRef.current = setTimeout(streamToken, 20);
   }, []);
 
   const stopStreaming = useCallback(() => {
@@ -105,42 +105,42 @@ function useStreamingResponse() {
         clearTimeout(timeoutRef.current);
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { streamingContent, isStreaming, startStreaming, stopStreaming };
 }
 
 export function AIChatPopover() {
-  const { isOpen, close } = useAIChat();
+  const { isOpen, close, threadId, setThreadId } = useAIChat();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const { streamingContent, isStreaming, startStreaming } = useStreamingResponse();
-  const messageIndexRef = useRef(0);
+  const { streamingContent, isStreaming, startStreaming } = useStreamingSimulation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+  const [regeneratingMessageId, setRegeneratingMessageId] = useState<string | null>(null);
+
+  const chat = useAction(api.chat.chat);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const welcomeMessage: Message = {
         id: '1',
         role: 'assistant',
-        content: MOCK_RESPONSES[0],
+        content: WELCOME_MESSAGE,
       };
       setMessages([welcomeMessage]);
-      messageIndexRef.current = 1;
     }
   }, [isOpen, messages.length]);
 
   // Focus input when chat opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      // Small delay to ensure the animation has started and DOM is ready
       const timeoutId = setTimeout(() => {
         const input = inputRef.current;
         if (input) {
           input.focus();
-          // Move cursor to end of text if input has content
           const length = input.value.length;
           input.setSelectionRange(length, length);
         }
@@ -171,44 +171,104 @@ export function AIChatPopover() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, close]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isStreaming) return;
+  const sendMessage = async (messageContent: string, isRegenerate = false) => {
+    if (!messageContent.trim() || isStreaming || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim(),
+      content: messageContent.trim(),
     };
 
-    const streamingMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content: '',
-      isStreaming: true,
-    };
+    // Only add user message if not regenerating
+    if (!isRegenerate) {
+      setMessages(prev => [...prev, userMessage]);
+    }
 
-    setMessages(prev => [...prev, userMessage, streamingMessage]);
+    setIsLoading(true);
+
+    try {
+      // Call the agent
+      const result = await chat({
+        threadId: threadId || undefined,
+        message: messageContent,
+      });
+
+      // Store thread ID for future messages
+      if (result.threadId && !threadId) {
+        setThreadId(result.threadId);
+      }
+
+      // Now add streaming message and start streaming
+      const streamingMessageId = (Date.now() + 1).toString();
+      
+      // Add new streaming message
+      setMessages(prev => [...prev, {
+        id: streamingMessageId,
+        role: 'assistant',
+        content: '',
+        isStreaming: true,
+      }]);
+
+      // Simulate streaming for the response
+      startStreaming(result.text, () => {
+        setMessages(prev => prev.map(msg =>
+          msg.isStreaming
+            ? { ...msg, content: result.text, isStreaming: false }
+            : msg
+        ));
+      });
+    } catch (error) {
+      console.error('Failed to get response:', error);
+      toast.error('Failed to get a response. Please try again.');
+    } finally {
+      setIsLoading(false);
+      setRegeneratingMessageId(null);
+    }
+  };
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const messageContent = input.trim();
     setInput('');
+    await sendMessage(messageContent);
+  };
 
-    const responseContent = MOCK_RESPONSES[messageIndexRef.current % MOCK_RESPONSES.length];
-    messageIndexRef.current++;
+  const handleRegenerate = async (messageId: string) => {
+    // Find the user message that came before this assistant message
+    const messageIndex = messages.findIndex(m => m.id === messageId);
+    if (messageIndex <= 0) return;
 
-    startStreaming(responseContent, () => {
-      setMessages(prev => prev.map(msg =>
-        msg.isStreaming
-          ? { ...msg, content: responseContent, isStreaming: false }
-          : msg
-      ));
-    });
+    // Find the preceding user message
+    let userMessageContent = '';
+    for (let i = messageIndex - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') {
+        userMessageContent = messages[i].content;
+        break;
+      }
+    }
+
+    if (!userMessageContent) return;
+
+    // Immediately remove the message from view
+    setMessages(prev => prev.filter(m => m.id !== messageId));
+    setRegeneratingMessageId(messageId);
+    await sendMessage(userMessageContent, true);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);
   };
 
-  const handleCopy = (content: string) => {
+  const handleCopy = (messageId: string, content: string) => {
     navigator.clipboard.writeText(content);
+    setCopiedMessageId(messageId);
+    toast.success('Copied to clipboard');
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+      setCopiedMessageId(null);
+    }, 2000);
   };
 
   if (typeof window === 'undefined') return null;
@@ -290,22 +350,52 @@ export function AIChatPopover() {
                                   {message.isStreaming ? streamingContent : message.content}
                                 </Response>
                               </div>
-                              {!message.isStreaming && (
+                              {!message.isStreaming && message.content && (
                                 <Actions>
                                   <Action
-                                    tooltip="Copy"
-                                    onClick={() => handleCopy(message.content)}
+                                    tooltip={copiedMessageId === message.id ? "Copied!" : "Copy"}
+                                    onClick={() => handleCopy(message.id, message.content)}
                                   >
-                                    <Copy className="h-4 w-4" />
+                                    <AnimatePresence mode="wait" initial={false}>
+                                      {copiedMessageId === message.id ? (
+                                        <motion.div
+                                          key="check"
+                                          initial={{ opacity: 0, scale: 0.5 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          exit={{ opacity: 0, scale: 0.5 }}
+                                          transition={{ duration: 0.15 }}
+                                        >
+                                          <Check className="h-4 w-4 text-green-500" />
+                                        </motion.div>
+                                      ) : (
+                                        <motion.div
+                                          key="copy"
+                                          initial={{ opacity: 0, scale: 0.5 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          exit={{ opacity: 0, scale: 0.5 }}
+                                          transition={{ duration: 0.15 }}
+                                        >
+                                          <Copy className="h-4 w-4" />
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
                                   </Action>
-                                  <Action tooltip="Good response">
-                                    <ThumbsUp className="h-4 w-4" />
-                                  </Action>
-                                  <Action tooltip="Bad response">
-                                    <ThumbsDown className="h-4 w-4" />
-                                  </Action>
-                                  <Action tooltip="Regenerate">
-                                    <RefreshCw className="h-4 w-4" />
+                                  <Action 
+                                    tooltip="Regenerate"
+                                    onClick={() => handleRegenerate(message.id)}
+                                  >
+                                    <motion.div
+                                      animate={{ 
+                                        rotate: regeneratingMessageId === message.id ? 360 : 0 
+                                      }}
+                                      transition={{ 
+                                        duration: 1,
+                                        repeat: regeneratingMessageId === message.id ? Infinity : 0,
+                                        ease: "linear"
+                                      }}
+                                    >
+                                      <RefreshCw className="h-4 w-4" />
+                                    </motion.div>
                                   </Action>
                                 </Actions>
                               )}
@@ -314,6 +404,23 @@ export function AIChatPopover() {
                         </div>
                       </motion.div>
                     ))}
+                    
+                    {/* Loading indicator - Thinking shimmer */}
+                    {isLoading && !isStreaming && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="mb-6"
+                      >
+                        <TextShimmer 
+                          className="text-sm font-medium"
+                          duration={1.5}
+                        >
+                          Thinking...
+                        </TextShimmer>
+                      </motion.div>
+                    )}
                   </div>
 
                   <MarqueeFade side="bottom" className="h-14" />
@@ -339,7 +446,7 @@ export function AIChatPopover() {
                   value={input}
                   onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.currentTarget.value)}
                   placeholder="Ask about Mihai's work..."
-                  disabled={isStreaming}
+                  disabled={isStreaming || isLoading}
                 />
                 <PromptInputToolbar>
                   <div className="relative flex-1 overflow-hidden">
@@ -359,8 +466,8 @@ export function AIChatPopover() {
                     </Marquee>
                   </div>
                   <PromptInputSubmit
-                    disabled={!input.trim() || isStreaming}
-                    status={isStreaming ? 'streaming' : 'ready'}
+                    disabled={!input.trim() || isStreaming || isLoading}
+                    status={isStreaming || isLoading ? 'streaming' : 'ready'}
                   />
                 </PromptInputToolbar>
               </PromptInput>

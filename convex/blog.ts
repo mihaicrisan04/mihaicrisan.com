@@ -33,6 +33,17 @@ export const getAllBlogSlugs = query({
   },
 });
 
+// Alias for ingest compatibility
+export const getPublishedPosts = query({
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("blogPosts")
+      .withIndex("by_status", (q) => q.eq("status", "published"))
+      .order("desc")
+      .collect();
+  },
+});
+
 export const createBlogPost = mutation({
   args: {
     title: v.string(),
