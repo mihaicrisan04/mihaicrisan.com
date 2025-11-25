@@ -6,7 +6,14 @@ import { Sun, Moon } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
-import { Separator } from "@radix-ui/react-separator"
+import { AIChatTrigger } from "@/components/ai-chat-trigger"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
 
 export function Navigation() {
   const { theme, setTheme } = useTheme()
@@ -22,16 +29,16 @@ export function Navigation() {
           className="bg-background/80 backdrop-blur-sm border border-border rounded-sm px-4 py-2"
         >
           <div className="flex items-center justify-between">
-            <nav className="flex items-center gap-6">
+            <nav className="flex items-center gap-3 sm:gap-6">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link 
-                  href="/" 
+                <Link
+                  href="/"
                   className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
-                    pathname === "/" 
-                      ? "text-foreground" 
+                    pathname === "/"
+                      ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -42,11 +49,11 @@ export function Navigation() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link 
-                  href="/projects" 
+                <Link
+                  href="/projects"
                   className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
                     pathname === "/projects" || pathname?.startsWith("/projects/")
-                      ? "text-foreground" 
+                      ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -57,11 +64,11 @@ export function Navigation() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link 
-                  href="/blog" 
+                <Link
+                  href="/blog"
                   className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
                     pathname === "/blog" || pathname?.startsWith("/blog/")
-                      ? "text-foreground" 
+                      ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -70,9 +77,35 @@ export function Navigation() {
               </motion.div>
             </nav>
 
-            <div className="h-4 w-px bg-border mx-4" />
+            <div className="h-4 w-px bg-border mx-2 sm:mx-4" />
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <AIChatTrigger />
+                    </motion.div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <div className="flex items-center gap-2">
+                      <span>Ask AI</span>
+                      <KbdGroup>
+                        <Kbd>⌘</Kbd>
+                        <Kbd>I</Kbd>
+                      </KbdGroup>
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+
+            <div className="h-4 w-px bg-border mx-2 sm:mx-4" />
+
+            <div className="flex items-center gap-2 sm:gap-3">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -94,4 +127,4 @@ export function Navigation() {
       </div>
     </div>
   )
-} 
+}

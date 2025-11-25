@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import { ThemeProvider } from "next-themes";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,13 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-          storageKey="theme"
-        >
+        <Providers>
           <div className="flex flex-col min-h-screen">
             <Navigation />
             <main className="flex-1">
@@ -44,7 +38,7 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -16,23 +16,5 @@
     "endDate": null,
     "description": "Developed web applications for various clients, focusing on building scalable and efficient solutions.",
     "current": false
-  },
-  {
-    "id": "kindergarten-automation",
-    "company": "Kindergarten Automation Project",
-    "position": "Software Developer",
-    "startDate": "2023-10-01",
-    "endDate": "2024-06-30",
-    "description": "Developed automation systems using Google Apps Script, streamlining administrative processes and improving communication workflows.",
-    "current": false
-  },
-  {
-    "id": "dpit-internship",
-    "company": "DpIT",
-    "position": "Software Developer",
-    "startDate": "2021-09-01",
-    "endDate": "2022-06-30",
-    "description": "Led development of healthcare communication platform, optimizing user workflows and implementing responsive design solutions.",
-    "current": false
   }
-] 
+]

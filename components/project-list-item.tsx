@@ -4,17 +4,19 @@ import { motion } from "motion/react"
 import { Cursor } from "@/components/motion-primitives/cursor"
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur"
 import Link from "next/link"
+import { Image } from "@imagekit/next"
 
-export interface Project {
-  id: string
+interface Project {
+  _id: string
   name: string
+  slug: string
   shortDescription: string
   fullDescription: string
-  status: string
+  status?: string
   category: string
   featured: boolean
   startDate: string
-  endDate: string | null
+  endDate?: string | null
   techStack: Array<{
     name: string
     category: string
@@ -33,13 +35,6 @@ export interface Project {
 
 interface ProjectListItemProps {
   project: Project
-}
-
-function generateSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
 }
 
 export function ProjectListItem({ project }: ProjectListItemProps) {
@@ -65,10 +60,15 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
         >
           {/* Background Image or Gradient */}
           {project.images && project.images.length > 0 ? (
-            <img 
-              src={project.images[0].url} 
+            <Image
+              src={project.images[0].url}
               alt={project.images[0].alt}
+              width={300}
+              height={300}
               className="absolute inset-0 w-full h-full object-cover"
+              transformation={[
+                { width: 300, height: 300, crop: "maintain_ratio" }
+              ]}
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-muted" />
@@ -89,7 +89,7 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
         </motion.div>
       </Cursor>
 
-      <Link href={`/projects/${generateSlug(project.name)}`}>
+      <Link href={`/projects/${project.slug}`}>
         <motion.div
           className="flex items-center justify-between group hover:bg-muted/50 -mx-2 px-2 py-1 rounded transition-colors cursor-pointer"
           whileHover={{ x: 4 }}
