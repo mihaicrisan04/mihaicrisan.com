@@ -12,7 +12,8 @@
         }
       },
       "style": {
-        "useAtIndex": "warn"
+        "useAtIndex": "warn",
+        "useFilenamingConvention": "warn"
       }
     }
   }

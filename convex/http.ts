@@ -1,6 +1,6 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { streamChat } from "./stream-chat";
+import { streamChat } from "./streamChat";
 
 const http = httpRouter();
 
