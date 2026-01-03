@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 
-interface AnimatedDescriptionProps {
+type AnimatedDescriptionProps {
   children: React.ReactNode;
   delay?: number;
 }
