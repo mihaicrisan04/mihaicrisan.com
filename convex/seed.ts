@@ -1,11 +1,11 @@
 import { mutation } from "./_generated/server";
 
 export const addSampleBlogPost = mutation({
-  handler: async (ctx) => {
-    const blogPost = await ctx.db.insert("blogPosts", {
-      title: "Building with Convex",
-      slug: "building-with-convex",
-      content: `# Building with Convex
+	handler: async (ctx) => {
+		const blogPost = await ctx.db.insert("blogPosts", {
+			title: "Building with Convex",
+			slug: "building-with-convex",
+			content: `# Building with Convex
 
 Convex is a powerful backend-as-a-service that makes it easy to build real-time applications.
 
@@ -36,11 +36,12 @@ export default defineSchema({
 ## Conclusion
 
 Convex simplifies backend development while providing powerful features for modern applications.`,
-      description: "An introduction to building applications with Convex backend-as-a-service",
-      date: "2024-01-15",
-      status: "published",
-    });
+			description:
+				"An introduction to building applications with Convex backend-as-a-service",
+			date: "2024-01-15",
+			status: "published",
+		});
 
-    return { id: blogPost, message: "Sample blog post added successfully" };
-  },
+		return { id: blogPost, message: "Sample blog post added successfully" };
+	},
 });

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Run linter check and fail commit if there are errors
+bun x ultracite check

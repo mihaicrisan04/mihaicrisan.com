@@ -1,20 +1,22 @@
 [
-  {
-    "id": "wolfpack-digital",
-    "company": "WolfPack Digital",
-    "position": "Fullstack Software Developer",
-    "startDate": "2025-07-01",
-    "endDate": null,
-    "description": "Building scalable web applications with deep focus on design and user experience.",
-    "current": true
-  },
-  {
-    "id": "fullstack-developer",
-    "company": "Freelance",
-    "position": "Fullstack Software Developer",
-    "startDate": "2024-12-01",
-    "endDate": null,
-    "description": "Developed web applications for various clients, focusing on building scalable and efficient solutions.",
-    "current": false
-  }
+	{
+		"id": "wolfpack-digital",
+		"company": "WolfPack Digital",
+		"companyUrl": "https://wolfpack-digital.com",
+		"position": "Fullstack Software Developer",
+		"startDate": "2025-07-01",
+		"endDate": null,
+		"description": "Building scalable web applications with deep focus on design and user experience.",
+		"current": true
+	},
+	{
+		"id": "fullstack-developer",
+		"company": "Freelance",
+		"companyUrl": null,
+		"position": "Fullstack Software Developer",
+		"startDate": "2024-12-01",
+		"endDate": null,
+		"description": "Developed web applications for various clients.",
+		"current": false
+	}
 ]
