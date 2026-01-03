@@ -12,6 +12,9 @@
     "lint:fix": "ultracite fix",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json}": "bun x ultracite check"
+  },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.0",
     "@ai-sdk/react": "^2.0.0",
