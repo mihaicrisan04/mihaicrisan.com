@@ -5,53 +5,53 @@ import { rag } from "./rag";
 
 // Define output schema for the time tool
 const timeOutputSchema = z.object({
-	currentTime: z.string(),
-	formatted: z.string(),
-	timezone: z.string(),
+  currentTime: z.string(),
+  formatted: z.string(),
+  timezone: z.string(),
 });
 
 // Simple tool to get current time information
 export const getCurrentTime = tool({
-	description:
-		"Gets the current date and time. Use this when the user asks about the current time, date, or when they need time-related information.",
-	inputSchema: z.object({}),
-	outputSchema: timeOutputSchema,
-	execute: (): z.infer<typeof timeOutputSchema> => {
-		const now = new Date();
-		return {
-			currentTime: now.toISOString(),
-			formatted: now.toLocaleString("en-US", {
-				weekday: "long",
-				year: "numeric",
-				month: "long",
-				day: "numeric",
-				hour: "2-digit",
-				minute: "2-digit",
-				second: "2-digit",
-				timeZoneName: "short",
-			}),
-			timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-		};
-	},
+  description:
+    "Gets the current date and time. Use this when the user asks about the current time, date, or when they need time-related information.",
+  inputSchema: z.object({}),
+  outputSchema: timeOutputSchema,
+  execute: (): z.infer<typeof timeOutputSchema> => {
+    const now = new Date();
+    return {
+      currentTime: now.toISOString(),
+      formatted: now.toLocaleString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short",
+      }),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    };
+  },
 });
 
 // Define output schema for the portfolio search tool
 const portfolioSearchOutputSchema = z.object({
-	found: z.boolean(),
-	resultsCount: z.number(),
-	results: z.array(
-		z.object({
-			content: z.string(),
-			relevance: z.number().optional(),
-		}),
-	),
-	summary: z.string(),
+  found: z.boolean(),
+  resultsCount: z.number(),
+  results: z.array(
+    z.object({
+      content: z.string(),
+      relevance: z.number().optional(),
+    })
+  ),
+  summary: z.string(),
 });
 
 // Factory function to create tools that need Convex context
 export function createContextualTools(ctx: ActionCtx) {
-	const searchPortfolio = tool({
-		description: `Search Mihai's portfolio knowledge base for specific information about his projects, skills, work experience, or blog posts.
+  const searchPortfolio = tool({
+    description: `Search Mihai's portfolio knowledge base for specific information about his projects, skills, work experience, or blog posts.
 
 USE THIS TOOL WHEN:
 - User asks about Mihai's projects or what he has built
@@ -64,66 +64,66 @@ DO NOT USE THIS TOOL FOR:
 - General greetings (hello, hi, how are you)
 - Questions about the current time (use getCurrentTime instead)
 - Generic questions not related to Mihai's work`,
-		inputSchema: z.object({
-			query: z
-				.string()
-				.describe(
-					"The search query to find relevant information about Mihai's portfolio",
-				),
-		}),
-		outputSchema: portfolioSearchOutputSchema,
-		execute: async ({
-			query,
-		}): Promise<z.infer<typeof portfolioSearchOutputSchema>> => {
-			try {
-				const searchResults = await rag.search(ctx, {
-					namespace: "portfolio",
-					query,
-					limit: 5,
-				});
+    inputSchema: z.object({
+      query: z
+        .string()
+        .describe(
+          "The search query to find relevant information about Mihai's portfolio"
+        ),
+    }),
+    outputSchema: portfolioSearchOutputSchema,
+    execute: async ({
+      query,
+    }): Promise<z.infer<typeof portfolioSearchOutputSchema>> => {
+      try {
+        const searchResults = await rag.search(ctx, {
+          namespace: "portfolio",
+          query,
+          limit: 5,
+        });
 
-				if (searchResults.results.length === 0) {
-					return {
-						found: false,
-						resultsCount: 0,
-						results: [],
-						summary:
-							"No relevant information found in the portfolio knowledge base.",
-					};
-				}
+        if (searchResults.results.length === 0) {
+          return {
+            found: false,
+            resultsCount: 0,
+            results: [],
+            summary:
+              "No relevant information found in the portfolio knowledge base.",
+          };
+        }
 
-				const results = searchResults.results.map((result) => ({
-					content: result.content.map((c) => c.text).join(" "),
-					relevance: result.score,
-				}));
+        const results = searchResults.results.map((result) => ({
+          content: result.content.map((c) => c.text).join(" "),
+          relevance: result.score,
+        }));
 
-				return {
-					found: true,
-					resultsCount: results.length,
-					results,
-					summary: `Found ${results.length} relevant result(s) in the portfolio knowledge base.`,
-				};
-			} catch (error) {
-				console.error("Portfolio search error:", error);
-				return {
-					found: false,
-					resultsCount: 0,
-					results: [],
-					summary: "Unable to search the portfolio at this time.",
-				};
-			}
-		},
-	});
+        return {
+          found: true,
+          resultsCount: results.length,
+          results,
+          summary: `Found ${results.length} relevant result(s) in the portfolio knowledge base.`,
+        };
+      } catch (error) {
+        console.error("Portfolio search error:", error);
+        return {
+          found: false,
+          resultsCount: 0,
+          results: [],
+          summary: "Unable to search the portfolio at this time.",
+        };
+      }
+    },
+  });
 
-	return {
-		getCurrentTime,
-		searchPortfolio,
-	};
+  return {
+    getCurrentTime,
+    searchPortfolio,
+  };
 }
 
 // Export static tools (those that don't need context)
 export const staticTools = {
-	getCurrentTime,
+  getCurrentTime,
 };
 
 // System instructions for the portfolio assistant

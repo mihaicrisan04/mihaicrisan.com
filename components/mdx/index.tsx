@@ -11,8 +11,8 @@ import { Separator } from "./separator";
  * For individual component imports, import directly from the source file.
  */
 export const mdxComponents = {
-	ProjectImage,
-	ProjectLinks,
-	ProjectLinkButton,
-	Separator,
+  ProjectImage,
+  ProjectLinks,
+  ProjectLinkButton,
+  Separator,
 };

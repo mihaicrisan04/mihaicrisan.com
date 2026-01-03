@@ -1,115 +1,115 @@
 {
-	"version": 1.1,
-	"atDirectives": [
-		{
-			"name": "@tailwind",
-			"description": "Use the @tailwind directive to insert Tailwind's `base`, `components`, `utilities`, and `variants` styles into your CSS.",
-			"references": [
-				{
-					"name": "Tailwind CSS Documentation",
-					"url": "https://tailwindcss.com/docs/functions-and-directives#tailwind"
-				}
-			]
-		},
-		{
-			"name": "@theme",
-			"description": "Use the @theme directive to define your project's custom design tokens (colors, fonts, spacing, etc.) in Tailwind CSS v4.",
-			"references": [
-				{
-					"name": "Tailwind CSS v4 Documentation",
-					"url": "https://tailwindcss.com/docs/theme"
-				}
-			]
-		},
-		{
-			"name": "@layer",
-			"description": "Use the @layer directive to tell Tailwind which 'bucket' a set of custom styles belong to. Valid layers are `base`, `components`, and `utilities`.",
-			"references": [
-				{
-					"name": "Tailwind CSS Documentation",
-					"url": "https://tailwindcss.com/docs/functions-and-directives#layer"
-				}
-			]
-		},
-		{
-			"name": "@apply",
-			"description": "Use @apply to inline any existing utility classes into your own custom CSS.",
-			"references": [
-				{
-					"name": "Tailwind CSS Documentation",
-					"url": "https://tailwindcss.com/docs/functions-and-directives#apply"
-				}
-			]
-		},
-		{
-			"name": "@config",
-			"description": "Use the @config directive to specify which config file Tailwind should use when compiling that CSS file.",
-			"references": [
-				{
-					"name": "Tailwind CSS Documentation",
-					"url": "https://tailwindcss.com/docs/functions-and-directives#config"
-				}
-			]
-		},
-		{
-			"name": "@custom-variant",
-			"description": "Use the @custom-variant directive to define custom variants in Tailwind CSS v4. For example: @custom-variant dark (&:is(.dark *));",
-			"references": [
-				{
-					"name": "Tailwind CSS v4 Documentation",
-					"url": "https://tailwindcss.com/docs/adding-custom-styles#adding-custom-variants"
-				}
-			]
-		},
-		{
-			"name": "@variant",
-			"description": "Use the @variant directive to apply a Tailwind variant to a block of custom CSS in v4.",
-			"references": [
-				{
-					"name": "Tailwind CSS v4 Documentation",
-					"url": "https://tailwindcss.com/docs/adding-custom-styles#using-variants"
-				}
-			]
-		},
-		{
-			"name": "@source",
-			"description": "Use the @source directive to specify additional source paths for Tailwind to scan for class names.",
-			"references": [
-				{
-					"name": "Tailwind CSS v4 Documentation",
-					"url": "https://tailwindcss.com/docs/detecting-classes-in-source-files"
-				}
-			]
-		},
-		{
-			"name": "@utility",
-			"description": "Use the @utility directive to define custom utilities in Tailwind CSS v4.",
-			"references": [
-				{
-					"name": "Tailwind CSS v4 Documentation",
-					"url": "https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities"
-				}
-			]
-		},
-		{
-			"name": "@plugin",
-			"description": "Use the @plugin directive to load a Tailwind CSS plugin in v4.",
-			"references": [
-				{
-					"name": "Tailwind CSS v4 Documentation",
-					"url": "https://tailwindcss.com/docs/plugins"
-				}
-			]
-		},
-		{
-			"name": "@import",
-			"description": "Use @import to include other CSS files. In Tailwind v4, use @import \"tailwindcss\" to include all of Tailwind's styles.",
-			"references": [
-				{
-					"name": "Tailwind CSS v4 Documentation",
-					"url": "https://tailwindcss.com/docs/installation/using-postcss"
-				}
-			]
-		}
-	]
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@tailwind",
+      "description": "Use the @tailwind directive to insert Tailwind's `base`, `components`, `utilities`, and `variants` styles into your CSS.",
+      "references": [
+        {
+          "name": "Tailwind CSS Documentation",
+          "url": "https://tailwindcss.com/docs/functions-and-directives#tailwind"
+        }
+      ]
+    },
+    {
+      "name": "@theme",
+      "description": "Use the @theme directive to define your project's custom design tokens (colors, fonts, spacing, etc.) in Tailwind CSS v4.",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Documentation",
+          "url": "https://tailwindcss.com/docs/theme"
+        }
+      ]
+    },
+    {
+      "name": "@layer",
+      "description": "Use the @layer directive to tell Tailwind which 'bucket' a set of custom styles belong to. Valid layers are `base`, `components`, and `utilities`.",
+      "references": [
+        {
+          "name": "Tailwind CSS Documentation",
+          "url": "https://tailwindcss.com/docs/functions-and-directives#layer"
+        }
+      ]
+    },
+    {
+      "name": "@apply",
+      "description": "Use @apply to inline any existing utility classes into your own custom CSS.",
+      "references": [
+        {
+          "name": "Tailwind CSS Documentation",
+          "url": "https://tailwindcss.com/docs/functions-and-directives#apply"
+        }
+      ]
+    },
+    {
+      "name": "@config",
+      "description": "Use the @config directive to specify which config file Tailwind should use when compiling that CSS file.",
+      "references": [
+        {
+          "name": "Tailwind CSS Documentation",
+          "url": "https://tailwindcss.com/docs/functions-and-directives#config"
+        }
+      ]
+    },
+    {
+      "name": "@custom-variant",
+      "description": "Use the @custom-variant directive to define custom variants in Tailwind CSS v4. For example: @custom-variant dark (&:is(.dark *));",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Documentation",
+          "url": "https://tailwindcss.com/docs/adding-custom-styles#adding-custom-variants"
+        }
+      ]
+    },
+    {
+      "name": "@variant",
+      "description": "Use the @variant directive to apply a Tailwind variant to a block of custom CSS in v4.",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Documentation",
+          "url": "https://tailwindcss.com/docs/adding-custom-styles#using-variants"
+        }
+      ]
+    },
+    {
+      "name": "@source",
+      "description": "Use the @source directive to specify additional source paths for Tailwind to scan for class names.",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Documentation",
+          "url": "https://tailwindcss.com/docs/detecting-classes-in-source-files"
+        }
+      ]
+    },
+    {
+      "name": "@utility",
+      "description": "Use the @utility directive to define custom utilities in Tailwind CSS v4.",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Documentation",
+          "url": "https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities"
+        }
+      ]
+    },
+    {
+      "name": "@plugin",
+      "description": "Use the @plugin directive to load a Tailwind CSS plugin in v4.",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Documentation",
+          "url": "https://tailwindcss.com/docs/plugins"
+        }
+      ]
+    },
+    {
+      "name": "@import",
+      "description": "Use @import to include other CSS files. In Tailwind v4, use @import \"tailwindcss\" to include all of Tailwind's styles.",
+      "references": [
+        {
+          "name": "Tailwind CSS v4 Documentation",
+          "url": "https://tailwindcss.com/docs/installation/using-postcss"
+        }
+      ]
+    }
+  ]
 }

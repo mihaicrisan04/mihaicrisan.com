@@ -8,56 +8,56 @@ import { cn } from "@/lib/utils";
 export type MarqueeProps = HTMLAttributes<HTMLDivElement>;
 
 export const Marquee = ({ className, ...props }: MarqueeProps) => (
-	<div
-		className={cn("relative w-full overflow-hidden", className)}
-		{...props}
-	/>
+  <div
+    className={cn("relative w-full overflow-hidden", className)}
+    {...props}
+  />
 );
 
 export type MarqueeContentProps = FastMarqueeProps;
 
 export const MarqueeContent = ({
-	loop = 0,
-	autoFill = true,
-	pauseOnHover = true,
-	...props
+  loop = 0,
+  autoFill = true,
+  pauseOnHover = true,
+  ...props
 }: MarqueeContentProps) => (
-	<FastMarquee
-		autoFill={autoFill}
-		loop={loop}
-		pauseOnHover={pauseOnHover}
-		{...props}
-	/>
+  <FastMarquee
+    autoFill={autoFill}
+    loop={loop}
+    pauseOnHover={pauseOnHover}
+    {...props}
+  />
 );
 
 export type MarqueeFadeProps = HTMLAttributes<HTMLDivElement> & {
-	side: "left" | "right" | "top" | "bottom";
+  side: "left" | "right" | "top" | "bottom";
 };
 
 export const MarqueeFade = ({
-	className,
-	side,
-	...props
+  className,
+  side,
+  ...props
 }: MarqueeFadeProps) => (
-	<div
-		className={cn(
-			"absolute z-10 from-background to-transparent",
-			side === "left" && "top-0 bottom-0 left-0 h-full w-24 bg-gradient-to-r",
-			side === "right" && "top-0 right-0 bottom-0 h-full w-24 bg-gradient-to-l",
-			side === "top" && "top-0 right-0 left-0 h-12 w-full bg-gradient-to-b",
-			side === "bottom" &&
-				"right-0 bottom-0 left-0 h-12 w-full bg-gradient-to-t",
-			className,
-		)}
-		{...props}
-	/>
+  <div
+    className={cn(
+      "absolute z-10 from-background to-transparent",
+      side === "left" && "top-0 bottom-0 left-0 h-full w-24 bg-gradient-to-r",
+      side === "right" && "top-0 right-0 bottom-0 h-full w-24 bg-gradient-to-l",
+      side === "top" && "top-0 right-0 left-0 h-12 w-full bg-gradient-to-b",
+      side === "bottom" &&
+        "right-0 bottom-0 left-0 h-12 w-full bg-gradient-to-t",
+      className
+    )}
+    {...props}
+  />
 );
 
 export type MarqueeItemProps = HTMLAttributes<HTMLDivElement>;
 
 export const MarqueeItem = ({ className, ...props }: MarqueeItemProps) => (
-	<div
-		className={cn("mx-2 flex-shrink-0 object-contain", className)}
-		{...props}
-	/>
+  <div
+    className={cn("mx-2 flex-shrink-0 object-contain", className)}
+    {...props}
+  />
 );

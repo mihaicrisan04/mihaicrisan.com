@@ -6,38 +6,38 @@ import { Navigation } from "@/components/navigation";
 import { Providers } from "./providers";
 
 const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-	title: "Mihai Crisan Personal Portfolio",
-	description: "Personal portfolio showcasing my projects and skills",
+  title: "Mihai Crisan Personal Portfolio",
+  description: "Personal portfolio showcasing my projects and skills",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html className="scroll-smooth" lang="en" suppressHydrationWarning>
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
-			>
-				<Providers>
-					<div className="flex min-h-screen flex-col">
-						<Navigation />
-						<main className="flex-1">{children}</main>
-						<Footer />
-					</div>
-				</Providers>
-			</body>
-		</html>
-	);
+  return (
+    <html className="scroll-smooth" lang="en" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
+      >
+        <Providers>
+          <div className="flex min-h-screen flex-col">
+            <Navigation />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+        </Providers>
+      </body>
+    </html>
+  );
 }

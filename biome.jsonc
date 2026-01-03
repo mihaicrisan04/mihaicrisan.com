@@ -10,9 +10,12 @@
         "noExcessiveCognitiveComplexity": {
           "level": "error",
           "options": {
-            "maxAllowedComplexity": 30
+            "maxAllowedComplexity": 50
           }
         }
+      },
+      "style": {
+        "useAtIndex": "warn"
       }
     }
   }

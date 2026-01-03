@@ -1,9 +1,7 @@
 {
   "editor.defaultFormatter": "biomejs.biome",
   "eslint.enable": false,
-  "css.customData": [
-    ".vscode/tailwind.css-data.json"
-  ],
+  "css.customData": [".vscode/tailwind.css-data.json"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,

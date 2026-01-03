@@ -8,92 +8,92 @@ import { useEffect, useState } from "react";
 import { TextLoop } from "./motion-primitives/text-loop";
 
 export function BackButton() {
-	const pathname = usePathname();
-	const [isHovered, setIsHovered] = useState(false);
-	const [direction, setDirection] = useState(-1);
-	const [currentIndex, setCurrentIndex] = useState(0);
-	const [shouldTrigger, setShouldTrigger] = useState(false);
+  const pathname = usePathname();
+  const [isHovered, setIsHovered] = useState(false);
+  const [direction, setDirection] = useState(-1);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [shouldTrigger, setShouldTrigger] = useState(false);
 
-	// Determine back link and labels based on current route
-	const isBlogRoute = pathname?.startsWith("/blog/");
-	const backHref = isBlogRoute ? "/blog" : "/work";
-	const backLabels = isBlogRoute
-		? ["Back", "All Posts"]
-		: ["Back", "All Projects"];
+  // Determine back link and labels based on current route
+  const isBlogRoute = pathname?.startsWith("/blog/");
+  const backHref = isBlogRoute ? "/blog" : "/work";
+  const backLabels = isBlogRoute
+    ? ["Back", "All Posts"]
+    : ["Back", "All Projects"];
 
-	useEffect(() => {
-		const targetIndex = isHovered ? 1 : 0;
-		if (currentIndex !== targetIndex) {
-			setShouldTrigger(true);
-			const timer = setTimeout(() => setShouldTrigger(false), 100);
-			return () => clearTimeout(timer);
-		}
-	}, [isHovered, currentIndex]);
+  useEffect(() => {
+    const targetIndex = isHovered ? 1 : 0;
+    if (currentIndex !== targetIndex) {
+      setShouldTrigger(true);
+      const timer = setTimeout(() => setShouldTrigger(false), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isHovered, currentIndex]);
 
-	const handleIndexChange = (index: number) => {
-		setTimeout(() => {
-			// trick to avoid
-			setCurrentIndex(index);
-			setDirection(index === 0 ? -1 : 1);
-			// Stop triggering once we reach the desired index
-			const targetIndex = isHovered ? 1 : 0;
-			if (index === targetIndex) {
-				setShouldTrigger(false);
-			}
-		}, 0);
-	};
+  const handleIndexChange = (index: number) => {
+    setTimeout(() => {
+      // trick to avoid
+      setCurrentIndex(index);
+      setDirection(index === 0 ? -1 : 1);
+      // Stop triggering once we reach the desired index
+      const targetIndex = isHovered ? 1 : 0;
+      if (index === targetIndex) {
+        setShouldTrigger(false);
+      }
+    }, 0);
+  };
 
-	return (
-		<Link href={backHref}>
-			<motion.div
-				className="mb-8 inline-flex cursor-pointer items-center gap-2 text-sm"
-				onHoverEnd={() => setIsHovered(false)}
-				onHoverStart={() => setIsHovered(true)}
-			>
-				<motion.div
-					animate={{
-						x: isHovered ? -4 : 0,
-					}}
-					className={isHovered ? "text-foreground" : "text-muted-foreground"}
-					transition={{ duration: 0.1 }}
-				>
-					<ArrowLeft className="h-4 w-4" />
-				</motion.div>
+  return (
+    <Link href={backHref}>
+      <motion.div
+        className="mb-8 inline-flex cursor-pointer items-center gap-2 text-sm"
+        onHoverEnd={() => setIsHovered(false)}
+        onHoverStart={() => setIsHovered(true)}
+      >
+        <motion.div
+          animate={{
+            x: isHovered ? -4 : 0,
+          }}
+          className={isHovered ? "text-foreground" : "text-muted-foreground"}
+          transition={{ duration: 0.1 }}
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </motion.div>
 
-				<TextLoop
-					interval={0.05}
-					onIndexChange={handleIndexChange}
-					transition={{
-						type: "tween",
-						duration: 0.15,
-						ease: "easeOut",
-					}}
-					trigger={shouldTrigger}
-					variants={{
-						initial: {
-							y: -direction * 20,
-							rotateX: -direction * 90,
-							opacity: 0,
-							filter: "blur(4px)",
-						},
-						animate: {
-							y: 0,
-							rotateX: 0,
-							opacity: 1,
-							filter: "blur(0px)",
-						},
-						exit: {
-							y: -direction * 20,
-							rotateX: -direction * 90,
-							opacity: 0,
-							filter: "blur(4px)",
-						},
-					}}
-				>
-					<span className="text-muted-foreground">{backLabels[0]}</span>
-					<span className="text-foreground">{backLabels[1]}</span>
-				</TextLoop>
-			</motion.div>
-		</Link>
-	);
+        <TextLoop
+          interval={0.05}
+          onIndexChange={handleIndexChange}
+          transition={{
+            type: "tween",
+            duration: 0.15,
+            ease: "easeOut",
+          }}
+          trigger={shouldTrigger}
+          variants={{
+            initial: {
+              y: -direction * 20,
+              rotateX: -direction * 90,
+              opacity: 0,
+              filter: "blur(4px)",
+            },
+            animate: {
+              y: 0,
+              rotateX: 0,
+              opacity: 1,
+              filter: "blur(0px)",
+            },
+            exit: {
+              y: -direction * 20,
+              rotateX: -direction * 90,
+              opacity: 0,
+              filter: "blur(4px)",
+            },
+          }}
+        >
+          <span className="text-muted-foreground">{backLabels[0]}</span>
+          <span className="text-foreground">{backLabels[1]}</span>
+        </TextLoop>
+      </motion.div>
+    </Link>
+  );
 }

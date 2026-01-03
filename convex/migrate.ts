@@ -1,18 +1,18 @@
 import { mutation } from "./_generated/server";
 
 export const migrateBlogPosts = mutation({
-	handler: async (ctx) => {
-		// First, clear existing blog posts
-		const existingPosts = await ctx.db.query("blogPosts").collect();
-		for (const post of existingPosts) {
-			await ctx.db.delete(post._id);
-		}
+  handler: async (ctx) => {
+    // First, clear existing blog posts
+    const existingPosts = await ctx.db.query("blogPosts").collect();
+    for (const post of existingPosts) {
+      await ctx.db.delete(post._id);
+    }
 
-		// Add the existing blog post from markdown
-		await ctx.db.insert("blogPosts", {
-			title: "Hover Card Test",
-			slug: "hover-card-test",
-			content: `# Project Overview
+    // Add the existing blog post from markdown
+    await ctx.db.insert("blogPosts", {
+      title: "Hover Card Test",
+      slug: "hover-card-test",
+      content: `# Project Overview
 
 This project demonstrates the new hover card functionality with image backgrounds and blurred text overlays. The implementation showcases modern web design patterns and smooth animations.
 
@@ -98,11 +98,11 @@ The implementation successfully demonstrates:
 ---
 
 *This project serves as a foundation for more complex interactive components and demonstrates best practices for modern web development.*`,
-			description: "Testing the new hover card design with public image",
-			date: "2024-01-01",
-			status: "published",
-		});
+      description: "Testing the new hover card design with public image",
+      date: "2024-01-01",
+      status: "published",
+    });
 
-		return { success: true, message: "Blog posts migrated successfully" };
-	},
+    return { success: true, message: "Blog posts migrated successfully" };
+  },
 });
