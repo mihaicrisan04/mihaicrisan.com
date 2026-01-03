@@ -188,6 +188,7 @@ function MorphingDialogContent({
       if (focusableElements && focusableElements.length > 0) {
         setFirstFocusableElement(focusableElements[0] as HTMLElement);
         setLastFocusableElement(
+          // biome-ignore lint/style/useAtIndex: i let it slide this once
           focusableElements[focusableElements.length - 1] as HTMLElement
         );
         (focusableElements[0] as HTMLElement).focus();
