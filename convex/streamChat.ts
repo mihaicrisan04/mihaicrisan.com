@@ -1,118 +1,143 @@
-import { openai } from "@ai-sdk/openai";
-import { stepCountIs, streamText } from "ai";
 import type { ActionCtx } from "./_generated/server";
-import { createContextualTools, SYSTEM_INSTRUCTIONS } from "./tools";
+import { portfolioAgent } from "./agent";
+import { createContextualTools } from "./tools";
 
-// Regex for splitting text while preserving whitespace
-const WHITESPACE_SPLIT_REGEX = /(\s+)/;
-
-// Event types for the streaming protocol
+// Event types for the streaming protocol (SSE to frontend)
 export type StreamEvent =
-  | { type: "step:start"; step: { type: "tool_call"; name: string } }
-  | { type: "step:complete"; step: { type: "tool_call"; result: string } }
+  | {
+      type: "step:start";
+      step: {
+        type: "tool_call";
+        toolCallId: string;
+        name: string;
+        args?: Record<string, unknown>;
+      };
+    }
+  | {
+      type: "step:complete";
+      step: {
+        type: "tool_call";
+        toolCallId: string;
+        result: string;
+        resultsCount?: number;
+      };
+    }
   | { type: "text:delta"; content: string }
   | { type: "text:done"; threadId: string }
-  | { type: "error"; message: string };
+  | { type: "error"; message: string }
+  | { type: "reasoning:start" }
+  | { type: "reasoning:delta"; content: string }
+  | { type: "reasoning:done" };
 
 // Helper to format SSE data
 function formatSSE(event: StreamEvent): string {
   return `data: ${JSON.stringify(event)}\n\n`;
 }
 
-// Helper to generate a fallback summary when AI doesn't generate text after tool calls
-function generateToolResultSummary(
-  toolResults: { name: string; result: string }[]
-): string {
-  const summaries: string[] = [];
-
-  for (const { name, result } of toolResults) {
-    try {
-      const parsed = JSON.parse(result);
-
-      switch (name) {
-        case "getCurrentTime":
-          if (parsed.formatted) {
-            summaries.push(
-              `The current time is **${parsed.formatted}** (${parsed.timezone}).`
-            );
-          } else {
-            summaries.push(`The current time is ${parsed.currentTime}.`);
-          }
-          break;
-        case "searchPortfolio":
-          if (parsed.found && parsed.results?.length > 0) {
-            const contentSummary = parsed.results
-              .slice(0, 3)
-              .map((r: { content: string }) => r.content.substring(0, 200))
-              .join("\n\n");
-            summaries.push(
-              `Here's what I found about Mihai:\n\n${contentSummary}`
-            );
-          } else {
-            summaries.push(
-              "I couldn't find specific information about that in Mihai's portfolio. Feel free to ask about his projects, skills, or experience!"
-            );
-          }
-          break;
-        default:
-          summaries.push(`Here's what I found: ${result}`);
-      }
-    } catch {
-      summaries.push(`Here's the result: ${result}`);
-    }
-  }
-
-  return summaries.join("\n\n");
-}
-
-// Main streaming chat function
-export function streamChat(
+// Main streaming chat function using the Convex Agent
+export async function streamChat(
   ctx: ActionCtx,
   { threadId, message }: { threadId?: string; message: string }
-): ReadableStream<Uint8Array> {
+): Promise<Response> {
+  // Create tools with Convex context (for RAG search)
+  const contextualTools = createContextualTools(ctx);
+
+  // Create or continue thread
+  let currentThreadId = threadId;
+  if (!currentThreadId) {
+    const { threadId: newThreadId } = await portfolioAgent.createThread(
+      ctx,
+      {}
+    );
+    currentThreadId = newThreadId;
+  }
+
+  // Continue the thread to get the thread object
+  const { thread } = await portfolioAgent.continueThread(ctx, {
+    threadId: currentThreadId,
+  });
+
+  // Use the Agent's streamText with saveStreamDeltas for persistence
+  // This automatically saves messages with reasoning, metadata, etc.
+  const result = await thread.streamText(
+    {
+      prompt: message,
+      tools: contextualTools,
+    },
+    {
+      saveStreamDeltas: {
+        returnImmediately: true, // Return stream immediately for HTTP response
+      },
+      // Save all messages including intermediate tool calls
+      storageOptions: {
+        saveMessages: "all",
+      },
+    }
+  );
+
+  // Create a readable stream to pipe SSE events to the client
   const encoder = new TextEncoder();
 
-  // Generate a thread ID if not provided (simplified - in production you'd persist this)
-  const currentThreadId =
-    threadId ||
-    `thread_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-  // Create tools with access to Convex context (for RAG search)
-  const tools = createContextualTools(ctx);
-
-  return new ReadableStream({
+  const stream = new ReadableStream({
     async start(controller) {
       try {
-        // Track state for fallback
-        let hasReceivedText = false;
-        const collectedToolResults: { name: string; result: string }[] = [];
-        const activeToolCalls = new Map<string, string>(); // toolCallId -> toolName
+        // Track state for proper event sequencing
+        let hasStartedReasoning = false;
+        const activeToolCalls = new Map<string, string>();
 
-        // Stream AI response using fullStream for proper event ordering
-        // stopWhen: stepCountIs(2) allows the AI to first call tools, then generate text from results
-        // Default is stepCountIs(1) which stops after tool calls without generating text
-        const result = streamText({
-          model: openai("gpt-4o-mini"),
-          system: SYSTEM_INSTRUCTIONS,
-          prompt: message,
-          tools,
-          stopWhen: stepCountIs(2),
-        });
-
-        // Use fullStream to get all events in order
-        console.log("[streamChat] Starting stream processing");
+        // Iterate over the full stream from the Agent
         for await (const part of result.fullStream) {
-          console.log("[streamChat] Received part:", part.type);
           switch (part.type) {
+            case "reasoning-start": {
+              hasStartedReasoning = true;
+              controller.enqueue(
+                encoder.encode(formatSSE({ type: "reasoning:start" }))
+              );
+              break;
+            }
+
+            case "reasoning-delta": {
+              if (part.text) {
+                controller.enqueue(
+                  encoder.encode(
+                    formatSSE({
+                      type: "reasoning:delta",
+                      content: part.text,
+                    })
+                  )
+                );
+              }
+              break;
+            }
+
+            case "reasoning-end": {
+              hasStartedReasoning = false;
+              controller.enqueue(
+                encoder.encode(formatSSE({ type: "reasoning:done" }))
+              );
+              break;
+            }
+
             case "tool-call": {
-              // Tool call starting
-              console.log("[streamChat] Tool call:", part.toolName);
+              // Close reasoning if we were in it
+              if (hasStartedReasoning) {
+                hasStartedReasoning = false;
+                controller.enqueue(
+                  encoder.encode(formatSSE({ type: "reasoning:done" }))
+                );
+              }
+
               activeToolCalls.set(part.toolCallId, part.toolName);
               controller.enqueue(
                 encoder.encode(
                   formatSSE({
                     type: "step:start",
-                    step: { type: "tool_call", name: part.toolName },
+                    step: {
+                      type: "tool_call",
+                      toolCallId: part.toolCallId,
+                      name: part.toolName,
+                      args: part.input as Record<string, unknown> | undefined,
+                    },
                   })
                 )
               );
@@ -120,23 +145,16 @@ export function streamChat(
             }
 
             case "tool-result": {
-              // Tool call completed
               const toolName =
                 activeToolCalls.get(part.toolCallId) || "unknown";
-              // AI SDK v5 uses 'output' property for tool results
-              const output = (part as { output?: unknown }).output;
-              const resultValue = JSON.stringify(output);
-              console.log(
-                "[streamChat] Tool result for:",
-                toolName,
-                "output:",
-                resultValue?.substring(0, 100)
-              );
+              const resultValue = JSON.stringify(part.output);
 
-              collectedToolResults.push({
-                name: toolName,
-                result: resultValue,
-              });
+              // Extract resultsCount for searchPortfolio
+              let resultsCount: number | undefined;
+              if (toolName === "searchPortfolio" && part.output) {
+                const outputObj = part.output as { resultsCount?: number };
+                resultsCount = outputObj.resultsCount;
+              }
 
               controller.enqueue(
                 encoder.encode(
@@ -144,7 +162,9 @@ export function streamChat(
                     type: "step:complete",
                     step: {
                       type: "tool_call",
+                      toolCallId: part.toolCallId,
                       result: resultValue,
+                      resultsCount,
                     },
                   })
                 )
@@ -153,19 +173,20 @@ export function streamChat(
             }
 
             case "text-delta": {
-              // Text streaming - AI SDK v5 uses 'text' property for text-delta
-              const textContent = (part as { text?: string }).text;
-              console.log(
-                "[streamChat] Text delta received:",
-                textContent?.substring(0, 50)
-              );
-              if (textContent) {
-                hasReceivedText = true;
+              // Close reasoning if we were in it
+              if (hasStartedReasoning) {
+                hasStartedReasoning = false;
+                controller.enqueue(
+                  encoder.encode(formatSSE({ type: "reasoning:done" }))
+                );
+              }
+
+              if (part.text) {
                 controller.enqueue(
                   encoder.encode(
                     formatSSE({
                       type: "text:delta",
-                      content: textContent,
+                      content: part.text,
                     })
                   )
                 );
@@ -175,82 +196,16 @@ export function streamChat(
 
             case "error": {
               console.error("[streamChat] Stream error:", part.error);
-              throw part.error;
+              throw part.error || new Error("Unknown stream error");
             }
 
-            case "finish": {
-              // Stream finished
-              const finishPart = part as {
-                finishReason?: string;
-                totalUsage?: unknown;
-              };
-              console.log(
-                "[streamChat] Finish event - reason:",
-                finishPart.finishReason
-              );
+            // Ignore other event types (start, finish, etc.)
+            default:
               break;
-            }
-
-            case "finish-step": {
-              // A step finished (tool call or text generation)
-              const stepPart = part as {
-                finishReason?: string;
-                usage?: unknown;
-              };
-              console.log(
-                "[streamChat] Step finished - reason:",
-                stepPart.finishReason
-              );
-              break;
-            }
-
-            case "start":
-            case "start-step":
-            case "text-start":
-            case "text-end":
-              // These are informational events, log but don't process
-              console.log("[streamChat] Info event:", part.type);
-              break;
-
-            default: {
-              // Log any other event types we might be missing
-              console.log(
-                "[streamChat] Other part type:",
-                (part as { type: string }).type
-              );
-            }
-          }
-        }
-        console.log(
-          "[streamChat] Stream processing complete. hasReceivedText:",
-          hasReceivedText,
-          "toolResults:",
-          collectedToolResults.length
-        );
-
-        // Safety fallback: if no text was generated but tools were called, generate a summary
-        // Stream it in chunks to simulate natural streaming
-        if (!hasReceivedText && collectedToolResults.length > 0) {
-          const fallbackMessage =
-            generateToolResultSummary(collectedToolResults);
-          // Split into words and stream them with small delays for natural feel
-          const words = fallbackMessage.split(WHITESPACE_SPLIT_REGEX); // Keep whitespace
-          for (const word of words) {
-            if (word) {
-              controller.enqueue(
-                encoder.encode(
-                  formatSSE({
-                    type: "text:delta",
-                    content: word,
-                  })
-                )
-              );
-            }
           }
         }
 
-        // Stream complete
-        console.log("[streamChat] Sending text:done event");
+        // Stream complete - send done event with thread ID
         controller.enqueue(
           encoder.encode(
             formatSSE({
@@ -260,12 +215,9 @@ export function streamChat(
           )
         );
 
-        // Small delay to ensure all events are flushed to the client
-        await new Promise((resolve) => setTimeout(resolve, 50));
-        console.log("[streamChat] Closing controller");
         controller.close();
       } catch (error) {
-        console.error("Stream error:", error);
+        console.error("[streamChat] Error:", error);
         controller.enqueue(
           encoder.encode(
             formatSSE({
@@ -277,6 +229,17 @@ export function streamChat(
         );
         controller.close();
       }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
     },
   });
 }

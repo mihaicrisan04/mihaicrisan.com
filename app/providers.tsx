@@ -5,7 +5,7 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { LayoutGroup } from "motion/react";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
-import { AIChatPopover } from "@/components/ai-chat-popover";
+import { AIChatPopover } from "@/components/ai-chat/ai-chat-popover";
 import { AIChatProvider } from "@/contexts/ai-chat-context";
 import { KeyboardShortcutsProvider } from "@/contexts/keyboard-shortcuts-context";
 

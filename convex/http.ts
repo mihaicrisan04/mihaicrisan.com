@@ -5,6 +5,7 @@ import { streamChat } from "./streamChat";
 const http = httpRouter();
 
 // Streaming chat endpoint using Server-Sent Events
+// Uses the Convex Agent for automatic message persistence with reasoning
 http.route({
   path: "/api/chat",
   method: "POST",
@@ -23,19 +24,8 @@ http.route({
         });
       }
 
-      // Create SSE stream
-      const stream = streamChat(ctx, { threadId, message });
-
-      return new Response(stream, {
-        headers: {
-          "Content-Type": "text/event-stream",
-          "Cache-Control": "no-cache, no-transform",
-          Connection: "keep-alive",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-        },
-      });
+      // streamChat now returns a Response directly with proper headers
+      return await streamChat(ctx, { threadId, message });
     } catch (error) {
       console.error("Stream chat error:", error);
       return new Response(JSON.stringify({ error: "Internal server error" }), {

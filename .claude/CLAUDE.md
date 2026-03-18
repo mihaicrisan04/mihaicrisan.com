@@ -1,123 +1,76 @@
-# Ultracite Code Standards
+# CLAUDE.md
 
-This project uses **Ultracite**, a zero-config Biome preset that enforces strict code quality standards through automated formatting and linting.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Quick Reference
+## Commands
 
-- **Format code**: `bun x ultracite fix`
-- **Check for issues**: `bun x ultracite check`
-- **Diagnose setup**: `bun x ultracite doctor`
+```bash
+# Development (runs both frontend and backend concurrently)
+bun run dev
 
-Biome (the underlying engine) provides extremely fast Rust-based linting and formatting. Most issues are automatically fixable.
+# Individual services
+bun run dev:frontend    # Next.js with Turbopack
+bun run dev:backend     # Convex dev server
 
----
+# Build & Start
+bun run build           # Production build
+bun run start           # Start production server
 
-## Core Principles
+# Linting (Ultracite/Biome)
+bun run lint            # Check for issues
+bun run lint:fix        # Auto-fix issues
+```
 
-Write code that is **accessible, performant, type-safe, and maintainable**. Focus on clarity and explicit intent over brevity.
+## Architecture
 
-### Type Safety & Explicitness
+This is a personal portfolio site built with **Next.js 16** (App Router) and **Convex** as the backend.
 
-- Use explicit types for function parameters and return values when they enhance clarity
-- Prefer `unknown` over `any` when the type is genuinely unknown
-- Use const assertions (`as const`) for immutable values and literal types
-- Leverage TypeScript's type narrowing instead of type assertions
-- Use meaningful variable names instead of magic numbers - extract constants with descriptive names
+### Tech Stack
+- **Frontend**: Next.js 16, React 19, Tailwind CSS 4, Framer Motion
+- **Backend**: Convex (real-time database, serverless functions)
+- **AI Features**: Gemini Flash 2.0 via OpenRouter with RAG for portfolio assistant
+- **Images**: ImageKit CDN integration
+- **Linting**: Ultracite (Biome preset)
 
-### Modern JavaScript/TypeScript
+### Key Directories
+- `app/` - Next.js App Router pages and layouts
+- `convex/` - Convex backend functions, schema, and AI agent configuration
+- `components/` - React components organized by feature
+  - `ui/` - Base shadcn/ui components
+  - `ai-chat/` - AI chat popover and message components
+  - `motion-primitives/` - Animation components
+  - `mdx/` - MDX rendering components
+- `content/projects/` - MDX files for project pages (frontmatter + content)
+- `contexts/` - React context providers (AI chat, keyboard shortcuts)
+- `lib/` - Utilities and data fetching (projects, markdown parsing)
 
-- Use arrow functions for callbacks and short functions
-- Prefer `for...of` loops over `.forEach()` and indexed `for` loops
-- Use optional chaining (`?.`) and nullish coalescing (`??`) for safer property access
-- Prefer template literals over string concatenation
-- Use destructuring for object and array assignments
-- Use `const` by default, `let` only when reassignment is needed, never `var`
+### Data Flow
+- **Projects**: Static MDX files in `content/projects/` parsed via `lib/projects.ts`
+- **Blog Posts**: Stored in Convex database, fetched via `convex/blog.ts`
+- **AI Chat**: Streaming via Convex HTTP endpoint (`/api/chat`) using SSE
+  - Agent configured in `convex/agent.ts` with @convex-dev/agent
+  - Stream parsing in `lib/stream-parser.ts`
+  - Client hook in `hooks/use-ai-chat-stream.ts`
 
-### Async & Promises
+### Convex Schema
+- `documents` - RAG knowledge base (projects, blog, work, custom content)
+- `blogPosts` - Blog posts with title, slug, content, status, date
 
-- Always `await` promises in async functions - don't forget to use the return value
-- Use `async/await` syntax instead of promise chains for better readability
-- Handle errors appropriately in async code with try-catch blocks
-- Don't use async functions as Promise executors
+### Provider Stack (app/providers.tsx)
+ConvexProvider → ImageKitProvider → ThemeProvider → KeyboardShortcutsProvider → AIChatProvider → LayoutGroup
 
-### React & JSX
+### Environment Variables
+- `NEXT_PUBLIC_CONVEX_URL` - Convex deployment URL
+- `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT` - ImageKit CDN endpoint
+- `OPENROUTER_API_KEY` - OpenRouter API key (Convex backend)
 
-- Use function components over class components
-- Call hooks at the top level only, never conditionally
-- Specify all dependencies in hook dependency arrays correctly
-- Use the `key` prop for elements in iterables (prefer unique IDs over array indices)
-- Nest children between opening and closing tags instead of passing as props
-- Don't define components inside other components
-- Use semantic HTML and ARIA attributes for accessibility:
-  - Provide meaningful alt text for images
-  - Use proper heading hierarchy
-  - Add labels for form inputs
-  - Include keyboard event handlers alongside mouse events
-  - Use semantic elements (`<button>`, `<nav>`, etc.) instead of divs with roles
+## Code Standards
 
-### Error Handling & Debugging
+Uses **Ultracite** (Biome preset). Run `bun run lint:fix` before committing.
 
-- Remove `console.log`, `debugger`, and `alert` statements from production code
-- Throw `Error` objects with descriptive messages, not strings or other values
-- Use `try-catch` blocks meaningfully - don't catch errors just to rethrow them
-- Prefer early returns over nested conditionals for error cases
-
-### Code Organization
-
-- Keep functions focused and under reasonable cognitive complexity limits
-- Extract complex conditions into well-named boolean variables
-- Use early returns to reduce nesting
-- Prefer simple conditionals over nested ternary operators
-- Group related code together and separate concerns
-
-### Security
-
-- Add `rel="noopener"` when using `target="_blank"` on links
-- Avoid `dangerouslySetInnerHTML` unless absolutely necessary
-- Don't use `eval()` or assign directly to `document.cookie`
-- Validate and sanitize user input
-
-### Performance
-
-- Avoid spread syntax in accumulators within loops
-- Use top-level regex literals instead of creating them in loops
-- Prefer specific imports over namespace imports
-- Avoid barrel files (index files that re-export everything)
-- Use proper image components (e.g., Next.js `<Image>`) over `<img>` tags
-
-### Framework-Specific Guidance
-
-**Next.js:**
-- Use Next.js `<Image>` component for images
-- Use `next/head` or App Router metadata API for head elements
-- Use Server Components for async data fetching instead of async Client Components
-
-**React 19+:**
-- Use ref as a prop instead of `React.forwardRef`
-
-**Solid/Svelte/Vue/Qwik:**
-- Use `class` and `for` attributes (not `className` or `htmlFor`)
-
----
-
-## Testing
-
-- Write assertions inside `it()` or `test()` blocks
-- Avoid done callbacks in async tests - use async/await instead
-- Don't use `.only` or `.skip` in committed code
-- Keep test suites reasonably flat - avoid excessive `describe` nesting
-
-## When Biome Can't Help
-
-Biome's linter will catch most issues automatically. Focus your attention on:
-
-1. **Business logic correctness** - Biome can't validate your algorithms
-2. **Meaningful naming** - Use descriptive names for functions, variables, and types
-3. **Architecture decisions** - Component structure, data flow, and API design
-4. **Edge cases** - Handle boundary conditions and error states
-5. **User experience** - Accessibility, performance, and usability considerations
-6. **Documentation** - Add comments for complex logic, but prefer self-documenting code
-
----
-
-Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.
+Key rules:
+- React 19: Use `ref` as prop instead of `forwardRef`
+- Next.js: Use `<Image>` component, Server Components for data fetching
+- TypeScript: Prefer `unknown` over `any`, use const assertions
+- Loops: Prefer `for...of` over `.forEach()` and indexed loops
+- Imports: Use `@/*` path alias (maps to project root)
