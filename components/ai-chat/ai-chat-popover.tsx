@@ -196,8 +196,6 @@ export function AIChatPopover() {
                 isStreaming={isLoading}
                 onChange={setInput}
                 onSubmit={handleSubmit}
-                onSuggestionClick={handleSuggestionClick}
-                suggestions={[]}
                 value={input}
               />
             </motion.div>

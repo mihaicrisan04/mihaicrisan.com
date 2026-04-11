@@ -1,13 +1,11 @@
 "use client";
 
-import { Bot } from "lucide-react";
-import { forwardRef, useEffect } from "react";
+import { useEffect } from "react";
 import { useAIChat } from "@/contexts/ai-chat-context";
 
-export const AIChatTrigger = forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->((props, ref) => {
+export function AIChatTrigger(
+  props: React.ButtonHTMLAttributes<HTMLButtonElement>
+) {
   const { open, isOpen } = useAIChat();
 
   useEffect(() => {
@@ -26,19 +24,17 @@ export const AIChatTrigger = forwardRef<
 
   return (
     <button
-      aria-label="Open AI chat"
+      aria-label="Ask Zuzu"
       className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 font-medium text-foreground text-sm transition-all hover:bg-muted"
       onClick={(e) => {
         open();
         props.onClick?.(e);
       }}
-      ref={ref}
+      type="button"
       {...props}
     >
-      <Bot className="h-4 w-4" />
-      <span className="hidden text-sm sm:inline">ask AI</span>
+      <span className="font-bold text-sm tracking-tight">Z</span>
+      <span className="hidden text-sm sm:inline">ask zuzu</span>
     </button>
   );
-});
-
-AIChatTrigger.displayName = "AIChatTrigger";
+}

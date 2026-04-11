@@ -6,6 +6,7 @@ import {
   type ReactNode,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from "react";
 import { toast } from "sonner";
@@ -71,19 +72,10 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
   const close = useCallback(() => setIsOpen(false), []);
   const newChat = useCallback(() => setThreadId(null), []);
 
-  return (
-    <AIChatContext
-      value={{
-        isOpen,
-        threadId,
-        isLoading,
-        open,
-        close,
-        newChat,
-        sendMessage,
-      }}
-    >
-      {children}
-    </AIChatContext>
+  const value = useMemo(
+    () => ({ isOpen, threadId, isLoading, open, close, newChat, sendMessage }),
+    [isOpen, threadId, isLoading, open, close, newChat, sendMessage]
   );
+
+  return <AIChatContext value={value}>{children}</AIChatContext>;
 }

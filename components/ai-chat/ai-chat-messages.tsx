@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Sparkles } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { type Ref, useEffect, useState } from "react";
 import { useStickToBottom } from "use-stick-to-bottom";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -96,10 +96,13 @@ export function AIChatMessages({
           {isEmpty ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-4 py-16">
               <div className="text-center text-muted-foreground">
-                <Sparkles className="mx-auto mb-3 size-8 opacity-20" />
-                <p className="font-semibold text-sm">Portfolio Assistant</p>
+                <p className="mx-auto mb-2 font-bold text-2xl tracking-tight opacity-15">
+                  Z
+                </p>
+                <p className="font-semibold text-sm">Zuzu</p>
                 <p className="mt-1.5 max-w-[220px] text-xs leading-relaxed opacity-70">
-                  Ask about Mihai's projects, skills, experience, or writings.
+                  Mihai's AI assistant. Ask about his projects, skills,
+                  experience, or writings.
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-2 px-2">

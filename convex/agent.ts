@@ -11,7 +11,7 @@ const openrouter = createOpenRouter({
 const MODEL_ID = "google/gemini-2.5-flash";
 
 export const portfolioAgent = new Agent(components.agent, {
-  name: "Portfolio Assistant",
+  name: "Zuzu",
   languageModel: openrouter.chat(MODEL_ID),
   instructions: SYSTEM_INSTRUCTIONS,
   tools: staticTools,
