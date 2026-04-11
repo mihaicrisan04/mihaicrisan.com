@@ -1,6 +1,6 @@
 "use client";
 
-import { BrainCircuit, ChevronDown, Loader2 } from "lucide-react";
+import { Brain, ChevronDown, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { TextShimmer } from "@/components/motion-primitives/text-shimmer";
 import {
@@ -67,7 +67,7 @@ function Thinking({ text, isStreaming = false, className }: ThinkingProps) {
             {showAsActive ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <BrainCircuit className="size-4" />
+              <Brain className="size-4" />
             )}
           </span>
           {showAsActive ? (

@@ -52,9 +52,14 @@ function ReasoningPart({
   text: string;
   isStreaming: boolean;
 }) {
-  // startStreaming: false → shows initial text immediately, animates growth
-  // This prevents re-animation on component remount during streaming→paginated transition
-  const [revealed] = useSmoothText(text, { charsPerSec: 600 });
+  // startStreaming: true for reasoning — animate from empty so the thinking
+  // block appears immediately with the spinner before text arrives.
+  // Reasoning parts don't suffer from the streaming→paginated double-render
+  // issue since they're finalized before text parts begin.
+  const [revealed] = useSmoothText(text, {
+    startStreaming: isStreaming,
+    charsPerSec: 600,
+  });
   return (
     <div className="py-0.5">
       <Thinking isStreaming={isStreaming} text={revealed} />
