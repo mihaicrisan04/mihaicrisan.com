@@ -19,7 +19,6 @@ import {
 import type { MessagePart } from "@/lib/chat-types";
 import { extractToolName, getToolLabel } from "./tool-labels";
 
-// States considered "active" (tool is still running)
 const ACTIVE_STATES = new Set([
   "call",
   "partial-call",
@@ -54,55 +53,8 @@ function getStepIcon(toolName: string, isActive: boolean) {
   }
 }
 
-function getSubSteps(
-  toolName: string,
-  isActive: boolean,
-  output?: unknown
-): string[] {
-  if (isActive) {
-    switch (toolName) {
-      case "searchPortfolio":
-        return ["Querying knowledge base...", "Scanning documents..."];
-      case "listProjects":
-        return ["Fetching project list...", "Parsing project data..."];
-      case "getProjectDetails":
-        return ["Loading project info...", "Reading content..."];
-      case "getWorkExperience":
-        return ["Fetching work history...", "Parsing career data..."];
-      case "getBlogPosts":
-        return ["Checking blog posts...", "Loading articles..."];
-      default:
-        return ["Processing..."];
-    }
-  }
-
-  const count = extractCount(output);
-  switch (toolName) {
-    case "searchPortfolio":
-      return [
-        "Queried knowledge base",
-        `Found ${count ?? 0} result${(count ?? 0) !== 1 ? "s" : ""}`,
-      ];
-    case "listProjects":
-      return [
-        "Fetched project list",
-        `Found ${count ?? 0} project${(count ?? 0) !== 1 ? "s" : ""}`,
-      ];
-    case "getProjectDetails":
-      return ["Loaded project info", "Details ready"];
-    case "getWorkExperience":
-      return [
-        "Fetched work history",
-        `Found ${count ?? 0} position${(count ?? 0) !== 1 ? "s" : ""}`,
-      ];
-    case "getBlogPosts":
-      return [
-        "Checked blog posts",
-        `Found ${count ?? 0} post${(count ?? 0) !== 1 ? "s" : ""}`,
-      ];
-    default:
-      return ["Done"];
-  }
+function pluralize(count: number, singular: string): string {
+  return `${count} ${singular}${count !== 1 ? "s" : ""}`;
 }
 
 function extractCount(output: unknown): number | undefined {
@@ -118,6 +70,93 @@ function extractCount(output: unknown): number | undefined {
   return undefined;
 }
 
+function extractOutputField(output: unknown, field: string): unknown {
+  if (output && typeof output === "object") {
+    return (output as Record<string, unknown>)[field];
+  }
+  return undefined;
+}
+
+function Shimmer({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="animate-[shimmer_4s_infinite_linear] bg-[length:200%_auto] bg-[linear-gradient(to_right,var(--muted-foreground)_40%,var(--foreground)_60%,var(--muted-foreground)_80%)] bg-clip-text text-transparent">
+      {children}
+    </span>
+  );
+}
+
+function getActiveSubStep(
+  toolName: string,
+  input?: Record<string, unknown>,
+): string {
+  switch (toolName) {
+    case "searchPortfolio": {
+      const query = input?.query;
+      return typeof query === "string"
+        ? `Querying "${query}"...`
+        : "Querying knowledge base...";
+    }
+    case "listProjects":
+      return "Fetching project list...";
+    case "getProjectDetails": {
+      const slug = input?.slug;
+      return typeof slug === "string"
+        ? `Loading ${slug}...`
+        : "Loading project...";
+    }
+    case "getWorkExperience":
+      return "Fetching work history...";
+    case "getBlogPosts":
+      return "Loading articles...";
+    case "getCurrentTime":
+      return "Checking clock...";
+    default:
+      return "Processing...";
+  }
+}
+
+function getDoneSubStep(
+  toolName: string,
+  output?: unknown,
+): string {
+  const count = extractCount(output);
+
+  switch (toolName) {
+    case "searchPortfolio":
+      return count !== undefined
+        ? `Found ${pluralize(count, "result")}`
+        : "Search complete";
+    case "listProjects":
+      return count !== undefined
+        ? `Found ${pluralize(count, "project")}`
+        : "Projects loaded";
+    case "getProjectDetails": {
+      const name = extractOutputField(output, "name");
+      const found = extractOutputField(output, "found");
+      if (found === false) {
+        return "Project not found";
+      }
+      return typeof name === "string"
+        ? `Loaded ${name}`
+        : "Loaded project details";
+    }
+    case "getWorkExperience":
+      return count !== undefined
+        ? `Found ${pluralize(count, "position")}`
+        : "Work history loaded";
+    case "getBlogPosts":
+      return count !== undefined
+        ? `Found ${pluralize(count, "post")}`
+        : "Blog posts loaded";
+    case "getCurrentTime": {
+      const formatted = extractOutputField(output, "formatted");
+      return typeof formatted === "string" ? formatted : "Got the time";
+    }
+    default:
+      return "Done";
+  }
+}
+
 export interface ToolStepFromPartProps {
   part: MessagePart;
 }
@@ -126,15 +165,16 @@ export function ToolStepFromPart({ part }: ToolStepFromPartProps) {
   const toolName = extractToolName(part) ?? "unknown";
   const isActive = isActiveState(part.state);
   const label = getToolLabel(toolName);
-  const subSteps = getSubSteps(toolName, isActive, part.output);
 
   const triggerLabel = isActive ? (
-    <span className="animate-[shimmer_4s_infinite_linear] bg-[length:200%_auto] bg-[linear-gradient(to_right,var(--muted-foreground)_40%,var(--foreground)_60%,var(--muted-foreground)_80%)] bg-clip-text text-transparent">
-      {label.active}...
-    </span>
+    <Shimmer>{label.active}...</Shimmer>
   ) : (
     label.done
   );
+
+  const subStep = isActive
+    ? getActiveSubStep(toolName, part.input)
+    : getDoneSubStep(toolName, part.output);
 
   return (
     <Steps defaultOpen>
@@ -145,9 +185,9 @@ export function ToolStepFromPart({ part }: ToolStepFromPartProps) {
         {triggerLabel}
       </StepsTrigger>
       <StepsContent>
-        {subSteps.map((item) => (
-          <StepsItem key={item}>{item}</StepsItem>
-        ))}
+        <StepsItem>
+          {isActive ? <Shimmer>{subStep}</Shimmer> : subStep}
+        </StepsItem>
       </StepsContent>
     </Steps>
   );
