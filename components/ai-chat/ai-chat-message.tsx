@@ -1,7 +1,7 @@
 "use client";
 
 import { useSmoothText } from "@convex-dev/agent/react";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import type { MessagePart, UIMessage } from "@/lib/chat-types";
 import { ToolStepFromPart } from "./ai-chat-tool-steps";
 import { Markdown } from "./markdown";
@@ -84,40 +84,70 @@ function ToolPart({ part }: { part: MessagePart }) {
   );
 }
 
-function AssistantParts({ parts }: { parts: MessagePart[] }) {
+/**
+ * Reveals array items one at a time with a delay between each.
+ * On mount: shows first item, then reveals subsequent ones sequentially.
+ * For historical messages (isActive=false): shows all immediately.
+ */
+function useSequentialReveal<T>(items: T[], isActive: boolean, delayMs = 600): T[] {
+  const [count, setCount] = useState(
+    isActive ? Math.min(1, items.length) : items.length,
+  );
+
+  useEffect(() => {
+    if (count >= items.length) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      setCount((c) => c + 1);
+    }, delayMs);
+    return () => clearTimeout(timer);
+  }, [count, items.length, delayMs]);
+
+  return items.slice(0, count);
+}
+
+function AssistantParts({
+  parts,
+  isActive,
+}: {
+  parts: MessagePart[];
+  isActive: boolean;
+}) {
+  // Filter to renderable parts first
+  const renderableParts = parts.filter((p) => {
+    if (p.type === "reasoning") {
+      return (p.text ?? "").length > 0 || p.state === "streaming";
+    }
+    if (p.type === "text") {
+      return (p.text ?? "").trim().length > 0;
+    }
+    return extractToolName(p) !== null;
+  });
+
+  // Reveal parts sequentially during streaming
+  const visibleParts = useSequentialReveal(renderableParts, isActive);
+
   return (
     <>
-      {parts.map((part, index) => {
+      {visibleParts.map((part, index) => {
         if (part.type === "reasoning") {
-          const text = part.text ?? "";
-          if (!text && part.state !== "streaming") {
-            return null;
-          }
           return (
             <ReasoningPart
               isStreaming={part.state === "streaming"}
               key={`reasoning-${index}`}
-              text={text}
+              text={part.text ?? ""}
             />
           );
         }
 
         if (part.type === "text") {
-          const text = part.text ?? "";
-          if (!text.trim()) {
-            return null;
-          }
-          return <TextPart key={`text-${index}`} text={text} />;
+          return <TextPart key={`text-${index}`} text={part.text ?? ""} />;
         }
 
-        const toolName = extractToolName(part);
-        if (toolName) {
-          return (
-            <ToolPart key={`tool-${part.toolCallId ?? index}`} part={part} />
-          );
-        }
-
-        return null;
+        return (
+          <ToolPart key={`tool-${part.toolCallId ?? index}`} part={part} />
+        );
       })}
     </>
   );
@@ -169,7 +199,10 @@ function AIChatMessageComponent({
   return (
     <div className="group flex flex-col items-start gap-1">
       <div className="w-full space-y-1">
-        <AssistantParts parts={parts} />
+        <AssistantParts
+          isActive={message.status === "streaming"}
+          parts={parts}
+        />
       </div>
       {text ? (
         <MessageActionsBar
