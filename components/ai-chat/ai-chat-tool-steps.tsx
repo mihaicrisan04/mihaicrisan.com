@@ -10,6 +10,7 @@ import {
   Search,
   Wrench,
 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import {
   Steps,
   StepsContent,
@@ -166,6 +167,19 @@ export function ToolStepFromPart({ part }: ToolStepFromPartProps) {
   const isActive = isActiveState(part.state);
   const label = getToolLabel(toolName);
 
+  // Start open if active, closed if already done (e.g. loaded from history)
+  const [open, setOpen] = useState(isActive);
+  // Track if we've already auto-closed once (so user can re-open without it closing again)
+  const hasAutoClosedRef = useRef(!isActive);
+
+  useEffect(() => {
+    if (!isActive && !hasAutoClosedRef.current) {
+      hasAutoClosedRef.current = true;
+      const timer = setTimeout(() => setOpen(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isActive]);
+
   const triggerLabel = isActive ? (
     <Shimmer>{label.active}...</Shimmer>
   ) : (
@@ -177,7 +191,7 @@ export function ToolStepFromPart({ part }: ToolStepFromPartProps) {
     : getDoneSubStep(toolName, part.output);
 
   return (
-    <Steps defaultOpen>
+    <Steps onOpenChange={setOpen} open={open}>
       <StepsTrigger
         leftIcon={getStepIcon(toolName, isActive)}
         swapIconOnHover={!isActive}
