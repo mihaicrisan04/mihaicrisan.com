@@ -24,6 +24,10 @@ function SuggestionsCarousel({
   suggestions,
   onSuggestionClick,
 }: SuggestionsCarouselProps) {
+  if (suggestions.length === 0) {
+    return <div className="flex-1" />;
+  }
+
   return (
     <div className="relative flex-1 overflow-hidden">
       <Marquee>
@@ -83,9 +87,13 @@ export function AIChatInput({
         />
         <PromptInputSubmit
           disabled={!value.trim() || isStreaming}
-          status={isStreaming ? "streaming" : "ready"}
+          status={isLoading(isStreaming)}
         />
       </PromptInputToolbar>
     </PromptInput>
   );
+}
+
+function isLoading(streaming: boolean): "ready" | "streaming" {
+  return streaming ? "streaming" : "ready";
 }

@@ -1,16 +1,15 @@
 "use client";
 
+import { useUIMessages } from "@convex-dev/agent/react";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { toast } from "sonner";
-import { MarqueeFade } from "@/components/ui/shadcn-io/marquee";
 import { useAIChat } from "@/contexts/ai-chat-context";
-import { useAIChatStream } from "@/hooks/use-ai-chat-stream";
+import { api } from "@/convex/_generated/api";
+import type { UIMessage } from "@/lib/chat-types";
 import { AIChatInput } from "./ai-chat-input";
 import { AIChatMessages } from "./ai-chat-messages";
-import { SUGGESTIONS, WELCOME_MESSAGE } from "./constants";
 
 function CloseButton({ onClick }: { onClick: () => void }) {
   return (
@@ -34,44 +33,44 @@ function CloseButton({ onClick }: { onClick: () => void }) {
 }
 
 export function AIChatPopover() {
-  const { isOpen, close, threadId, setThreadId } = useAIChat();
+  const { isOpen, close, threadId, isLoading, sendMessage } = useAIChat();
   const [input, setInput] = useState("");
+  const [optimisticMsg, setOptimisticMsg] = useState<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
-  const [regeneratingMessageId, setRegeneratingMessageId] = useState<
-    string | null
-  >(null);
 
-  const {
-    messages,
-    isStreaming,
-    sendMessage,
-    regenerateMessage,
-    initializeWithWelcome,
-  } = useAIChatStream({
-    threadId,
-    onThreadIdChange: setThreadId,
-  });
+  // Subscribe to thread messages via Convex Agent
+  const messagesResult = useUIMessages(
+    api.queries.listThreadMessages,
+    threadId ? { threadId } : "skip",
+    { initialNumItems: 50, stream: true }
+  );
 
-  // Initialize welcome message
+  const messages = (messagesResult?.results ?? []) as UIMessage[];
+
+  // Clear optimistic message once the matching real user message shows up
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      initializeWithWelcome(WELCOME_MESSAGE);
+    if (!optimisticMsg) {
+      return;
     }
-  }, [isOpen, messages.length, initializeWithWelcome]);
+    const found = messages.some(
+      (m) =>
+        m.role === "user" &&
+        m.parts?.some(
+          (p) =>
+            p?.type === "text" && (p.text ?? "").trim() === optimisticMsg.trim()
+        )
+    );
+    if (found) {
+      setOptimisticMsg(null);
+    }
+  }, [messages, optimisticMsg]);
 
   // Focus input when chat opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
       const timeoutId = setTimeout(() => {
-        const inputEl = inputRef.current;
-        if (inputEl) {
-          inputEl.focus();
-          const length = inputEl.value.length;
-          inputEl.setSelectionRange(length, length);
-        }
+        inputRef.current?.focus();
       }, 100);
-
       return () => clearTimeout(timeoutId);
     }
   }, [isOpen]);
@@ -99,24 +98,30 @@ export function AIChatPopover() {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, close]);
 
-  const handleSendMessage = async () => {
+  const handleSend = useCallback(
+    (question: string) => {
+      setOptimisticMsg(question);
+      sendMessage(question);
+    },
+    [sendMessage]
+  );
+
+  const handleSubmit = useCallback(() => {
     const content = input.trim();
+    if (!content || isLoading) {
+      return;
+    }
     setInput("");
-    await sendMessage(content);
-  };
+    handleSend(content);
+  }, [input, isLoading, handleSend]);
 
-  const handleRegenerate = async (messageId: string) => {
-    setRegeneratingMessageId(messageId);
-    await regenerateMessage(messageId);
-    setRegeneratingMessageId(null);
-  };
-
-  const handleCopy = (messageId: string, content: string) => {
-    navigator.clipboard.writeText(content);
-    setCopiedMessageId(messageId);
-    toast.success("Copied to clipboard");
-    setTimeout(() => setCopiedMessageId(null), 2000);
-  };
+  const handleSuggestionClick = useCallback(
+    (suggestion: string) => {
+      setInput("");
+      handleSend(suggestion);
+    },
+    [handleSend]
+  );
 
   if (typeof window === "undefined") {
     return null;
@@ -139,71 +144,60 @@ export function AIChatPopover() {
             exit={{ backdropFilter: "blur(0px) opacity(0)" }}
             initial={{ backdropFilter: "blur(0px) opacity(0)" }}
             onClick={close}
-            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
           />
 
           {/* Chat container */}
           <motion.div
             animate={{ opacity: 1 }}
-            className="relative z-10 mx-auto flex h-full w-full max-w-2xl flex-col"
+            className="relative z-10 flex h-full w-full flex-col"
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3 }}
           >
             <CloseButton onClick={close} />
-
-            <MarqueeFade
-              className="h-15 bg-linear-to-t from-background to-transparent"
-              side="top"
-            />
 
             {/* Messages area */}
             <motion.div
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              className="relative mt-15 flex-1 overflow-hidden"
+              className="relative flex-1 overflow-hidden"
               exit={{ scale: 0.98, opacity: 0, y: 8 }}
               initial={{ scale: 0.98, opacity: 0, y: 8 }}
               transition={{
                 delay: 0.05,
-                duration: 0.2,
+                duration: 0.35,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
             >
               <div className="absolute inset-0">
                 <AIChatMessages
-                  copiedMessageId={copiedMessageId}
+                  isLoading={isLoading}
                   messages={messages}
-                  onCopy={handleCopy}
-                  onRegenerate={handleRegenerate}
-                  regeneratingMessageId={regeneratingMessageId}
+                  onSuggestionClick={handleSuggestionClick}
+                  optimisticMsg={optimisticMsg}
                 />
               </div>
             </motion.div>
 
-            <MarqueeFade
-              className="absolute right-0 bottom-0 left-0 h-33 bg-linear-to-b from-background to-transparent"
-              side="bottom"
-            />
-
             {/* Input area */}
             <motion.div
               animate={{ opacity: 1, y: 0 }}
-              className="relative z-20 px-4 pb-4"
+              className="relative z-20 mx-auto w-full max-w-2xl px-4 pb-4"
               exit={{ opacity: 0, y: 12 }}
               initial={{ opacity: 0, y: 12 }}
               transition={{
                 delay: 0.1,
-                duration: 0.2,
+                duration: 0.35,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
             >
               <AIChatInput
                 inputRef={inputRef}
-                isStreaming={isStreaming}
+                isStreaming={isLoading}
                 onChange={setInput}
-                onSubmit={handleSendMessage}
-                onSuggestionClick={setInput}
-                suggestions={SUGGESTIONS}
+                onSubmit={handleSubmit}
+                onSuggestionClick={handleSuggestionClick}
+                suggestions={[]}
                 value={input}
               />
             </motion.div>

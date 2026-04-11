@@ -1,6 +1,8 @@
 import { tool } from "ai";
 import { z } from "zod";
+import { api } from "./_generated/api";
 import type { ActionCtx } from "./_generated/server";
+import { PROJECTS } from "./ingest";
 import { rag } from "./rag";
 
 // Define output schema for the time tool
@@ -51,19 +53,8 @@ const portfolioSearchOutputSchema = z.object({
 // Factory function to create tools that need Convex context
 export function createContextualTools(ctx: ActionCtx) {
   const searchPortfolio = tool({
-    description: `Search Mihai's portfolio knowledge base for specific information about his projects, skills, work experience, or blog posts.
-
-USE THIS TOOL WHEN:
-- User asks about Mihai's projects or what he has built
-- User asks about his skills, technologies, or tech stack
-- User asks about his work experience or background
-- User asks about his blog posts or writings
-- User asks specific questions about his portfolio
-
-DO NOT USE THIS TOOL FOR:
-- General greetings (hello, hi, how are you)
-- Questions about the current time (use getCurrentTime instead)
-- Generic questions not related to Mihai's work`,
+    description:
+      "Semantic search across Mihai's entire portfolio knowledge base. Use as a fallback for ambiguous or cross-cutting queries (e.g. skills, technologies across projects). Prefer the specific tools (listProjects, getProjectDetails, getWorkExperience, getBlogPosts) when the query clearly maps to one data source.",
     inputSchema: z.object({
       query: z
         .string()
@@ -115,9 +106,123 @@ DO NOT USE THIS TOOL FOR:
     },
   });
 
+  const listProjects = tool({
+    description:
+      "List all of Mihai's projects with names, categories, and tech stacks. Use this for overview questions like 'what has he built?' or 'show me his projects'. Follow up with getProjectDetails for specific projects.",
+    inputSchema: z.object({}),
+    outputSchema: z.object({
+      projects: z.array(
+        z.object({
+          name: z.string(),
+          slug: z.string(),
+          category: z.string(),
+          shortDescription: z.string(),
+          techStack: z.array(z.string()),
+        })
+      ),
+      count: z.number(),
+    }),
+    execute: () => {
+      const projects = PROJECTS.map((p) => ({
+        name: p.name,
+        slug: p.slug,
+        category: p.category,
+        shortDescription: p.shortDescription,
+        techStack: p.techStack.map((t) => t.name),
+      }));
+      return { projects, count: projects.length };
+    },
+  });
+
+  const getProjectDetails = tool({
+    description:
+      "Get full details about a specific project by its slug. Use after listProjects to drill into a project the user is interested in, or when the user asks about a specific project by name.",
+    inputSchema: z.object({
+      slug: z
+        .string()
+        .describe("The project slug (e.g. 'rngo-ro', 'cluj-bus-tracking')"),
+    }),
+    outputSchema: z.object({
+      found: z.boolean(),
+      name: z.string().optional(),
+      content: z.string().optional(),
+      slug: z.string(),
+    }),
+    execute: async ({ slug }) => {
+      const doc = await ctx.runQuery(api.ingest.getDocumentBySourceId, {
+        sourceId: slug,
+      });
+      if (!doc) {
+        return { found: false, slug };
+      }
+      return {
+        found: true,
+        name: doc.title,
+        content: doc.content,
+        slug,
+      };
+    },
+  });
+
+  const getWorkExperience = tool({
+    description:
+      "Get Mihai's work experience and career history. Use for questions about where he has worked, his job roles, or career background.",
+    inputSchema: z.object({}),
+    outputSchema: z.object({
+      experiences: z.array(
+        z.object({
+          title: z.string(),
+          content: z.string(),
+        })
+      ),
+      count: z.number(),
+    }),
+    execute: async () => {
+      const docs = await ctx.runQuery(api.ingest.getDocumentsBySource, {
+        source: "work",
+      });
+      const experiences = docs.map((d) => ({
+        title: d.title,
+        content: d.content,
+      }));
+      return { experiences, count: experiences.length };
+    },
+  });
+
+  const getBlogPosts = tool({
+    description:
+      "Get all of Mihai's published blog posts. Use for questions about his writing, articles, or blog content.",
+    inputSchema: z.object({}),
+    outputSchema: z.object({
+      posts: z.array(
+        z.object({
+          title: z.string(),
+          slug: z.string(),
+          description: z.string().optional(),
+          date: z.string(),
+        })
+      ),
+      count: z.number(),
+    }),
+    execute: async () => {
+      const posts = await ctx.runQuery(api.blog.getAllBlogPosts, {});
+      const formatted = posts.map((p) => ({
+        title: p.title,
+        slug: p.slug,
+        description: p.description,
+        date: p.date,
+      }));
+      return { posts: formatted, count: formatted.length };
+    },
+  });
+
   return {
     getCurrentTime,
     searchPortfolio,
+    listProjects,
+    getProjectDetails,
+    getWorkExperience,
+    getBlogPosts,
   };
 }
 
@@ -133,47 +238,37 @@ Your role is to help users learn about Mihai's work, including his projects, ski
 
 ## AVAILABLE TOOLS:
 
-1. **searchPortfolio**: Search Mihai's knowledge base for information about:
-   - His projects and what he has built
-   - His technical skills and technologies
-   - His work experience and professional background
-   - His blog posts and writings
+1. **listProjects** — List all projects with names, categories, and tech stacks. Use for overview questions ("what has he built?", "show me his projects").
+2. **getProjectDetails** — Get full details about a specific project by slug. Use after listProjects to drill into a project, or when the user asks about a specific project by name.
+3. **getWorkExperience** — Get Mihai's work history and career info. Use for career/job/background questions.
+4. **getBlogPosts** — Get all published blog posts. Use for writing/article/blog questions.
+5. **searchPortfolio** — Semantic search across the entire knowledge base. Use as a **fallback** for ambiguous or cross-cutting queries (e.g. "what technologies does he use?", "skills").
+6. **getCurrentTime** — Get the current date and time.
 
-2. **getCurrentTime**: Get the current date and time
+## MULTI-STEP STRATEGY:
 
-## WHEN TO USE TOOLS:
+For broad questions, **chain 2-3 tool calls** to gather comprehensive information:
+- "Tell me about Mihai" → listProjects + getWorkExperience, then synthesize
+- "What projects has he built?" → listProjects, optionally getProjectDetails for the most interesting ones
+- "Tell me about the bus tracking app" → getProjectDetails with slug "cluj-bus-tracking"
+- "Tell me everything" → listProjects + getWorkExperience + getBlogPosts, then synthesize
 
-**USE searchPortfolio when:**
-- User asks about Mihai's projects ("What has he built?", "Tell me about his projects")
-- User asks about skills/technologies ("What technologies does he use?", "What's his tech stack?")
-- User asks about experience ("Where has he worked?", "What's his background?")
-- User asks about blog posts or writings
-- Any specific question about Mihai's portfolio
+For specific questions, use the most targeted tool:
+- "Where has he worked?" → getWorkExperience
+- "Does he have a blog?" → getBlogPosts
+- "What's his tech stack?" → searchPortfolio (cross-cutting semantic query)
 
-**USE getCurrentTime when:**
-- User asks about the current time or date
-
-**DON'T USE ANY TOOLS when:**
-- User says hello, hi, or other greetings → Just respond warmly
-- User asks how you are → Respond conversationally
-- User asks what you can help with → Explain your capabilities
-- User asks a follow-up that you can answer from previous context
+## WHEN NOT TO USE TOOLS:
+- Greetings (hello, hi) → Respond warmly
+- Follow-ups answerable from previous context → Use what you already know
+- Meta questions ("what can you help with?") → Explain your capabilities
 
 ## CRITICAL RESPONSE RULES:
 
 1. **ALWAYS provide a final text response.** Never end with just a tool call.
-
-2. **After using searchPortfolio:**
-   - If results found: Synthesize the information into a natural, conversational answer
-   - If no results: Be honest and suggest what you CAN help with
-
-3. **After using getCurrentTime:**
-   - Present the time in a friendly, readable format
-
-4. **For greetings and simple questions:**
-   - Respond directly without using tools
-   - Be warm and helpful
-   - Mention what you can help users learn about Mihai
+2. After using tools, **synthesize** the information into a natural, conversational answer.
+3. If no results found, be honest and suggest what you CAN help with.
+4. Use markdown formatting when it improves readability.
 
 ## TONE:
 - Friendly and professional

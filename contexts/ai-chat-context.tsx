@@ -1,58 +1,89 @@
 "use client";
 
+import { useAction, useMutation } from "convex/react";
 import {
   createContext,
   type ReactNode,
+  useCallback,
   useContext,
-  useId,
   useState,
 } from "react";
+import { toast } from "sonner";
+import { api } from "@/convex/_generated/api";
 
-interface AIChatContextValue {
+interface AIChatState {
   isOpen: boolean;
+  threadId: string | null;
+  isLoading: boolean;
   open: () => void;
   close: () => void;
-  setIsOpen: (open: boolean) => void;
-  uniqueId: string;
-  // Thread management for agent conversations
-  threadId: string | null;
-  setThreadId: (id: string | null) => void;
-  resetThread: () => void;
+  newChat: () => void;
+  sendMessage: (question: string) => void;
 }
 
-const AIChatContext = createContext<AIChatContextValue | null>(null);
+const AIChatContext = createContext<AIChatState | null>(null);
+
+export function useAIChat() {
+  const ctx = useContext(AIChatContext);
+  if (!ctx) {
+    throw new Error("useAIChat must be used within AIChatProvider");
+  }
+  return ctx;
+}
 
 export function AIChatProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(null);
-  const uniqueId = useId();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
-  const resetThread = () => setThreadId(null);
+  const createThread = useMutation(api.agent.createThread);
+  const sendMessageAction = useAction(api.streamChat.sendMessage);
+
+  const sendMessage = useCallback(
+    async (question: string) => {
+      setIsLoading(true);
+
+      try {
+        let currentThreadId = threadId;
+
+        // create thread first (instant mutation) so useUIMessages can subscribe
+        if (!currentThreadId) {
+          const result = await createThread({});
+          currentThreadId = result.threadId;
+          setThreadId(currentThreadId);
+        }
+
+        // now stream into the thread (useUIMessages is already subscribed)
+        await sendMessageAction({
+          threadId: currentThreadId,
+          message: question,
+        });
+      } catch {
+        toast.error("Failed to get a response. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [threadId, createThread, sendMessageAction]
+  );
+
+  const open = useCallback(() => setIsOpen(true), []);
+  const close = useCallback(() => setIsOpen(false), []);
+  const newChat = useCallback(() => setThreadId(null), []);
 
   return (
-    <AIChatContext.Provider
+    <AIChatContext
       value={{
         isOpen,
+        threadId,
+        isLoading,
         open,
         close,
-        setIsOpen,
-        uniqueId,
-        threadId,
-        setThreadId,
-        resetThread,
+        newChat,
+        sendMessage,
       }}
     >
       {children}
-    </AIChatContext.Provider>
+    </AIChatContext>
   );
-}
-
-export function useAIChat() {
-  const context = useContext(AIChatContext);
-  if (!context) {
-    throw new Error("useAIChat must be used within AIChatProvider");
-  }
-  return context;
 }

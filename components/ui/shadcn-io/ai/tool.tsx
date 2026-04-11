@@ -1,6 +1,14 @@
 "use client";
 
-import type { ToolUIPart } from "ai";
+interface ToolUIPart {
+  type: string;
+  state: string;
+  toolName: string;
+  input?: unknown;
+  output?: unknown;
+  errorText?: string;
+}
+
 import {
   CheckCircleIcon,
   ChevronDownIcon,
@@ -35,19 +43,19 @@ export interface ToolHeaderProps {
 }
 
 const getStatusBadge = (status: ToolUIPart["state"]) => {
-  const labels = {
+  const labels: Record<string, string> = {
     "input-streaming": "Pending",
     "input-available": "Running",
     "output-available": "Completed",
     "output-error": "Error",
-  } as const;
+  };
 
-  const icons = {
+  const icons: Record<string, ReactNode> = {
     "input-streaming": <CircleIcon className="size-4" />,
     "input-available": <ClockIcon className="size-4 animate-pulse" />,
     "output-available": <CheckCircleIcon className="size-4 text-green-600" />,
     "output-error": <XCircleIcon className="size-4 text-red-600" />,
-  } as const;
+  };
 
   return (
     <Badge className="rounded-full text-xs" variant="secondary">

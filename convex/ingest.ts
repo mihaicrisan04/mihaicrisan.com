@@ -30,7 +30,8 @@ const WORK_EXPERIENCE = [
 ];
 
 // Static project data for RAG ingestion (mirrors MDX content)
-const PROJECTS = [
+// Exported so tools can return structured project data directly
+export const PROJECTS = [
   {
     id: "rngo-ro",
     name: "rngo.ro",
@@ -298,6 +299,17 @@ export const deleteDocument = mutation({
 export const getAllDocuments = query({
   handler: async (ctx) => {
     return await ctx.db.query("documents").collect();
+  },
+});
+
+// Get a single document by sourceId
+export const getDocumentBySourceId = query({
+  args: { sourceId: v.string() },
+  handler: async (ctx, { sourceId }) => {
+    return await ctx.db
+      .query("documents")
+      .withIndex("by_sourceId", (q) => q.eq("sourceId", sourceId))
+      .first();
   },
 });
 

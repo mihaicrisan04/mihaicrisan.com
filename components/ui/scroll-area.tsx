@@ -1,64 +1,83 @@
 "use client";
 
-import {
-  Corner,
-  Root,
-  ScrollAreaScrollbar,
-  ScrollAreaThumb,
-  Viewport,
-} from "@radix-ui/react-scroll-area";
-import type { ComponentProps } from "react";
-
+import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
+import { type Ref, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
-function ScrollArea({
+export function ScrollArea({
   className,
   children,
+  scrollFade = false,
+  scrollbarGutter = false,
+  viewportRef,
   ...props
-}: ComponentProps<typeof Root>) {
+}: ScrollAreaPrimitive.Root.Props & {
+  scrollFade?: boolean;
+  scrollbarGutter?: boolean;
+  viewportRef?: Ref<HTMLDivElement>;
+}) {
+  // Merge the external viewportRef with the internal viewport element
+  const setViewportRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (!viewportRef) {
+        return;
+      }
+      if (typeof viewportRef === "function") {
+        viewportRef(node);
+      } else if (viewportRef && "current" in viewportRef) {
+        (viewportRef as React.MutableRefObject<HTMLDivElement | null>).current =
+          node;
+      }
+    },
+    [viewportRef]
+  );
+
   return (
-    <Root
-      className={cn("relative", className)}
-      data-slot="scroll-area"
+    <ScrollAreaPrimitive.Root
+      className={cn("size-full min-h-0", className)}
       {...props}
     >
-      <Viewport
-        className="size-full rounded-[inherit] outline-none transition-[color,box-shadow] focus-visible:outline-1 focus-visible:ring-[3px] focus-visible:ring-ring/50"
+      <ScrollAreaPrimitive.Viewport
+        className={cn(
+          "h-full rounded-[inherit] outline-none transition-shadows focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background data-has-overflow-y:overscroll-y-contain data-has-overflow-x:overscroll-x-contain",
+          scrollFade &&
+            "mask-t-from-[calc(100%-min(var(--fade-size),var(--scroll-area-overflow-y-start)))] mask-b-from-[calc(100%-min(var(--fade-size),var(--scroll-area-overflow-y-end)))] mask-l-from-[calc(100%-min(var(--fade-size),var(--scroll-area-overflow-x-start)))] mask-r-from-[calc(100%-min(var(--fade-size),var(--scroll-area-overflow-x-end)))] [--fade-size:1.5rem]",
+          scrollbarGutter &&
+            "data-has-overflow-y:pe-2.5 data-has-overflow-x:pb-2.5"
+        )}
         data-slot="scroll-area-viewport"
+        ref={viewportRef ? setViewportRef : undefined}
       >
         {children}
-      </Viewport>
-      <ScrollBar />
-      <Corner />
-    </Root>
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollBar orientation="vertical" />
+      <ScrollBar orientation="horizontal" />
+      <ScrollAreaPrimitive.Corner data-slot="scroll-area-corner" />
+    </ScrollAreaPrimitive.Root>
   );
 }
 
-function ScrollBar({
+export function ScrollBar({
   className,
   orientation = "vertical",
   ...props
-}: ComponentProps<typeof ScrollAreaScrollbar>) {
+}: ScrollAreaPrimitive.Scrollbar.Props) {
   return (
-    <ScrollAreaScrollbar
+    <ScrollAreaPrimitive.Scrollbar
       className={cn(
-        "flex touch-none select-none p-px transition-colors",
-        orientation === "vertical" &&
-          "h-full w-2.5 border-l border-l-transparent",
-        orientation === "horizontal" &&
-          "h-2.5 flex-col border-t border-t-transparent",
+        "m-1 flex opacity-0 transition-opacity delay-300 data-[orientation=horizontal]:h-1.5 data-[orientation=vertical]:w-1.5 data-[orientation=horizontal]:flex-col data-hovering:opacity-100 data-scrolling:opacity-100 data-hovering:delay-0 data-scrolling:delay-0 data-hovering:duration-100 data-scrolling:duration-100",
         className
       )}
       data-slot="scroll-area-scrollbar"
       orientation={orientation}
       {...props}
     >
-      <ScrollAreaThumb
-        className="relative flex-1 rounded-full bg-border"
+      <ScrollAreaPrimitive.Thumb
+        className="relative flex-1 rounded-full bg-foreground/20"
         data-slot="scroll-area-thumb"
       />
-    </ScrollAreaScrollbar>
+    </ScrollAreaPrimitive.Scrollbar>
   );
 }
 
-export { ScrollArea, ScrollBar };
+export { ScrollAreaPrimitive };
