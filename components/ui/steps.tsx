@@ -35,7 +35,7 @@ export const StepsTrigger = ({
   <CollapsibleTrigger
     className={cn(
       "group/step flex w-full cursor-pointer items-center justify-start gap-1.5 text-muted-foreground text-sm transition-colors hover:text-foreground",
-      className,
+      className
     )}
     {...props}
   >
@@ -65,7 +65,7 @@ export const StepsContent = ({
     <CollapsibleContent
       className={cn(
         "overflow-hidden text-popover-foreground data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
-        className,
+        className
       )}
       {...props}
     >
@@ -89,11 +89,7 @@ export const StepsBar = ({ className, ...props }: StepsBarProps) => (
 
 export type StepsProps = React.ComponentProps<typeof Collapsible>;
 
-export function Steps({
-  defaultOpen = true,
-  className,
-  ...props
-}: StepsProps) {
+export function Steps({ defaultOpen = true, className, ...props }: StepsProps) {
   return (
     <Collapsible
       className={cn(className)}

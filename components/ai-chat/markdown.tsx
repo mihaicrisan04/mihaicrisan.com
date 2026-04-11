@@ -20,7 +20,7 @@ const INITIAL_COMPONENTS: Components = {
         <code
           className={cn(
             "rounded-sm border bg-muted px-1 py-0.5 font-mono text-[0.85em] text-foreground",
-            className,
+            className
           )}
           {...props}
         >
@@ -56,7 +56,7 @@ const INITIAL_COMPONENTS: Components = {
   },
   blockquote({ children }: P) {
     return (
-      <blockquote className="my-2 border-l-2 border-muted-foreground/30 pl-4 text-muted-foreground italic">
+      <blockquote className="my-2 border-muted-foreground/30 border-l-2 pl-4 text-muted-foreground italic">
         {children}
       </blockquote>
     );
@@ -70,17 +70,17 @@ const INITIAL_COMPONENTS: Components = {
   },
   th({ children }: P) {
     return (
-      <th className="border-b border-border px-2 py-1 text-left font-medium">
+      <th className="border-border border-b px-2 py-1 text-left font-medium">
         {children}
       </th>
     );
   },
   td({ children }: P) {
-    return <td className="border-b border-border px-2 py-1">{children}</td>;
+    return <td className="border-border border-b px-2 py-1">{children}</td>;
   },
   h1({ children }: P) {
     return (
-      <h1 className="mt-2 mb-1 font-semibold text-lg text-foreground">
+      <h1 className="mt-2 mb-1 font-semibold text-foreground text-lg">
         {children}
       </h1>
     );
@@ -94,7 +94,7 @@ const INITIAL_COMPONENTS: Components = {
   },
   h3({ children }: P) {
     return (
-      <h3 className="mt-2 mb-1 font-semibold text-sm text-foreground">
+      <h3 className="mt-2 mb-1 font-semibold text-foreground text-sm">
         {children}
       </h3>
     );

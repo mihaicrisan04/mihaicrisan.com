@@ -80,7 +80,7 @@ function Thinking({ text, isStreaming = false, className }: ThinkingProps) {
           <ChevronDown
             className={cn(
               "size-3.5 shrink-0 opacity-0 transition-all duration-150 group-hover/thinking:opacity-100",
-              open && "rotate-180",
+              open && "rotate-180"
             )}
           />
         </CollapsibleTrigger>
