@@ -54,7 +54,7 @@ function ReasoningPart({
 }) {
   // startStreaming: false → shows initial text immediately, animates growth
   // This prevents re-animation on component remount during streaming→paginated transition
-  const [revealed] = useSmoothText(text, { charsPerSec: 200 });
+  const [revealed] = useSmoothText(text, { charsPerSec: 600 });
   return (
     <div className="py-0.5">
       <Thinking isStreaming={isStreaming} text={revealed} />
