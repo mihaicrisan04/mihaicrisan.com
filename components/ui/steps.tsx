@@ -24,44 +24,28 @@ export type StepsTriggerProps = React.ComponentProps<
   typeof CollapsibleTrigger
 > & {
   leftIcon?: React.ReactNode;
-  swapIconOnHover?: boolean;
 };
 
 export const StepsTrigger = ({
   children,
   className,
   leftIcon,
-  swapIconOnHover = true,
   ...props
 }: StepsTriggerProps) => (
   <CollapsibleTrigger
     className={cn(
-      "group flex w-full cursor-pointer items-center justify-start gap-1 text-muted-foreground text-sm transition-colors hover:text-foreground",
-      className
+      "group/step flex w-full cursor-pointer items-center justify-start gap-1.5 text-muted-foreground text-sm transition-colors hover:text-foreground",
+      className,
     )}
     {...props}
   >
-    <div className="flex items-center gap-2">
-      {leftIcon ? (
-        <span className="relative inline-flex size-4 items-center justify-center">
-          <span
-            className={cn(
-              "transition-opacity",
-              swapIconOnHover && "group-hover:opacity-0"
-            )}
-          >
-            {leftIcon}
-          </span>
-          {swapIconOnHover && (
-            <ChevronDown className="absolute size-4 opacity-0 transition-opacity group-hover:opacity-100 group-data-[state=open]:rotate-180" />
-          )}
-        </span>
-      ) : null}
-      <span>{children}</span>
-    </div>
-    {!leftIcon && (
-      <ChevronDown className="size-4 transition-transform group-data-[state=open]:rotate-180" />
-    )}
+    {leftIcon ? (
+      <span className="inline-flex size-4 shrink-0 items-center justify-center">
+        {leftIcon}
+      </span>
+    ) : null}
+    <span>{children}</span>
+    <ChevronDown className="size-3.5 shrink-0 opacity-0 transition-all duration-150 group-hover/step:opacity-100 group-data-[state=open]/step:rotate-180" />
   </CollapsibleTrigger>
 );
 
@@ -81,7 +65,7 @@ export const StepsContent = ({
     <CollapsibleContent
       className={cn(
         "overflow-hidden text-popover-foreground data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
-        className
+        className,
       )}
       {...props}
     >
@@ -105,7 +89,11 @@ export const StepsBar = ({ className, ...props }: StepsBarProps) => (
 
 export type StepsProps = React.ComponentProps<typeof Collapsible>;
 
-export function Steps({ defaultOpen = true, className, ...props }: StepsProps) {
+export function Steps({
+  defaultOpen = true,
+  className,
+  ...props
+}: StepsProps) {
   return (
     <Collapsible
       className={cn(className)}

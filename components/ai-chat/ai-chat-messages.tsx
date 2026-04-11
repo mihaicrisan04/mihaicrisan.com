@@ -118,7 +118,7 @@ export function AIChatMessages({
           ) : null}
 
           {messages.map((msg, index) => {
-            const key = msg.key ?? msg.id ?? `msg-${index}`;
+            const key = msg.id ?? msg.key ?? `msg-${index}`;
             const forceActions = index === lastAssistantIndex;
             return (
               <AIChatMessage
@@ -130,7 +130,7 @@ export function AIChatMessages({
           })}
 
           {optimisticMsg ? (
-            <div className="group flex flex-col items-end gap-1 animate-in fade-in slide-in-from-bottom-1 duration-200">
+            <div className="group fade-in slide-in-from-bottom-1 flex animate-in flex-col items-end gap-1 duration-200">
               <div className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl bg-primary px-4 py-2.5 text-primary-foreground text-sm leading-relaxed">
                 {optimisticMsg}
               </div>

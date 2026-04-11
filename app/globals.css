@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "../node_modules/@nvq/flowtoken/dist/styles.css";
 
 @custom-variant dark (&:is(.dark *));
 

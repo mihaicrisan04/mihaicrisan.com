@@ -1,7 +1,7 @@
 "use client";
 
+import { useSmoothText } from "@convex-dev/agent/react";
 import { memo } from "react";
-import { useStreamReveal } from "@/hooks/use-stream-reveal";
 import type { MessagePart, UIMessage } from "@/lib/chat-types";
 import { ToolStepFromPart } from "./ai-chat-tool-steps";
 import { Markdown } from "./markdown";
@@ -45,7 +45,6 @@ function toolPartsSignature(msg: UIMessage): string {
     .join("||");
 }
 
-// Reasoning still uses useStreamReveal for smooth character reveal
 function ReasoningPart({
   text,
   isStreaming,
@@ -53,7 +52,9 @@ function ReasoningPart({
   text: string;
   isStreaming: boolean;
 }) {
-  const revealed = useStreamReveal(text, isStreaming);
+  // startStreaming: false → shows initial text immediately, animates growth
+  // This prevents re-animation on component remount during streaming→paginated transition
+  const [revealed] = useSmoothText(text, { charsPerSec: 200 });
   return (
     <div className="py-0.5">
       <Thinking isStreaming={isStreaming} text={revealed} />
@@ -61,17 +62,11 @@ function ReasoningPart({
   );
 }
 
-// Text uses flowtoken's AnimatedMarkdown for smooth word-by-word fade-in
-function TextPart({
-  text,
-  isStreaming,
-}: {
-  text: string;
-  isStreaming: boolean;
-}) {
+function TextPart({ text }: { text: string }) {
+  const [revealed] = useSmoothText(text, { charsPerSec: 600 });
   return (
     <div className="text-foreground text-sm leading-relaxed">
-      <Markdown isStreaming={isStreaming}>{text}</Markdown>
+      <Markdown>{revealed}</Markdown>
     </div>
   );
 }
@@ -84,13 +79,7 @@ function ToolPart({ part }: { part: MessagePart }) {
   );
 }
 
-function AssistantParts({
-  parts,
-  isStreaming,
-}: {
-  parts: MessagePart[];
-  isStreaming: boolean;
-}) {
+function AssistantParts({ parts }: { parts: MessagePart[] }) {
   return (
     <>
       {parts.map((part, index) => {
@@ -113,15 +102,7 @@ function AssistantParts({
           if (!text.trim()) {
             return null;
           }
-          const isLastTextPart =
-            index === parts.findLastIndex((p) => p.type === "text");
-          return (
-            <TextPart
-              isStreaming={isStreaming && isLastTextPart}
-              key={`text-${index}`}
-              text={text}
-            />
-          );
+          return <TextPart key={`text-${index}`} text={text} />;
         }
 
         const toolName = extractToolName(part);
@@ -180,12 +161,10 @@ function AIChatMessageComponent({
     return null;
   }
 
-  const isStreaming = message.status !== "complete";
-
   return (
     <div className="group flex flex-col items-start gap-1">
       <div className="w-full space-y-1">
-        <AssistantParts isStreaming={isStreaming} parts={parts} />
+        <AssistantParts parts={parts} />
       </div>
       {text ? (
         <MessageActionsBar

@@ -63,14 +63,6 @@ function Thinking({ text, isStreaming = false, className }: ThinkingProps) {
     <div className={cn("inline-flex flex-col", className)}>
       <Collapsible onOpenChange={setOpen} open={open}>
         <CollapsibleTrigger className="group/thinking -mx-1 inline-flex items-center gap-1.5 rounded px-1 py-0.5 text-left text-muted-foreground text-sm transition-colors hover:text-foreground">
-          <span className="relative inline-flex size-4 items-center justify-center">
-            <ChevronDown
-              className={cn(
-                "size-3.5 shrink-0 transition-transform duration-150",
-                open && "rotate-180",
-              )}
-            />
-          </span>
           {showAsActive ? (
             <TextShimmer className="text-sm" duration={2}>
               Thinking...
@@ -78,14 +70,20 @@ function Thinking({ text, isStreaming = false, className }: ThinkingProps) {
           ) : (
             <span>Thought</span>
           )}
+          <ChevronDown
+            className={cn(
+              "size-3.5 shrink-0 opacity-0 transition-all duration-150 group-hover/thinking:opacity-100",
+              open && "rotate-180",
+            )}
+          />
         </CollapsibleTrigger>
         <CollapsibleContent className="mt-1 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
           {hasText ? (
             <div className="ml-[7px] grid grid-cols-[min-content_minmax(0,1fr)] items-start gap-x-3">
               <div className="h-full w-[2px] self-stretch bg-muted" />
               <div
-                ref={scrollRef}
                 className="mask-t-from-95% mask-b-from-90% max-h-48 overflow-y-auto [scrollbar-color:var(--scrollbar-color)_transparent]"
+                ref={scrollRef}
               >
                 <div className="whitespace-pre-wrap text-[12px] text-muted-foreground/60 leading-relaxed">
                   {text}

@@ -2,19 +2,23 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const CHARS_PER_SECOND = 200;
-
 /**
  * Smoothly reveals text character-by-character while streaming.
  * Buffers incoming chunks and drips them out at a steady pace.
  * When streaming stops, snaps to the full text immediately.
  */
-export function useStreamReveal(text: string, streaming: boolean): string {
+export function useStreamReveal(
+  text: string,
+  streaming: boolean,
+  charsPerSecond = 400
+): string {
   const [revealed, setRevealed] = useState(text);
   const bufferRef = useRef(text);
   const revealedLenRef = useRef(text.length);
   const frameRef = useRef<number>(0);
   const lastTimeRef = useRef(0);
+  const speedRef = useRef(charsPerSecond);
+  speedRef.current = charsPerSecond;
 
   useEffect(() => {
     bufferRef.current = text;
@@ -46,7 +50,7 @@ export function useStreamReveal(text: string, streaming: boolean): string {
       if (currentLen < target.length) {
         const charsToReveal = Math.max(
           1,
-          Math.round((CHARS_PER_SECOND / 1000) * dt)
+          Math.round((speedRef.current / 1000) * dt)
         );
         const newLen = Math.min(currentLen + charsToReveal, target.length);
         revealedLenRef.current = newLen;

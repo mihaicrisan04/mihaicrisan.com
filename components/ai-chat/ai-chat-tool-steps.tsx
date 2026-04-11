@@ -88,7 +88,7 @@ function Shimmer({ children }: { children: React.ReactNode }) {
 
 function getActiveSubStep(
   toolName: string,
-  input?: Record<string, unknown>,
+  input?: Record<string, unknown>
 ): string {
   switch (toolName) {
     case "searchPortfolio": {
@@ -116,10 +116,7 @@ function getActiveSubStep(
   }
 }
 
-function getDoneSubStep(
-  toolName: string,
-  output?: unknown,
-): string {
+function getDoneSubStep(toolName: string, output?: unknown): string {
   const count = extractCount(output);
 
   switch (toolName) {
@@ -173,7 +170,7 @@ export function ToolStepFromPart({ part }: ToolStepFromPartProps) {
   const hasAutoClosedRef = useRef(!isActive);
 
   useEffect(() => {
-    if (!isActive && !hasAutoClosedRef.current) {
+    if (!(isActive || hasAutoClosedRef.current)) {
       hasAutoClosedRef.current = true;
       const timer = setTimeout(() => setOpen(false), 1000);
       return () => clearTimeout(timer);
@@ -192,10 +189,7 @@ export function ToolStepFromPart({ part }: ToolStepFromPartProps) {
 
   return (
     <Steps onOpenChange={setOpen} open={open}>
-      <StepsTrigger
-        leftIcon={getStepIcon(toolName, isActive)}
-        swapIconOnHover={!isActive}
-      >
+      <StepsTrigger leftIcon={getStepIcon(toolName, isActive)}>
         {triggerLabel}
       </StepsTrigger>
       <StepsContent>

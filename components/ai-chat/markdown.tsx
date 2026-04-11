@@ -1,35 +1,129 @@
 "use client";
 
-import { AnimatedMarkdown } from "@nvq/flowtoken";
 import { memo } from "react";
+import { type Components, Streamdown } from "streamdown";
 import { cn } from "@/lib/utils";
 
 export interface MarkdownProps {
   children: string;
-  isStreaming?: boolean;
   className?: string;
 }
 
-function MarkdownComponent({
-  children,
-  isStreaming = false,
-  className,
-}: MarkdownProps) {
+// biome-ignore lint/suspicious/noExplicitAny: streamdown component props are untyped
+type P = Record<string, any>;
+
+const INITIAL_COMPONENTS: Components = {
+  code({ className, children, ...props }: P) {
+    const isInline = !className?.includes("language-");
+    if (isInline) {
+      return (
+        <code
+          className={cn(
+            "rounded-sm border bg-muted px-1 py-0.5 font-mono text-[0.85em] text-foreground",
+            className,
+          )}
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    }
+    return (
+      <code className={cn("font-mono text-sm", className)} {...props}>
+        {children}
+      </code>
+    );
+  },
+  pre({ children }: P) {
+    return (
+      <pre className="my-2 overflow-x-auto rounded-lg border bg-muted p-3 text-sm">
+        {children}
+      </pre>
+    );
+  },
+  a({ children, href, ...props }: P) {
+    return (
+      <a
+        className="text-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:decoration-foreground"
+        href={href}
+        rel="noopener noreferrer"
+        target="_blank"
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  },
+  blockquote({ children }: P) {
+    return (
+      <blockquote className="my-2 border-l-2 border-muted-foreground/30 pl-4 text-muted-foreground italic">
+        {children}
+      </blockquote>
+    );
+  },
+  table({ children }: P) {
+    return (
+      <div className="my-2 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">{children}</table>
+      </div>
+    );
+  },
+  th({ children }: P) {
+    return (
+      <th className="border-b border-border px-2 py-1 text-left font-medium">
+        {children}
+      </th>
+    );
+  },
+  td({ children }: P) {
+    return <td className="border-b border-border px-2 py-1">{children}</td>;
+  },
+  h1({ children }: P) {
+    return (
+      <h1 className="mt-2 mb-1 font-semibold text-lg text-foreground">
+        {children}
+      </h1>
+    );
+  },
+  h2({ children }: P) {
+    return (
+      <h2 className="mt-2 mb-1 font-semibold text-base text-foreground">
+        {children}
+      </h2>
+    );
+  },
+  h3({ children }: P) {
+    return (
+      <h3 className="mt-2 mb-1 font-semibold text-sm text-foreground">
+        {children}
+      </h3>
+    );
+  },
+  ul({ children }: P) {
+    return <ul className="my-1 list-disc space-y-0.5 pl-5">{children}</ul>;
+  },
+  ol({ children }: P) {
+    return <ol className="my-1 list-decimal space-y-0.5 pl-5">{children}</ol>;
+  },
+  li({ children }: P) {
+    return <li className="leading-relaxed">{children}</li>;
+  },
+  p({ children }: P) {
+    return <p className="leading-relaxed">{children}</p>;
+  },
+  hr() {
+    return <hr className="my-3 border-border" />;
+  },
+};
+
+function MarkdownComponent({ children, className }: MarkdownProps) {
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-2 [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:my-2 [&_blockquote]:border-muted-foreground/30 [&_blockquote]:border-l-2 [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground [&_blockquote]:italic [&_code]:rounded-sm [&_code]:border [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em] [&_h1]:mt-2 [&_h1]:mb-1 [&_h1]:font-semibold [&_h1]:text-lg [&_h2]:mt-2 [&_h2]:mb-1 [&_h2]:font-semibold [&_h2]:text-base [&_h3]:mt-2 [&_h3]:mb-1 [&_h3]:font-semibold [&_h3]:text-sm [&_li]:leading-relaxed [&_ol]:my-1 [&_ol]:list-decimal [&_ol]:space-y-0.5 [&_ol]:pl-5 [&_p]:leading-relaxed [&_pre]:my-2 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:border [&_pre]:bg-muted [&_pre]:p-3 [&_pre]:text-sm [&_ul]:my-1 [&_ul]:list-disc [&_ul]:space-y-0.5 [&_ul]:pl-5",
-        className
-      )}
+    <Streamdown
+      className={cn("flex flex-col gap-2", className)}
+      components={INITIAL_COMPONENTS}
     >
-      <AnimatedMarkdown
-        animation="fadeIn"
-        animationDuration="0.35s"
-        animationTimingFunction="ease-out"
-        content={children}
-        isStreaming={isStreaming}
-      />
-    </div>
+      {children}
+    </Streamdown>
   );
 }
 
