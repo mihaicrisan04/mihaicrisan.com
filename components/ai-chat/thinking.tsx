@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { BrainCircuit, ChevronDown, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { TextShimmer } from "@/components/motion-primitives/text-shimmer";
 import {
@@ -63,6 +63,13 @@ function Thinking({ text, isStreaming = false, className }: ThinkingProps) {
     <div className={cn("inline-flex flex-col", className)}>
       <Collapsible onOpenChange={setOpen} open={open}>
         <CollapsibleTrigger className="group/thinking -mx-1 inline-flex items-center gap-1.5 rounded px-1 py-0.5 text-left text-muted-foreground text-sm transition-colors hover:text-foreground">
+          <span className="inline-flex size-4 shrink-0 items-center justify-center">
+            {showAsActive ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <BrainCircuit className="size-4" />
+            )}
+          </span>
           {showAsActive ? (
             <TextShimmer className="text-sm" duration={2}>
               Thinking...
