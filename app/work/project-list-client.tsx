@@ -2,51 +2,66 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
+import { useState } from "react";
 import type { Project } from "@/lib/projects";
 
 interface ProjectListClientProps {
   projects: Project[];
 }
 
+function getYear(date: string) {
+  return new Date(date).getFullYear();
+}
+
+function ProjectRow({ project, index }: { project: Project; index: number }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Link href={`/work/${project.slug}`}>
+      <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 8 }}
+        transition={{ duration: 0.5, delay: index * 0.04 }}
+      >
+        <motion.div
+          animate={{ x: hovered ? 4 : 0 }}
+          className="flex items-baseline justify-between border-border/40 border-b py-4"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          transition={{ duration: 0.2 }}
+        >
+          <span className="flex items-baseline gap-4">
+            <span className="font-mono text-muted-foreground/50 text-xs tabular-nums">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="text-base text-foreground">{project.name}</span>
+          </span>
+          <span className="flex items-baseline gap-4">
+            <span className="hidden font-mono text-muted-foreground/60 text-xs sm:inline">
+              {project.category}
+            </span>
+            <span className="font-mono text-muted-foreground text-xs tabular-nums">
+              {getYear(project.startDate)}
+            </span>
+            <motion.span
+              animate={{ opacity: hovered ? 1 : 0.5 }}
+              className="font-mono text-muted-foreground text-sm"
+              transition={{ duration: 0.2 }}
+            >
+              →
+            </motion.span>
+          </span>
+        </motion.div>
+      </motion.div>
+    </Link>
+  );
+}
+
 export function ProjectListClient({ projects }: ProjectListClientProps) {
   return (
-    <div className="space-y-3">
+    <div className="border-border/40 border-t">
       {projects.map((project, index) => (
-        <motion.div
-          animate={{ opacity: 1, y: 0 }}
-          initial={{ opacity: 0, y: 20 }}
-          key={project.slug}
-          transition={{ duration: 0.6, delay: index * 0.05 }}
-        >
-          <Link href={`/work/${project.slug}`}>
-            <motion.div
-              className="group -mx-2 flex cursor-pointer items-center justify-between rounded px-2 py-1 transition-colors hover:bg-muted/50"
-              transition={{ duration: 0.2 }}
-              whileHover={{ x: 4 }}
-            >
-              <span className="text-sm transition-colors hover:text-foreground">
-                {project.name}
-              </span>
-              <motion.svg
-                aria-label="Navigate to project"
-                className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-foreground"
-                fill="none"
-                role="img"
-                stroke="currentColor"
-                transition={{ duration: 0.2 }}
-                viewBox="0 0 24 24"
-                whileHover={{ x: 4 }}
-              >
-                <path
-                  d="M9 5l7 7-7 7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                />
-              </motion.svg>
-            </motion.div>
-          </Link>
-        </motion.div>
+        <ProjectRow index={index} key={project.slug} project={project} />
       ))}
     </div>
   );

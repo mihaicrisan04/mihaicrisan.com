@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Footer } from "@/components/footer";
-import { Navigation } from "@/components/navigation";
+import { FooterSlot } from "@/components/footer-slot";
+import { ShaderSlot } from "@/components/shader-slot";
 import { Providers } from "./providers";
 
 const geistSans = Geist({
@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mihai Crisan Personal Portfolio",
-  description: "Personal portfolio showcasing my projects and skills",
+  title: "mihai crisan",
+  description: "software engineer, cluj-napoca",
 };
 
 export default function RootLayout({
@@ -31,10 +31,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
       >
         <Providers>
-          <div className="flex min-h-screen flex-col">
-            <Navigation />
-            <main className="flex-1">{children}</main>
-            <Footer />
+          <ShaderSlot />
+          <div className="relative z-10 flex flex-col">
+            <main className="min-h-svh">{children}</main>
+            <FooterSlot />
           </div>
         </Providers>
       </body>

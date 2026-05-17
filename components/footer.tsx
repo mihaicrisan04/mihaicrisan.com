@@ -75,15 +75,13 @@ export function Footer() {
     setMounted(true);
   }, []);
 
-  // Theme-specific colors
+  // Theme-specific grid color (footer is transparent so shader shows through)
   const themeStyles = {
     light: {
-      background: "#f8fafc",
-      gridColor: "#e2e8f0",
+      gridColor: "rgba(0, 0, 0, 0.08)",
     },
     dark: {
-      background: "var(--background)",
-      gridColor: "var(--border)",
+      gridColor: "rgba(255, 255, 255, 0.08)",
     },
   };
 
@@ -95,7 +93,6 @@ export function Footer() {
     <motion.footer
       className="relative min-h-[60vh] overflow-hidden py-32"
       ref={footerRef}
-      style={{ backgroundColor: styles.background }}
     >
       {/* Grid Background with Mask */}
       <div
@@ -144,13 +141,13 @@ export function Footer() {
           </div>
 
           {/* Copyright / Location */}
-          <div className="text-muted-foreground text-sm">
+          <div className="font-mono text-muted-foreground text-xs">
             <TextLoop interval={3}>
-              <span>© 2026 Mihai Crisan</span>
+              <span>© 2026 mihai crisan</span>
               <span>
-                Built with{" "}
-                <Heart className="inline-block h-4 w-4 transition-colors duration-300 hover:text-red-500" />{" "}
-                from Cluj-Napoca
+                built with{" "}
+                <Heart className="inline-block h-3.5 w-3.5 transition-colors duration-300 hover:text-red-500" />{" "}
+                from cluj-napoca
               </span>
             </TextLoop>
           </div>
