@@ -9,15 +9,15 @@ interface ShaderBackgroundProps {
 }
 
 const DARK_PALETTE = {
-  color1: "#1f2024",
-  color2: "#15161a",
-  color3: "#0d0e11",
+  color1: "#2a2b32",
+  color2: "#16171c",
+  color3: "#08090c",
 };
 
 const LIGHT_PALETTE = {
-  color1: "#fafafb",
-  color2: "#f2f2f4",
-  color3: "#e8e9ec",
+  color1: "#ffffff",
+  color2: "#eceef2",
+  color3: "#d6d8de",
 };
 
 export function ShaderBackground({ className = "" }: ShaderBackgroundProps) {
@@ -35,21 +35,21 @@ export function ShaderBackground({ className = "" }: ShaderBackgroundProps) {
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
     >
       <Grainient
-        blendSoftness={0.18}
+        blendSoftness={0.22}
         color1={palette.color1}
         color2={palette.color2}
         color3={palette.color3}
-        contrast={1.1}
-        grainAmount={0.06}
+        contrast={1.2}
+        grainAmount={0.07}
         grainScale={2.5}
-        rotationAmount={320.0}
-        saturation={0.5}
-        timeSpeed={0.2}
-        warpAmplitude={55.0}
-        warpFrequency={4.0}
-        warpSpeed={1.8}
-        warpStrength={1.0}
-        zoom={1.1}
+        rotationAmount={420.0}
+        saturation={0.65}
+        timeSpeed={0.35}
+        warpAmplitude={50.0}
+        warpFrequency={4.5}
+        warpSpeed={2.4}
+        warpStrength={1.5}
+        zoom={0.95}
       />
     </div>
   );

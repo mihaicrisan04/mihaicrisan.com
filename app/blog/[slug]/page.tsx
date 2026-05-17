@@ -53,10 +53,10 @@ export default function BlogPostPage({ params }: BlogPageProps) {
         </div>
 
         <header className="mb-12 border-border/40 border-b pb-8">
-          <time className="block font-mono text-muted-foreground text-xs">
+          <time className="block font-mono text-muted-foreground text-sm">
             {formatDate(blogPost.date)}
           </time>
-          <h1 className="mt-3 mb-3 font-medium text-2xl text-foreground tracking-tight">
+          <h1 className="mt-3 mb-3 font-medium text-foreground text-xl tracking-tight">
             {blogPost.title}
           </h1>
           {blogPost.description && (

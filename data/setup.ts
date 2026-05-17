@@ -7,76 +7,82 @@ export interface SetupItem {
 export interface SetupGroup {
   title: string;
   items: SetupItem[];
+  footer?: string;
 }
 
 export const setupGroups: SetupGroup[] = [
   {
-    title: "machine",
+    title: "hardware",
     items: [
-      { name: "macbook pro", note: "m-series, daily driver" },
-      { name: "external display", note: "betterdisplay for fine control" },
-    ],
-  },
-  {
-    title: "editor",
-    items: [
-      { name: "zed", note: "daily editor", href: "https://zed.dev" },
-      {
-        name: "neovim",
-        note: "remote / quick edits",
-        href: "https://neovim.io",
-      },
-      { name: "cursor", note: "occasional", href: "https://cursor.com" },
-      {
-        name: "claude code",
-        note: "agent in the terminal",
-        href: "https://claude.com/claude-code",
-      },
-    ],
-  },
-  {
-    title: "terminal",
-    items: [
-      { name: "ghostty", note: "terminal", href: "https://ghostty.org" },
-      { name: "zsh + powerlevel10k", note: "shell + prompt" },
-      { name: "eza", note: "ls replacement" },
-      { name: "fzf", note: "fuzzy everything" },
-      { name: "yazi", note: "file manager" },
-      { name: "btop", note: "system monitor" },
-      { name: "lazygit", note: "git tui" },
-      { name: "lazydocker", note: "docker tui" },
+      { name: "macbook pro m1", note: "still works fine to this day" },
+      { name: "airpods", note: "a must" },
     ],
   },
   {
     title: "cli",
     items: [
-      { name: "bun", note: "js runtime + package manager" },
-      { name: "mise", note: "tool versions + env" },
-      { name: "ripgrep", note: "grep, but fast" },
-      { name: "tldr", note: "man pages, simplified" },
-      { name: "ollama", note: "local models" },
-      { name: "stow", note: "symlink dotfiles" },
+      { name: "mise", note: "goated", href: "https://mise.jdx.dev" },
+      { name: "bun", note: "js runtime + pm", href: "https://bun.com" },
+      { name: "brew", note: "goated", href: "https://brew.sh" },
+      {
+        name: "claude code",
+        note: "main ai",
+        href: "https://claude.com/claude-code",
+      },
+      { name: "codex", note: "", href: "https://github.com/openai/codex" },
+      { name: "yazi", note: "file manager", href: "https://yazi-rs.github.io" },
     ],
+    footer: "plus custom cli apps + widgets, all in the dotfiles.",
   },
   {
     title: "apps",
     items: [
-      { name: "raycast", note: "launcher", href: "https://raycast.com" },
+      { name: "raycast", note: "the goat", href: "https://raycast.com" },
       {
-        name: "karabiner-elements",
-        note: "key remapping",
+        name: "cmux",
+        note: "terminal",
+        href: "https://github.com/manaflow-ai/cmux",
+      },
+      { name: "dia", note: "browser", href: "https://www.diabrowser.com" },
+      { name: "shottr", note: "screenshots", href: "https://shottr.cc" },
+      { name: "zed", note: "code editor", href: "https://zed.dev" },
+      { name: "cursor", note: "ai code editor", href: "https://cursor.com" },
+      {
+        name: "yaak",
+        note: "postman alternative",
+        href: "https://yaak.app",
+      },
+      {
+        name: "datagrip",
+        note: "database ide",
+        href: "https://www.jetbrains.com/datagrip",
+      },
+      {
+        name: "thaw",
+        note: "bartender alternative",
+        href: "https://github.com/stonerl/Thaw",
+      },
+      { name: "lookaway", note: "eye breaks", href: "https://lookaway.app" },
+      {
+        name: "betterdisplay",
+        note: "display config",
+        href: "https://github.com/waydabber/BetterDisplay",
+      },
+      {
+        name: "karabiner",
+        note: "keyboard remap",
         href: "https://karabiner-elements.pqrs.org",
       },
-      { name: "homerow", note: "keyboard mouse" },
       {
-        name: "framer",
-        note: "design + prototype",
-        href: "https://framer.com",
+        name: "screen studio",
+        note: "screen recording",
+        href: "https://screen.studio",
       },
-      { name: "figma", note: "design", href: "https://figma.com" },
-      { name: "notchnook", note: "the notch, useful" },
-      { name: "shottr", note: "screenshots" },
-      { name: "beeper", note: "all messaging in one" },
+      {
+        name: "homerow",
+        note: "keyboard mouse",
+        href: "https://homerow.app",
+      },
     ],
   },
   {

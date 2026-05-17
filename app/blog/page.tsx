@@ -20,10 +20,10 @@ export default function BlogPage() {
       </div>
 
       <header className="mb-10">
-        <h1 className="mb-2 font-medium text-foreground text-lg tracking-tight">
+        <h1 className="mb-2 font-medium text-foreground text-xl tracking-tight">
           blog
         </h1>
-        <p className="text-muted-foreground text-sm">
+        <p className="font-mono text-base text-muted-foreground">
           notes, things i find, occasional rants.
         </p>
       </header>

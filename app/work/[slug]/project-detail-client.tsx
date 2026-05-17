@@ -43,10 +43,10 @@ export function ProjectDetailClient({ project }: ProjectDetailClientProps) {
       </div>
 
       <header className="mb-12 border-border/40 border-b pb-8">
-        <h1 className="mb-2 font-medium text-2xl text-foreground tracking-tight">
+        <h1 className="mb-2 font-medium text-foreground text-xl tracking-tight">
           {project.website ? (
             <CustomLink
-              className="font-medium text-2xl text-foreground hover:text-foreground"
+              className="font-medium text-foreground text-xl hover:text-foreground"
               external
               href={project.website}
             >
@@ -57,7 +57,7 @@ export function ProjectDetailClient({ project }: ProjectDetailClientProps) {
           )}
         </h1>
 
-        <p className="mb-6 font-mono text-muted-foreground text-xs">
+        <p className="mb-6 font-mono text-muted-foreground text-sm">
           {formatDateRange(project.startDate, project.endDate)}
         </p>
 
@@ -68,7 +68,7 @@ export function ProjectDetailClient({ project }: ProjectDetailClientProps) {
         <div className="mt-6 flex flex-wrap gap-x-3 gap-y-1">
           {project.techStack.map((tech) => (
             <span
-              className="font-mono text-muted-foreground/70 text-xs"
+              className="font-mono text-muted-foreground/70 text-sm"
               key={tech.name}
             >
               {tech.name.toLowerCase()}

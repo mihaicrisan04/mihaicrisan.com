@@ -32,14 +32,14 @@ export function SetupList({ groups }: SetupListProps) {
               const inner = (
                 <div className="group flex items-baseline justify-between py-2">
                   <span className="flex items-baseline gap-3">
-                    <span className="text-foreground text-sm">
+                    <span className="text-base text-foreground">
                       {item.name}
                     </span>
                     {item.href && (
-                      <ArrowUpRight className="h-3 w-3 text-muted-foreground/40 opacity-0 transition-opacity group-hover:opacity-100" />
+                      <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/40 opacity-0 transition-opacity group-hover:opacity-100" />
                     )}
                   </span>
-                  <span className="font-mono text-muted-foreground text-xs">
+                  <span className="font-mono text-muted-foreground text-sm">
                     {item.note}
                   </span>
                 </div>
@@ -63,6 +63,11 @@ export function SetupList({ groups }: SetupListProps) {
               );
             })}
           </ul>
+          {group.footer && (
+            <p className="mt-3 font-mono text-muted-foreground/70 text-sm">
+              {group.footer}
+            </p>
+          )}
         </motion.section>
       ))}
     </div>

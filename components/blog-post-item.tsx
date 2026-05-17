@@ -42,7 +42,7 @@ export function BlogPostItem({ post, index }: BlogPostItemProps) {
           transition={{ duration: 0.2 }}
         >
           <span className="flex items-baseline gap-4">
-            <time className="font-mono text-muted-foreground text-xs tabular-nums">
+            <time className="font-mono text-muted-foreground text-sm tabular-nums">
               {formatDate(post.date)}
             </time>
             <span className="text-base text-foreground">{post.title}</span>

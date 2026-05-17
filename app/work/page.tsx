@@ -17,7 +17,7 @@ export default function ProjectsPage() {
           {String(projects.length).padStart(2, "0")} projects
         </span>
       </div>
-      <h1 className="mb-10 font-medium text-foreground text-lg tracking-tight">
+      <h1 className="mb-10 font-medium text-foreground text-xl tracking-tight">
         work
       </h1>
       <ProjectListClient projects={projects} />

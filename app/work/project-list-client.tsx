@@ -31,16 +31,16 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
           transition={{ duration: 0.2 }}
         >
           <span className="flex items-baseline gap-4">
-            <span className="font-mono text-muted-foreground/50 text-xs tabular-nums">
+            <span className="font-mono text-muted-foreground/50 text-sm tabular-nums">
               {String(index + 1).padStart(2, "0")}
             </span>
             <span className="text-base text-foreground">{project.name}</span>
           </span>
           <span className="flex items-baseline gap-4">
-            <span className="hidden font-mono text-muted-foreground/60 text-xs sm:inline">
+            <span className="hidden font-mono text-muted-foreground/60 text-sm sm:inline">
               {project.category}
             </span>
-            <span className="font-mono text-muted-foreground text-xs tabular-nums">
+            <span className="font-mono text-muted-foreground text-sm tabular-nums">
               {getYear(project.startDate)}
             </span>
             <motion.span

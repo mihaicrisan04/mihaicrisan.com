@@ -20,10 +20,10 @@ export default function SetupPage() {
       </div>
 
       <header className="mb-12">
-        <h1 className="mb-2 font-medium text-foreground text-lg tracking-tight">
+        <h1 className="mb-2 font-medium text-foreground text-xl tracking-tight">
           my setup
         </h1>
-        <p className="font-mono text-muted-foreground text-xs">
+        <p className="font-mono text-base text-muted-foreground">
           tools, apps, and configs i actually use. everything else is in{" "}
           <a
             className="text-muted-foreground/70 underline-offset-4 hover:text-foreground hover:underline"
