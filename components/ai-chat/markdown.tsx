@@ -4,15 +4,10 @@ import { memo } from "react";
 import { type Components, Streamdown } from "streamdown";
 import { cn } from "@/lib/utils";
 
-export interface MarkdownProps {
-  children: string;
-  className?: string;
-}
-
 // biome-ignore lint/suspicious/noExplicitAny: streamdown component props are untyped
 type P = Record<string, any>;
 
-const INITIAL_COMPONENTS: Components = {
+export const streamdownComponents: Components = {
   code({ className, children, ...props }: P) {
     const isInline = !className?.includes("language-");
     if (isInline) {
@@ -116,11 +111,16 @@ const INITIAL_COMPONENTS: Components = {
   },
 };
 
+export interface MarkdownProps {
+  children: string;
+  className?: string;
+}
+
 function MarkdownComponent({ children, className }: MarkdownProps) {
   return (
     <Streamdown
       className={cn("flex flex-col gap-2", className)}
-      components={INITIAL_COMPONENTS}
+      components={streamdownComponents}
     >
       {children}
     </Streamdown>
