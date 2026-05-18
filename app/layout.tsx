@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { FooterSlot } from "@/components/footer-slot";
-import { ShaderSlot } from "@/components/shader-slot";
 import { Providers } from "./providers";
 
 const geistSans = Geist({
@@ -31,7 +30,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
       >
         <Providers>
-          <ShaderSlot />
           <div className="relative z-10 flex flex-col">
             <main className="min-h-svh">{children}</main>
             <FooterSlot />
