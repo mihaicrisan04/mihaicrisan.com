@@ -34,7 +34,21 @@ highlights:
   - "Real-time tracking of Cluj-Napoca public buses"
 ---
 
-A real-time public transportation tracking application for Cluj-Napoca, focusing on fast data processing and user-friendly features. Achieved near-instant data updates for bus locations by implementing efficient network calls and optimizing API data handling, reducing app refresh times significantly.
+A live tracker for Cluj-Napoca's public buses, built in Swift/SwiftUI while I was commuting to UBB every day.
+
+## Why
+
+The official Cluj transit app is sluggish — its ETA is often stale by a couple of minutes, which is enough to miss the bus. I wanted something I'd actually pull out of my pocket at the stop and trust the number on screen.
+
+## What it does
+
+- live bus positions on the map, updating as you watch
+- per-stop ETA for the route you tapped, not just the nearest vehicle
+- minimal UI — open, look, close
+
+## How
+
+Data comes from the public [TranzyAPI](https://tranzy.dev/) GTFS-realtime feed. The interesting part was the refresh strategy: instead of polling on a fixed timer, the app batches calls and skips re-renders where the upstream timestamps haven't moved. Perceived refresh stays near-instant even on patchy mobile networks, without burning battery.
 
 <ProjectLinks>
   <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/bus-map" />

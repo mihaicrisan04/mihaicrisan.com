@@ -40,6 +40,10 @@ ad a.md b.png c.mov
 ad https://example.com
 ```
 
+## Why
+
+AirDrop is the fastest way to move a file off a Mac, but the share-sheet dance — focus Finder, navigate, right-click, share, pick the device — pulls you out of whatever you were doing. I'm in the terminal all day. I wanted `ad file.pdf` and done.
+
 ## Install
 
 ```sh
@@ -48,7 +52,7 @@ brew install mihaicrisan04/tap/airdrop
 
 Both methods put `ad` on your `PATH`.
 
-## Why this one works
+## Why this one doesn't hang
 
 Every other CLI airdrop tool I tested hangs after the picker dismisses — the system kills the share session before the transfer confirms. This one ships as a proper `.app` bundle, so `sharingd` keeps the share session alive until the receiving side accepts.
 

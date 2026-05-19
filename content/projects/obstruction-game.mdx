@@ -36,7 +36,25 @@ highlights:
   - "Clean, modular codebase for future enhancements"
 ---
 
-Engineered the Obstruction game with a scalable and easily modifiable codebase by employing a layered architecture, ensuring flexibility for future enhancements without compromising existing functionality. Implemented an advanced AI opponent using the Minimax algorithm with Alpha-Beta Pruning, resulting in a nearly unbeatable and highly efficient gaming experience for players.
+A turn-based board game with an AI opponent, built as a 1st-year university project at UBB. Two players take turns claiming cells on a grid; each claim blocks all 8 neighbouring cells. Whoever can't move loses.
+
+## Why
+
+The course had two goals stapled together — write something with a non-trivial architecture, and implement a game AI from scratch. Obstruction is small enough to fit a semester and deep enough that a brute-force search is unplayable, which made it the right forcing function for both.
+
+## How the AI works
+
+The opponent uses **minimax with alpha-beta pruning**. The pruning is what makes it usable in practice: without it, even modest board sizes blow the search tree up to seconds-per-move. With it, the AI responds in well under a second and rarely loses to a human.
+
+## Architecture
+
+A layered Python codebase, structured the way the course wanted us to internalise:
+
+- `domain/` — `Game`, `Board`, `Player`, `AI` (pure logic, no IO)
+- `ui/` — both a `pygame` GUI and a console renderer, swappable from `settings.properties`
+- `services/` — wiring between them
+
+The same domain runs untouched behind either UI, which is the whole point of the exercise. Bug-fixing the AI never touched the renderer; swapping the renderer never touched the rules.
 
 <ProjectLinks>
   <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/obstruction" />
