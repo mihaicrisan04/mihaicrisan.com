@@ -1,15 +1,14 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { LinkGithub } from "@/components/home/link-github";
+import { LinkSetup } from "@/components/home/link-setup";
 import { LinkShimmer } from "@/components/home/link-shimmer";
-import { LinkSticker } from "@/components/home/link-sticker";
 import { LinkStrikethrough } from "@/components/home/link-strikethrough";
+import { LinkWave } from "@/components/home/link-wave";
 
 function FadeIn({
   children,
@@ -53,27 +52,6 @@ function AvatarPeek({ visible }: { visible: boolean }) {
   );
 }
 
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  return (
-    <button
-      aria-label="toggle theme"
-      className="inline-flex h-7 w-7 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      type="button"
-    >
-      {mounted && theme === "dark" ? (
-        <Moon className="h-3.5 w-3.5" />
-      ) : (
-        <Sun className="h-3.5 w-3.5" />
-      )}
-    </button>
-  );
-}
-
 export function HomeClient() {
   const [avatarVisible, setAvatarVisible] = useState(false);
 
@@ -104,14 +82,9 @@ export function HomeClient() {
               wolfpack digital
             </LinkShimmer>
             , and studying computer science at{" "}
-            <LinkSticker
-              href="https://www.ubbcluj.ro/en/"
-              imageAlt="babeș-bolyai university"
-              imageSrc="/bbu-sticker.png"
-              rotation={-8}
-            >
+            <LinkWave href="https://www.ubbcluj.ro/en/">
               bbu university
-            </LinkSticker>
+            </LinkWave>
             .
           </p>
         </FadeIn>
@@ -119,21 +92,14 @@ export function HomeClient() {
         <FadeIn delay={0.25}>
           <p className="mt-5 text-base text-muted-foreground leading-relaxed">
             i care a lot about software in general, and lately a lot about ai.
-            my{" "}
-            <Link
-              className="font-medium text-foreground transition-opacity hover:opacity-70"
-              href="/setup"
-            >
-              setup
-            </Link>{" "}
-            says a lot about me.
+            my <LinkSetup href="/setup">setup</LinkSetup> says a lot about me.
           </p>
         </FadeIn>
 
         <FadeIn delay={0.35}>
           <p className="mt-5 text-base text-muted-foreground leading-relaxed">
             reach out on{" "}
-            <LinkStrikethrough href="https://x.com/mitzaqe">
+            <LinkStrikethrough href="https://x.com/mihaicrisann">
               twitter
             </LinkStrikethrough>
             , or see what i&apos;m working on on{" "}
@@ -149,15 +115,6 @@ export function HomeClient() {
       </div>
 
       <AvatarPeek visible={avatarVisible} />
-
-      <motion.div
-        animate={{ opacity: 1 }}
-        className="absolute right-6 bottom-6 z-10"
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
-      >
-        <ThemeToggle />
-      </motion.div>
 
       <motion.div
         animate={{ opacity: 1 }}
