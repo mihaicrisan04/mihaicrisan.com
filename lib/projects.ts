@@ -122,7 +122,9 @@ export function getProjectsGroupedByYear(): ProjectYearGroup[] {
         if (a.featured !== b.featured) {
           return a.featured ? -1 : 1;
         }
-        return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+        return (
+          new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+        );
       }),
     }))
     .sort((a, b) => b.year - a.year);

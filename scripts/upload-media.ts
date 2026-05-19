@@ -83,7 +83,10 @@ function getClient() {
   return new ImageKit({ privateKey, publicKey, urlEndpoint });
 }
 
-function classify(localPath: string, slug: string): UploadedFile["kind"] | null {
+function classify(
+  localPath: string,
+  slug: string
+): UploadedFile["kind"] | null {
   const rel = path.relative(path.join(STAGING_ROOT, slug), localPath);
   const ext = path.extname(rel).toLowerCase();
   const base = path.basename(rel, ext).toLowerCase();
@@ -167,7 +170,7 @@ function printSnippet(uploads: UploadedFile[]) {
     console.log("images:");
     for (const g of gallery) {
       console.log(`  - src: "${g.url}"`);
-      console.log("    alt: \"\"");
+      console.log('    alt: ""');
     }
   } else {
     console.log("images: []");

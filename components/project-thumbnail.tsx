@@ -35,8 +35,7 @@ export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
   const [hovered, setHovered] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const posterSrc =
-    project.preview?.image ?? project.images[0]?.src ?? null;
+  const posterSrc = project.preview?.image ?? project.images[0]?.src ?? null;
   const videoSrc = project.preview?.video;
   const gifSrc = project.preview?.gif;
 

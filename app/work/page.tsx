@@ -55,12 +55,12 @@ export default function ProjectsPage() {
 
             <div className="mx-auto max-w-2xl px-6">
               {gi === 0 ? (
-                <div className="mb-6 font-pixel text-muted-foreground/70 text-[10px] uppercase tracking-[0.15em] sm:hidden">
+                <div className="mb-6 font-pixel text-[10px] text-muted-foreground/70 uppercase tracking-[0.15em] sm:hidden">
                   {group.year}
                 </div>
               ) : (
                 <div className="-mt-8 mb-10 flex items-center gap-3 sm:hidden">
-                  <span className="font-pixel text-muted-foreground/70 text-[10px] uppercase tracking-[0.15em]">
+                  <span className="font-pixel text-[10px] text-muted-foreground/70 uppercase tracking-[0.15em]">
                     {group.year}
                   </span>
                   <div className="h-px flex-1 bg-border/40" />
