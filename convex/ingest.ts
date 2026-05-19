@@ -3,7 +3,7 @@ import { api } from "./_generated/api";
 import { action, mutation, query } from "./_generated/server";
 import { rag } from "./rag";
 
-// Work experience data (embedded since it's static)
+// Work experience data (static — not yet sourced from MDX)
 const WORK_EXPERIENCE = [
   {
     id: "wolfpack-digital",
@@ -29,196 +29,53 @@ const WORK_EXPERIENCE = [
   },
 ];
 
-// Static project data for RAG ingestion (mirrors MDX content)
-// Exported so tools can return structured project data directly
-export const PROJECTS = [
-  {
-    id: "rngo-ro",
-    name: "rngo.ro",
-    slug: "rngo-ro",
-    shortDescription: "Personal portfolio and blog website",
-    fullDescription:
-      "A modern personal portfolio and blog website showcasing projects, technical skills, and professional experience. Built with clean design principles and optimized for performance.",
-    category: "portfolio",
-    techStack: [
-      { name: "Next.js", category: "framework" },
-      { name: "TypeScript", category: "language" },
-      { name: "Tailwind CSS", category: "styling" },
-      { name: "Vercel", category: "deployment" },
-      { name: "React", category: "frontend" },
-    ],
-    highlights: [
-      "Modern responsive design with dark/light mode support",
-      "Built with Next.js 14 and TypeScript for type safety",
-      "Optimized for performance and SEO",
-      "Clean, minimalist UI focusing on content",
-      "Deployed on Vercel with automatic deployments",
-    ],
-    startDate: "2024-01-01",
-    endDate: "2024-02-15",
-    status: "completed",
-  },
-  {
-    id: "cluj-bus-tracking",
-    name: "Cluj-Napoca Bus Tracking App",
-    slug: "cluj-bus-tracking",
-    shortDescription:
-      "Real-time public transportation tracking for Cluj-Napoca",
-    fullDescription:
-      "A real-time public transportation tracking application for Cluj-Napoca, focusing on fast data processing and user-friendly features.",
-    category: "mobile-app",
-    techStack: [
-      { name: "Swift", category: "language" },
-      { name: "SwiftUI", category: "framework" },
-      { name: "TranzyAPI", category: "api" },
-      { name: "iOS", category: "platform" },
-    ],
-    highlights: [
-      "Near-instant data updates for bus locations",
-      "Efficient network calls and optimized API data handling",
-      "Reduced app refresh times significantly",
-      "User-friendly interface for public transportation",
-      "Real-time tracking of Cluj-Napoca public buses",
-    ],
-    startDate: "2023-09-01",
-    endDate: "2024-01-20",
-    status: "completed",
-  },
-  {
-    id: "boccelute",
-    name: "Boccelute",
-    slug: "boccelute",
-    shortDescription: "Full-stack e-commerce website for tote bag sales",
-    fullDescription:
-      "A full-stack e-commerce website specializing in tote bag sales, overseeing all aspects from database implementation to frontend design.",
-    category: "e-commerce",
-    techStack: [
-      { name: "JavaScript", category: "language" },
-      { name: "PHP", category: "backend" },
-      { name: "MySQL", category: "database" },
-      { name: "HTML/CSS", category: "frontend" },
-    ],
-    highlights: [
-      "Full-stack e-commerce solution from database to frontend",
-      "Robust user account management system",
-      "Secure encryption of sensitive user data",
-      "Seamless user signup and authentication",
-      "Complete product catalog and shopping cart functionality",
-    ],
-    startDate: "2022-06-01",
-    endDate: "2023-02-15",
-    status: "completed",
-  },
-  {
-    id: "obstruction-game",
-    name: "Obstruction Game",
-    slug: "obstruction-game",
-    shortDescription:
-      "Strategic board game with AI opponent using Minimax algorithm",
-    fullDescription:
-      "Engineered the Obstruction game with a scalable and easily modifiable codebase by employing a layered architecture.",
-    category: "game",
-    techStack: [
-      { name: "Python", category: "language" },
-      { name: "PyGame", category: "framework" },
-      { name: "Minimax Algorithm", category: "algorithm" },
-      { name: "Alpha-Beta Pruning", category: "optimization" },
-    ],
-    highlights: [
-      "Scalable layered architecture for easy modifications",
-      "Advanced AI opponent using Minimax algorithm",
-      "Alpha-Beta Pruning for efficient AI decision making",
-      "Nearly unbeatable AI gaming experience",
-      "Clean, modular codebase for future enhancements",
-    ],
-    startDate: "2023-03-01",
-    endDate: "2023-06-15",
-    status: "completed",
-  },
-  {
-    id: "medlog-healthcare",
-    name: "Medlog - Healthcare Communication Platform",
-    slug: "medlog-healthcare",
-    shortDescription:
-      "Doctor-patient communication and healthcare workflow optimization",
-    fullDescription:
-      "Led the design and development endeavors in a collaborative team of 5 individuals for the Medlog project.",
-    category: "healthcare",
-    techStack: [
-      { name: "JavaScript", category: "language" },
-      { name: "React", category: "framework" },
-      { name: "Node.js", category: "backend" },
-      { name: "MongoDB", category: "database" },
-    ],
-    highlights: [
-      "50% improvement in user efficiency through navigation optimization",
-      "Responsive design for all screen sizes",
-      "Streamlined doctor-patient communication",
-      "Healthcare workflow optimization",
-      "Collaborative team development of 5 members",
-    ],
-    startDate: "2021-09-01",
-    endDate: "2022-06-30",
-    status: "completed",
-  },
-  {
-    id: "kindergarten-automation",
-    name: "Kindergarten Automation System",
-    slug: "kindergarten-automation",
-    shortDescription:
-      "Google Sheets automation for administrative processes and parent communication",
-    fullDescription:
-      "Developed a Google Sheets automation system using Apps Script, streamlining report generation.",
-    category: "automation",
-    techStack: [
-      { name: "Google Apps Script", category: "automation" },
-      { name: "Google Sheets", category: "platform" },
-      { name: "JavaScript", category: "language" },
-      { name: "Email Integration", category: "communication" },
-    ],
-    highlights: [
-      "Streamlined report generation and administrative processes",
-      "Email newsletter system for parent communication",
-      "Digital transition from paper-based reporting",
-      "Improved data accuracy and accessibility",
-      "Environmentally sustainable practices",
-    ],
-    startDate: "2023-10-01",
-    endDate: "2024-06-30",
-    status: "completed",
-  },
-];
+// Shape of a project payload sent in by the ingest script
+const projectPayload = v.object({
+  slug: v.string(),
+  name: v.string(),
+  shortDescription: v.string(),
+  fullDescription: v.optional(v.string()),
+  category: v.string(),
+  status: v.optional(v.string()),
+  startDate: v.string(),
+  endDate: v.optional(v.string()),
+  techStack: v.array(v.object({ name: v.string(), category: v.string() })),
+  highlights: v.optional(v.array(v.string())),
+  body: v.string(),
+});
 
-// Helper to format project for RAG
+// Format a project into a single string that gets embedded into RAG
 function formatProjectForRag(project: {
   name: string;
   shortDescription: string;
-  fullDescription: string;
+  fullDescription?: string;
   category: string;
   techStack: { name: string; category: string }[];
   highlights?: string[];
   startDate: string;
   endDate?: string;
   status?: string;
+  body: string;
 }): string {
   const techNames = project.techStack.map((t) => t.name).join(", ");
   const highlights = project.highlights?.length
     ? `\nKey highlights:\n${project.highlights.map((h) => `- ${h}`).join("\n")}`
     : "";
   const status = project.status ? ` (${project.status})` : "";
+  const fullDescription = project.fullDescription
+    ? `\n${project.fullDescription}\n`
+    : "";
+  const body = project.body.trim() ? `\n\nFull writeup:\n${project.body}` : "";
 
   return `Project: ${project.name}${status}
 Category: ${project.category}
 Description: ${project.shortDescription}
-
-${project.fullDescription}
-
+${fullDescription}
 Technologies used: ${techNames}${highlights}
 
-Timeline: ${project.startDate}${project.endDate ? ` to ${project.endDate}` : " (ongoing)"}`;
+Timeline: ${project.startDate}${project.endDate ? ` to ${project.endDate}` : " (ongoing)"}${body}`;
 }
 
-// Helper to format blog post for RAG
 function formatBlogPostForRag(post: {
   title: string;
   content: string;
@@ -232,7 +89,6 @@ Content:
 ${post.content}`;
 }
 
-// Helper to format work experience for RAG
 function formatWorkExperienceForRag(work: {
   company: string;
   position: string;
@@ -251,7 +107,7 @@ Duration: ${dateRange}
 Description: ${work.description}`;
 }
 
-// Store a document in the documents table
+// Store (or update) a document in the documents table
 export const storeDocument = mutation({
   args: {
     title: v.string(),
@@ -263,9 +119,9 @@ export const storeDocument = mutation({
       v.literal("custom")
     ),
     sourceId: v.optional(v.string()),
+    metadata: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
-    // Check if document with same sourceId already exists
     if (args.sourceId) {
       const existing = await ctx.db
         .query("documents")
@@ -273,21 +129,19 @@ export const storeDocument = mutation({
         .first();
 
       if (existing) {
-        // Update existing document
         await ctx.db.patch(existing._id, {
           title: args.title,
           content: args.content,
+          metadata: args.metadata,
         });
         return existing._id;
       }
     }
 
-    // Create new document
     return await ctx.db.insert("documents", args);
   },
 });
 
-// Delete a document
 export const deleteDocument = mutation({
   args: { id: v.id("documents") },
   handler: async (ctx, { id }) => {
@@ -295,14 +149,12 @@ export const deleteDocument = mutation({
   },
 });
 
-// Get all documents
 export const getAllDocuments = query({
   handler: async (ctx) => {
     return await ctx.db.query("documents").collect();
   },
 });
 
-// Get a single document by sourceId
 export const getDocumentBySourceId = query({
   args: { sourceId: v.string() },
   handler: async (ctx, { sourceId }) => {
@@ -313,7 +165,6 @@ export const getDocumentBySourceId = query({
   },
 });
 
-// Get documents by source
 export const getDocumentsBySource = query({
   args: {
     source: v.union(
@@ -331,22 +182,31 @@ export const getDocumentsBySource = query({
   },
 });
 
-// Ingest all projects into RAG (from static data)
+// Ingest projects passed in from the local script (reads MDX, sends here).
+// MDX is the single source of truth — this is just a derived index.
 export const ingestProjects = action({
-  handler: async (ctx) => {
+  args: { projects: v.array(projectPayload) },
+  handler: async (ctx, { projects }) => {
     let ingested = 0;
-    for (const project of PROJECTS) {
-      const content = formatProjectForRag(project);
 
-      // Store in documents table
+    for (const project of projects) {
+      const content = formatProjectForRag(project);
+      const metadata = {
+        name: project.name,
+        slug: project.slug,
+        category: project.category,
+        shortDescription: project.shortDescription,
+        techStack: project.techStack.map((t) => t.name),
+      };
+
       await ctx.runMutation(api.ingest.storeDocument, {
         title: `Project: ${project.name}`,
         content,
         source: "project",
-        sourceId: project.id,
+        sourceId: project.slug,
+        metadata,
       });
 
-      // Add to RAG
       await rag.add(ctx, {
         namespace: "portfolio",
         key: `project:${project.slug}`,
@@ -361,17 +221,14 @@ export const ingestProjects = action({
   },
 });
 
-// Ingest all blog posts into RAG
 export const ingestBlogPosts = action({
   handler: async (ctx) => {
-    // Get all published blog posts
     const posts = await ctx.runQuery(api.blog.getPublishedPosts, {});
 
     let ingested = 0;
     for (const post of posts) {
       const content = formatBlogPostForRag(post);
 
-      // Store in documents table
       await ctx.runMutation(api.ingest.storeDocument, {
         title: `Blog: ${post.title}`,
         content,
@@ -379,7 +236,6 @@ export const ingestBlogPosts = action({
         sourceId: post._id,
       });
 
-      // Add to RAG
       await rag.add(ctx, {
         namespace: "portfolio",
         key: `blog:${post.slug}`,
@@ -394,7 +250,6 @@ export const ingestBlogPosts = action({
   },
 });
 
-// Ingest work experience into RAG
 export const ingestWorkExperience = action({
   handler: async (ctx) => {
     let ingested = 0;
@@ -402,7 +257,6 @@ export const ingestWorkExperience = action({
     for (const work of WORK_EXPERIENCE) {
       const content = formatWorkExperienceForRag(work);
 
-      // Store in documents table
       await ctx.runMutation(api.ingest.storeDocument, {
         title: `Work: ${work.position} at ${work.company}`,
         content,
@@ -410,7 +264,6 @@ export const ingestWorkExperience = action({
         sourceId: work.id,
       });
 
-      // Add to RAG
       await rag.add(ctx, {
         namespace: "portfolio",
         key: `work:${work.id}`,
@@ -425,7 +278,6 @@ export const ingestWorkExperience = action({
   },
 });
 
-// Ingest custom content into RAG
 export const ingestCustomContent = action({
   args: {
     title: v.string(),
@@ -437,7 +289,6 @@ export const ingestCustomContent = action({
   ): Promise<{ success: boolean; documentId: string }> => {
     const key = `custom:${Date.now()}`;
 
-    // Store in documents table
     const docId = await ctx.runMutation(api.ingest.storeDocument, {
       title,
       content,
@@ -445,7 +296,6 @@ export const ingestCustomContent = action({
       sourceId: key,
     });
 
-    // Add to RAG
     await rag.add(ctx, {
       namespace: "portfolio",
       key,
@@ -454,52 +304,5 @@ export const ingestCustomContent = action({
     });
 
     return { success: true, documentId: docId as string };
-  },
-});
-
-// Ingest all data sources at once
-export const ingestAll = action({
-  handler: async (
-    ctx
-  ): Promise<{
-    total: number;
-    breakdown: {
-      projects: { ingested: number; type: string };
-      blog: { ingested: number; type: string };
-      work: { ingested: number; type: string };
-    };
-  }> => {
-    const projectsResult = await ctx.runAction(api.ingest.ingestProjects, {});
-    const blogResult = await ctx.runAction(api.ingest.ingestBlogPosts, {});
-    const workResult = await ctx.runAction(api.ingest.ingestWorkExperience, {});
-
-    return {
-      total:
-        projectsResult.ingested + blogResult.ingested + workResult.ingested,
-      breakdown: {
-        projects: projectsResult,
-        blog: blogResult,
-        work: workResult,
-      },
-    };
-  },
-});
-
-// Clear all RAG data and re-ingest
-export const refreshAllData = action({
-  handler: async (
-    ctx
-  ): Promise<{
-    total: number;
-    breakdown: {
-      projects: { ingested: number; type: string };
-      blog: { ingested: number; type: string };
-      work: { ingested: number; type: string };
-    };
-  }> => {
-    // Note: This will add new versions but the old versions will still exist
-    // For a full refresh, you'd need to clear the RAG storage first
-    const result = await ctx.runAction(api.ingest.ingestAll, {});
-    return result;
   },
 });

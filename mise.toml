@@ -1,0 +1,105 @@
+# Pinned for reproducibility — bump deliberately.
+[tools]
+node = "23.11.1"
+bun = "1.3.12"
+# portless is also in the user's global mise config; pinned here so other
+# machines pick up the same version when they hit this repo.
+portless = "0.13.0"
+
+[env]
+# So tasks can call `next`, `convex`, `ultracite` directly (same as bun/npm scripts).
+_.path = ["./node_modules/.bin"]
+
+# ---------- Project ----------
+
+[tasks.install]
+description = "install JS deps"
+alias = "i"
+run = "bun install"
+
+[tasks.dev]
+description = "next dev + convex backend on plain localhost, in parallel"
+alias = "d"
+depends = ["dev:frontend", "dev:backend"]
+
+[tasks."dev:frontend"]
+description = "next dev on http://localhost:3000"
+run = "next dev --turbopack"
+
+[tasks."dev:backend"]
+description = "convex dev sync"
+run = "convex dev"
+
+[tasks."dev:portless"]
+description = "next (wrapped by portless) + convex backend, in parallel"
+alias = "dp"
+depends = ["dev:portless:frontend", "dev:backend"]
+
+[tasks."dev:portless:frontend"]
+description = "next dev via portless → https://<name>.localhost"
+run = "portless run next dev --turbopack"
+
+[tasks.build]
+description = "next build"
+alias = "b"
+run = "next build"
+
+[tasks.start]
+description = "next start (production)"
+run = "next start"
+
+[tasks.lint]
+description = "ultracite check"
+run = "ultracite check"
+
+[tasks."lint:fix"]
+description = "ultracite fix"
+alias = "lf"
+run = "ultracite fix"
+
+# ---------- Portless ----------
+# Thin wrappers — handy for discoverability via `mise tasks`.
+
+[tasks."portless:start"]
+description = "start portless proxy daemon (HTTPS :443)"
+run = "portless proxy start"
+
+[tasks."portless:stop"]
+description = "stop portless proxy daemon"
+run = "portless proxy stop"
+
+[tasks."portless:list"]
+description = "list active portless routes"
+run = "portless list"
+
+[tasks."portless:trust"]
+description = "install portless local CA into system trust (one-time, sudo)"
+run = "portless trust"
+
+[tasks."portless:service"]
+description = "install portless proxy as a launchd/systemd service (auto-start on boot)"
+run = "portless service install"
+
+[tasks."portless:hosts:sync"]
+description = "sync routes into /etc/hosts (needed for Safari)"
+run = "portless hosts sync"
+
+[tasks."portless:hosts:clean"]
+description = "remove portless entries from /etc/hosts"
+run = "portless hosts clean"
+
+[tasks."portless:prune"]
+description = "kill orphaned dev servers from crashed sessions"
+run = "portless prune"
+
+[tasks."portless:clean"]
+description = "full reset: portless state, trust entry, hosts block"
+run = "portless clean"
+
+[tasks."portless:url"]
+description = 'print URL for a service — `mise run portless:url -- <name>`'
+run = "portless get"
+
+[tasks."portless:alias"]
+description = 'register static route (e.g. Docker) — `mise run portless:alias -- <name> <port>`'
+run = "portless alias"

@@ -1,8 +1,8 @@
+import { GeistPixelSquare } from "geist/font/pixel";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Footer } from "@/components/footer";
-import { Navigation } from "@/components/navigation";
+import { GlobalChrome } from "@/components/global-chrome";
 import { Providers } from "./providers";
 
 const geistSans = Geist({
@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mihai Crisan Personal Portfolio",
-  description: "Personal portfolio showcasing my projects and skills",
+  title: "mihai crisan",
+  description: "software engineer, cluj-napoca",
 };
 
 export default function RootLayout({
@@ -28,14 +28,11 @@ export default function RootLayout({
   return (
     <html className="scroll-smooth" lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} min-h-screen bg-background text-foreground antialiased`}
       >
         <Providers>
-          <div className="flex min-h-screen flex-col">
-            <Navigation />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          <main className="relative z-10 min-h-svh">{children}</main>
+          <GlobalChrome />
         </Providers>
       </body>
     </html>

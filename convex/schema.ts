@@ -13,6 +13,7 @@ export default defineSchema({
       v.literal("custom")
     ),
     sourceId: v.optional(v.string()), // Reference to original record if applicable
+    metadata: v.optional(v.any()), // Structured frontmatter for tool responses (not embedded into RAG)
   })
     .index("by_source", ["source"])
     .index("by_sourceId", ["sourceId"]),
