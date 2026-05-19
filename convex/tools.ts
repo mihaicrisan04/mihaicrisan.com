@@ -2,7 +2,6 @@ import { tool } from "ai";
 import { z } from "zod";
 import { api } from "./_generated/api";
 import type { ActionCtx } from "./_generated/server";
-import { PROJECTS } from "./ingest";
 import { rag } from "./rag";
 
 // Define output schema for the time tool
@@ -122,14 +121,23 @@ export function createContextualTools(ctx: ActionCtx) {
       ),
       count: z.number(),
     }),
-    execute: () => {
-      const projects = PROJECTS.map((p) => ({
-        name: p.name,
-        slug: p.slug,
-        category: p.category,
-        shortDescription: p.shortDescription,
-        techStack: p.techStack.map((t) => t.name),
-      }));
+    execute: async () => {
+      const docs = await ctx.runQuery(api.ingest.getDocumentsBySource, {
+        source: "project",
+      });
+      const projects = docs
+        .map((d) => d.metadata)
+        .filter(
+          (
+            m
+          ): m is {
+            name: string;
+            slug: string;
+            category: string;
+            shortDescription: string;
+            techStack: string[];
+          } => Boolean(m && typeof m === "object" && "slug" in m)
+        );
       return { projects, count: projects.length };
     },
   });

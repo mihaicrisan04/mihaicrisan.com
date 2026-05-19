@@ -1,0 +1,67 @@
+---
+name: "mihaicrisan.com"
+slug: "mihaicrisan-com"
+shortDescription: "This site — a portfolio with a built-in AI assistant that actually knows me"
+fullDescription: "My personal portfolio, written from scratch with a focus on minimalism, micro-interactions, and a built-in AI assistant (Zuzu) that can answer questions about my work using a Convex-backed RAG pipeline. Content lives in MDX (single source of truth), media on ImageKit, embeddings in Convex — all rebuilt automatically on every Vercel deploy."
+status: "in-progress"
+category: "portfolio"
+featured: true
+startDate: "2026-05-19"
+techStack:
+  - name: "Next.js 16"
+    category: "framework"
+  - name: "React 19"
+    category: "frontend"
+  - name: "TypeScript"
+    category: "language"
+  - name: "Tailwind CSS"
+    category: "styling"
+  - name: "Motion"
+    category: "animation"
+  - name: "Convex"
+    category: "backend"
+  - name: "ImageKit"
+    category: "media"
+  - name: "OpenRouter"
+    category: "ai"
+  - name: "MDX"
+    category: "content"
+links:
+  - name: "Live Site"
+    url: "https://mihaicrisan.com"
+    type: "live"
+  - name: "GitHub"
+    url: "https://github.com/mihaicrisan04/mihaicrisan.com"
+    type: "github"
+images: []
+preview:
+  video: "https://ik.imagekit.io/mihaicrisan/projects/mihaicrisan-com/hero.mp4"
+  image: "https://ik.imagekit.io/mihaicrisan/projects/mihaicrisan-com/hero.mp4/ik-thumbnail.jpg"
+highlights:
+  - "Minimal centered homepage with per-keyword micro-interactions (shimmer, sticker, strikethrough, github popover)"
+  - "Built-in AI assistant (Zuzu) with RAG over my projects, blog, and work history"
+  - "Single source of truth — MDX files in git, ingested into Convex on every deploy"
+  - "Static-first: Next.js App Router with SSG for content pages, ISR where it matters"
+  - "Designed and shipped solo, including all motion choreography"
+---
+
+This is the site you're on right now. It started as a standard portfolio template and turned into a long-running design playground.
+
+## The redesign
+
+The current iteration leans into minimalism — a single centered paragraph on the homepage, four inline interactive keywords, no shader background, no marquee. Each keyword has its own micro-interaction: a Dia-style iridescent shimmer on hover for one, a hand-drawn strikethrough that reveals an X logo for another, a popover with my live GitHub contribution chart for a third.
+
+## The AI assistant
+
+The portfolio has a built-in chat (Zuzu) that can answer questions about my work. It runs on Gemini 2.5 Flash via OpenRouter, with a custom RAG pipeline on top of Convex — projects, blog posts, and work history are all embedded into a single namespace and retrieved per-query through targeted tools (`listProjects`, `getProjectDetails`, `searchPortfolio`).
+
+## The architecture
+
+Content is the interesting part. Project data lives in MDX files inside the repo — that's the **single source of truth**. On every Vercel deploy, a `postbuild` script reads those MDX files, formats them, and pushes structured payloads to a Convex action that re-ingests them into both the documents table (for tool responses) and the RAG vector store (for semantic search). Media (videos, gifs, screenshots) lives on ImageKit; the MDX frontmatter just holds the URLs.
+
+The result: editing a project means editing one MDX file. The deploy handles everything else.
+
+<ProjectLinks>
+  <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/mihaicrisan.com" />
+  <ProjectLinkButton type="live" href="https://mihaicrisan.com" label="Visit Site" />
+</ProjectLinks>

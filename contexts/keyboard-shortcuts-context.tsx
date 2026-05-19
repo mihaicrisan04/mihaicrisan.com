@@ -8,6 +8,8 @@ interface KeyboardShortcutsContextValue {
   shortcuts: {
     home: string;
     work: string;
+    setup: string;
+    blog: string;
     theme: string;
   };
 }
@@ -27,12 +29,13 @@ export function KeyboardShortcutsProvider({
   const shortcuts = {
     home: "H",
     work: "W",
+    setup: "S",
+    blog: "B",
     theme: "L",
   };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if user is typing in an input, textarea, or contenteditable
       const target = e.target as HTMLElement;
       if (
         target.tagName === "INPUT" ||
@@ -42,25 +45,30 @@ export function KeyboardShortcutsProvider({
         return;
       }
 
-      // Ignore if any modifier keys are pressed (except shift for uppercase)
       if (e.metaKey || e.ctrlKey || e.altKey) {
         return;
       }
 
       const key = e.key.toLowerCase();
+      const navigate = (target: string) => {
+        if (pathname !== target && !pathname?.startsWith(`${target}/`)) {
+          e.preventDefault();
+          router.push(target);
+        }
+      };
 
       switch (key) {
         case "h":
-          if (pathname !== "/") {
-            e.preventDefault();
-            router.push("/");
-          }
+          navigate("/");
           break;
         case "w":
-          if (pathname !== "/work" && !pathname?.startsWith("/work/")) {
-            e.preventDefault();
-            router.push("/work");
-          }
+          navigate("/work");
+          break;
+        case "s":
+          navigate("/setup");
+          break;
+        case "b":
+          navigate("/blog");
           break;
         case "l":
           e.preventDefault();

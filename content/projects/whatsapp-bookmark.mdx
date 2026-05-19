@@ -1,0 +1,58 @@
+---
+name: "WhatsApp Bookmark"
+slug: "whatsapp-bookmark"
+shortDescription: "Raycast extension that sends clipboard content to WhatsApp"
+fullDescription: "A macOS productivity tool that turns WhatsApp into a personal bookmarking inbox. Send links, text, images, or files straight from your clipboard to yourself or any contact, without ever opening WhatsApp. Built on top of a local daemon that keeps a single linked-device session alive."
+status: "in-progress"
+category: "tool"
+featured: true
+startDate: "2026-03-26"
+techStack:
+  - name: "TypeScript"
+    category: "language"
+  - name: "Raycast"
+    category: "platform"
+  - name: "Bun"
+    category: "runtime"
+  - name: "Baileys"
+    category: "library"
+  - name: "macOS"
+    category: "platform"
+links:
+  - name: "GitHub"
+    url: "https://github.com/mihaicrisan04/whatsapp-bookmark"
+    type: "github"
+images: []
+preview:
+  image: "https://ik.imagekit.io/mihaicrisan/projects/whatsapp-bookmark/hero.jpeg"
+highlights:
+  - "One-shot send from anywhere via Raycast command"
+  - "Local daemon keeps a persistent WhatsApp Web session alive"
+  - "Send links, text, images, or files in a single keystroke"
+  - "Pick from the last 6 clipboard items, or fire-and-forget to yourself"
+  - "Distributed as a self-contained Raycast extension"
+---
+
+A Raycast extension for sending clipboard content (links, text, images, files) to WhatsApp — to yourself or any contact — without ever leaving the keyboard.
+
+## Why
+
+WhatsApp is the de-facto inbox for everyone I talk to, but switching to it just to forward a link to myself is friction. This turns the "send to self" trick into a Raycast command: copy something, hit a shortcut, done.
+
+## How it works
+
+A small local daemon (built on [Baileys](https://github.com/WhiskeySockets/Baileys)) holds a single linked-device session to WhatsApp Web. Raycast commands talk to the daemon over IPC, so individual sends are instant and never spawn a browser.
+
+The auth flow is a one-time QR scan from Raycast itself — the daemon then persists credentials and auto-restarts on login.
+
+## Commands
+
+- **send to yourself** — clipboard → your number, no UI
+- **send to contact** — search any contact, send
+- **pick item to send** — choose from the last 6 clipboard entries
+- **whatsapp auth** — show the QR inside Raycast
+- **whatsapp daemon status** — health check
+
+<ProjectLinks>
+  <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/whatsapp-bookmark" />
+</ProjectLinks>

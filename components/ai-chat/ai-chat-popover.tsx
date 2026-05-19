@@ -36,9 +36,11 @@ export function AIChatPopover() {
   const { isOpen, close, threadId, isLoading, sendMessage } = useAIChat();
   const [input, setInput] = useState("");
   const [optimisticMsg, setOptimisticMsg] = useState<string | null>(null);
+  const [lastSendTimestamp, setLastSendTimestamp] = useState<number | null>(
+    null
+  );
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Subscribe to thread messages via Convex Agent
   const messagesResult = useUIMessages(
     api.queries.listThreadMessages,
     threadId ? { threadId } : "skip",
@@ -55,9 +57,10 @@ export function AIChatPopover() {
     const found = messages.some(
       (m) =>
         m.role === "user" &&
-        m.parts?.some(
+        m.parts.some(
           (p) =>
-            p?.type === "text" && (p.text ?? "").trim() === optimisticMsg.trim()
+            p.type === "text" &&
+            (p as { text: string }).text.trim() === optimisticMsg.trim()
         )
     );
     if (found) {
@@ -101,6 +104,7 @@ export function AIChatPopover() {
   const handleSend = useCallback(
     (question: string) => {
       setOptimisticMsg(question);
+      setLastSendTimestamp(Date.now());
       sendMessage(question);
     },
     [sendMessage]
@@ -172,6 +176,7 @@ export function AIChatPopover() {
               <div className="absolute inset-0">
                 <AIChatMessages
                   isLoading={isLoading}
+                  lastSendTimestamp={lastSendTimestamp}
                   messages={messages}
                   onSuggestionClick={handleSuggestionClick}
                   optimisticMsg={optimisticMsg}

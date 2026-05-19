@@ -1,95 +1,71 @@
 ---
 name: "Rent'n Go"
 slug: "rentn-go"
-shortDescription: "Full-stack car rental platform with booking system and admin dashboard"
-fullDescription: "A comprehensive car rental platform featuring a modern customer-facing frontend, robust admin dashboard, and integrated booking management system."
+shortDescription: "Full-stack car rental platform for Romania — booking, transfers, admin dashboard"
+fullDescription: "A production car rental platform built for a Cluj-based business. Customers browse and book vehicles with tiered pricing and seasonal multipliers; business owners get a full admin dashboard for fleet, pricing, and reservations. Also handles airport transfers with Mapbox routing, all in a bilingual (RO/EN) interface."
 status: "completed"
 category: "fullstack"
 website: "https://rngo.ro"
 featured: true
-startDate: "2024-01-01"
-endDate: "2024-02-15"
+startDate: "2025-05-09"
 techStack:
-  - name: "Next.js"
+  - name: "Next.js 15"
     category: "framework"
   - name: "TypeScript"
     category: "language"
+  - name: "Convex"
+    category: "backend"
+  - name: "Clerk"
+    category: "auth"
   - name: "Tailwind CSS"
     category: "styling"
+  - name: "shadcn/ui"
+    category: "components"
+  - name: "Mapbox"
+    category: "maps"
   - name: "Vercel"
     category: "deployment"
-  - name: "React"
-    category: "frontend"
-  - name: "PostgreSQL"
-    category: "database"
-  - name: "Prisma"
-    category: "orm"
 links:
   - name: "Live Site"
     url: "https://rngo.ro"
     type: "live"
   - name: "GitHub"
-    url: "https://github.com/mihaicrisan04/rngo.ro"
+    url: "https://github.com/mihaicrisan04/rentngo"
     type: "github"
-images:
-  - src: "/projects/homepage.jpeg"
-    alt: "rngo.ro Homepage"
-  - src: "/projects/cars-page.jpeg"
-    alt: "Projects Page"
+images: []
+preview:
+  image: "https://ik.imagekit.io/mihaicrisan/projects/rentn-go/hero.jpeg"
 highlights:
-  - "Modern responsive design with dark/light mode support"
-  - "Built with Next.js 14 and TypeScript for type safety"
-  - "Optimized for performance and SEO"
-  - "Clean, minimalist UI focusing on content"
-  - "Deployed on Vercel with automatic deployments"
+  - "Production platform for a real Cluj-based car rental business"
+  - "Tiered pricing — longer rentals get cheaper per-day rates automatically"
+  - "Seasonal price multipliers configured from the admin dashboard"
+  - "Airport transfer routing powered by Mapbox"
+  - "Bilingual interface (Romanian / English) with full i18n"
+  - "Convex-backed realtime — admin sees new bookings instantly"
 ---
 
-This project was built for a local car rental business in Romania, providing them with a complete digital solution to manage their fleet and serve customers online.
+A car rental platform built for a local business in Cluj-Napoca — the goal was a complete digital storefront plus admin tools, replacing the manual phone-and-WhatsApp booking process they were running before.
 
-## The Frontend
+## The frontend
 
-The customer-facing website features a clean, intuitive interface where users can browse available vehicles, check pricing, and make reservations. The design prioritizes simplicity—visitors can find what they need within seconds.
+A clean, fast catalog with filtering, real-time availability, and a streamlined checkout. Pricing is dynamic: longer rentals automatically get a per-day discount, and configurable seasonal multipliers handle peak periods.
 
-<ProjectImage src="/projects/cars-page.jpeg" alt="Vehicle catalog with filtering options" />
+## The admin dashboard
 
-Key features include real-time availability checking, dynamic pricing based on rental duration, and a streamlined checkout process. The site is fully responsive and optimized for mobile users who often book on the go.
+The owner sees the full picture in one place — active rentals, upcoming reservations, fleet status, and a calendar view per vehicle. New bookings land in realtime thanks to Convex's reactive queries, so they don't have to refresh.
 
-## Admin Dashboard
+## Services
 
-Behind the scenes, a comprehensive admin panel gives the business owner full control over operations. The dashboard provides an overview of active rentals, upcoming reservations, and fleet status at a glance.
+- **Standard rentals** — daily and weekly with flexible pickup
+- **Airport transfers** — dedicated flow with Mapbox-based routing and meet-and-greet
+- **Long-term leasing** — monthly packages at discounted rates
+- **Chauffeur services** — driver-included bookings for events and business trips
 
-<ProjectImage src="/projects/homepage.jpeg" alt="Admin dashboard overview" />
+## Stack notes
 
-Administrators can manage vehicle listings, update pricing, handle customer inquiries, and generate reports. The interface was designed to be simple enough that no technical training is required.
-
-## Services Offered
-
-The platform supports multiple service tiers:
-
-**Standard Rentals** — Daily and weekly car rentals with flexible pickup and drop-off locations across the city.
-
-**Airport Transfers** — Dedicated service for travelers arriving at or departing from Cluj-Napoca International Airport, with meet-and-greet options.
-
-**Long-term Leasing** — Monthly rental packages for businesses and individuals needing extended vehicle access at discounted rates.
-
-**Chauffeur Services** — Professional driver services for special events, business meetings, or city tours.
-
-<ProjectImage src="/projects/cars-page.jpeg" alt="Service booking interface" />
-
-Each service type has its own booking flow optimized for the specific use case, reducing friction and improving conversion rates.
+Convex handles the database, backend functions, and realtime sync — no separate API layer. Clerk does auth for both customers and the admin role. The whole thing is i18n'd from day one (RO/EN) because the customer base is split.
 
 <ProjectLinks>
-  <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/rngo.ro" />
-</ProjectLinks>
-
-The rngo.ro platform has successfully digitized the car rental experience for both customers and the business owner, resulting in increased bookings and streamlined operations.
-
-  
-<Separator orientation="horizontal"/>
-
-### Hellow wosldkfjsld flsjflsjkdf
-
-
-<ProjectLinks>
+  <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/rentngo" />
   <ProjectLinkButton type="live" href="https://rngo.ro" label="Visit Site" />
 </ProjectLinks>

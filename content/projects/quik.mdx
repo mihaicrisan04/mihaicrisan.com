@@ -1,0 +1,63 @@
+---
+name: "Quik"
+slug: "quik"
+shortDescription: "Inline AI prompt for your zsh session — Cmd+Enter, ask, streams in place"
+fullDescription: "A zsh plugin that turns your shell prompt into a quick AI ask. Hit Cmd+Enter, type a question, get the answer streamed back inline — without leaving your terminal or breaking your shell flow. Backed by Claude or Codex, written in Rust for instant startup."
+status: "in-progress"
+category: "tool"
+featured: true
+startDate: "2026-05-15"
+techStack:
+  - name: "Rust"
+    category: "language"
+  - name: "Zsh"
+    category: "shell"
+  - name: "Claude"
+    category: "ai"
+  - name: "Codex"
+    category: "ai"
+  - name: "Homebrew"
+    category: "distribution"
+links:
+  - name: "GitHub"
+    url: "https://github.com/mihaicrisan04/quik"
+    type: "github"
+images: []
+preview:
+  video: "https://ik.imagekit.io/mihaicrisan/projects/quik/hero.mp4"
+  image: "https://ik.imagekit.io/mihaicrisan/projects/quik/hero.mp4/ik-thumbnail.jpg"
+highlights:
+  - "Cmd+Enter from anywhere in your shell — no context switch"
+  - "Answers stream in place, no separate window or buffer"
+  - "Pluggable backend (Claude Code or OpenAI Codex on PATH)"
+  - "Native zsh plugin, distributed via homebrew tap"
+  - "Rust core for sub-100ms startup"
+---
+
+Inline AI in your terminal. Hit `Cmd+Enter`, ask anything, get an answer streamed in place. Built because I wanted Warp's inline-AI feature without giving up my actual terminal.
+
+## Install
+
+```sh
+brew install mihaicrisan04/tap/quik
+```
+
+Then add to `~/.zshrc`:
+
+```sh
+source "$(brew --prefix)/share/quik/quik.plugin.zsh"
+```
+
+Needs [`claude`](https://docs.claude.com/en/docs/claude-code) or [`codex`](https://github.com/openai/codex) on `PATH`.
+
+## How the keybinding works
+
+`quik` listens for the control byte `0x1f`. You map `Cmd+Enter` → that byte in your terminal of choice (Ghostty, iTerm, Kitty, WezTerm — see the wiki). The plugin handles everything else.
+
+## Design notes
+
+The Rust core stays out of the hot path: the zsh plugin runs entirely in your shell session, only shelling out to the inference CLI when you actually ask. That means zero overhead on shell startup and no background daemons.
+
+<ProjectLinks>
+  <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/quik" />
+</ProjectLinks>
