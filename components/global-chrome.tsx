@@ -2,7 +2,9 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const EMAIL = "crisanmihai2004@gmail.com";
@@ -59,8 +61,47 @@ function EmailCopy() {
 }
 
 export function GlobalChrome() {
+  const pathname = usePathname();
+  const showFade = pathname !== "/";
+
   return (
     <>
+      {showFade && (
+        <>
+          <div
+            aria-hidden
+            className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-32 sm:hidden"
+          >
+            <ProgressiveBlur
+              blurIntensity={1.1}
+              blurLayers={6}
+              className="absolute inset-0"
+              direction="bottom"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+          </div>
+
+          <div
+            aria-hidden
+            className="pointer-events-none fixed bottom-0 left-0 z-40 hidden h-32 w-[480px] sm:block"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right, black 55%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to right, black 55%, transparent 100%)",
+            }}
+          >
+            <ProgressiveBlur
+              blurIntensity={1.1}
+              blurLayers={6}
+              className="absolute inset-0"
+              direction="bottom"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+          </div>
+        </>
+      )}
+
       <motion.div
         animate={{ opacity: 1 }}
         className="fixed bottom-6 left-6 z-50 flex items-center gap-4 font-mono text-muted-foreground/60 text-xs"

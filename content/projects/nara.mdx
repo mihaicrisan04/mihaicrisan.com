@@ -1,0 +1,71 @@
+---
+name: "Nara"
+slug: "nara"
+shortDescription: "Document Q&A platform — upload PDFs, get grounded answers with cited sources"
+fullDescription: "A RAG-powered document chat platform built as a research project at Babes-Bolyai University. Users upload documents (PDF, DOCX, PPTX, images, and more), the backend converts them to markdown via Docling, chunks them with structure-preserving heuristics, and serves them to a hybrid (vector + full-text) search-backed chat interface. Built as a monorepo with a Next.js frontend, a Convex backend, and a FastAPI/Python data ingestion service."
+status: "completed"
+category: "ai"
+featured: false
+startDate: "2025-12-16"
+endDate: "2026-01-16"
+techStack:
+  - name: "TypeScript"
+    category: "language"
+  - name: "Next.js"
+    category: "framework"
+  - name: "Convex"
+    category: "backend"
+  - name: "Better-Auth"
+    category: "auth"
+  - name: "Tailwind CSS"
+    category: "styling"
+  - name: "shadcn/ui"
+    category: "components"
+  - name: "Turborepo"
+    category: "monorepo"
+  - name: "Bun"
+    category: "runtime"
+  - name: "Python"
+    category: "language"
+  - name: "FastAPI"
+    category: "backend"
+  - name: "Docling"
+    category: "library"
+links:
+  - name: "GitHub"
+    url: "https://github.com/LauraDiosan-CS/nara"
+    type: "github"
+images: []
+preview:
+  image: "https://ik.imagekit.io/mihaicrisan/projects/nara/hero.jpeg"
+highlights:
+  - "Document conversion pipeline supports PDF, DOCX, PPTX, XLSX, HTML, and image OCR"
+  - "Structure-preserving chunking via Docling's HybridChunker"
+  - "Hybrid search — vector similarity plus full-text RRF for better recall"
+  - "Convex schema models documents, chunks, and feedback with search indexes per layer"
+  - "Monorepo with shared types between web client and Convex backend"
+---
+
+A RAG-powered document Q&A platform built as a university research project. The goal: let someone drop a stack of PDFs into the system and have a grounded conversation about their content, with citations back to the source chunks.
+
+## The pipeline
+
+Uploads land in Convex storage, then a Python service picks them up and runs them through [Docling](https://github.com/docling-project/docling) — a document parsing library that converts PDF/DOCX/PPTX/images into clean Markdown while preserving structure (headings, tables, captions). The same service then chunks the markdown using Docling's `HybridChunker`, which respects document structure rather than blindly splitting on token count.
+
+Each chunk lands in `documentChunks` with its metadata (headings, captions, page number). Convex indexes both vector embeddings and a full-text search field, so the retrieval layer can do hybrid search — vector similarity plus full-text RRF — without an external search engine.
+
+## The stack
+
+- **Frontend** (`apps/web`): Next.js + Tailwind + shadcn/ui, talking to Convex via generated types so the client/server contract can't drift
+- **Backend** (`packages/backend`): Convex schema, functions, and the chat agent
+- **Data ingestor** (`packages/data-ingestor`): FastAPI service in Python, runs Docling and pushes chunks back into Convex
+- **Auth**: Better-Auth, integrated through Convex
+- **Build**: Turborepo monorepo with Bun as the package manager
+
+## Why this shape
+
+Convex handles the reactive data layer well, but document parsing is a Python-native problem — Docling has no good JS port. Splitting the ingestion into a separate FastAPI service kept the parsing pipeline in its natural ecosystem while letting the chat experience stay fully reactive on the Convex side.
+
+<ProjectLinks>
+  <ProjectLinkButton type="github" href="https://github.com/LauraDiosan-CS/nara" />
+</ProjectLinks>

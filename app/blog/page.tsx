@@ -12,18 +12,16 @@ export default function BlogPage() {
     <div className="mx-auto max-w-xl px-6 pt-12 pb-24">
       <div className="mb-12 flex items-center justify-between">
         <PageBack />
-        <span className="font-mono text-muted-foreground/60 text-xs">
-          {blogPosts
-            ? `${String(blogPosts.length).padStart(2, "0")} posts`
-            : ""}
+        <span className="font-mono text-muted-foreground/50 text-xs tabular-nums">
+          {blogPosts ? String(blogPosts.length).padStart(2, "0") : ""}
         </span>
       </div>
 
       <header className="mb-10">
-        <h1 className="mb-2 font-medium text-foreground text-xl tracking-tight">
+        <h1 className="mb-3 font-medium text-foreground text-lg tracking-tight">
           blog
         </h1>
-        <p className="font-mono text-base text-muted-foreground">
+        <p className="text-base text-muted-foreground leading-relaxed">
           notes, things i find, occasional rants.
         </p>
       </header>

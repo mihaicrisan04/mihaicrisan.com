@@ -23,6 +23,12 @@ export interface ProjectImage {
   alt: string;
 }
 
+export interface ProjectPreview {
+  video?: string;
+  gif?: string;
+  image?: string;
+}
+
 export interface ProjectFrontmatter {
   name: string;
   slug: string;
@@ -37,6 +43,7 @@ export interface ProjectFrontmatter {
   techStack: TechStackItem[];
   links: ProjectLink[];
   images: ProjectImage[];
+  preview?: ProjectPreview;
   highlights?: string[];
 }
 
@@ -89,4 +96,34 @@ export function getFeaturedProjects(): Project[] {
 
 export function getProjectsByCategory(category: string): Project[] {
   return getAllProjects().filter((project) => project.category === category);
+}
+
+export interface ProjectYearGroup {
+  year: number;
+  projects: Project[];
+}
+
+// Groups projects by start-year, with featured first then by date desc within each year.
+// Year groups themselves are sorted newest-first for the work timeline.
+export function getProjectsGroupedByYear(): ProjectYearGroup[] {
+  const buckets = new Map<number, Project[]>();
+
+  for (const project of getAllProjects()) {
+    const year = new Date(project.startDate).getFullYear();
+    const arr = buckets.get(year) ?? [];
+    arr.push(project);
+    buckets.set(year, arr);
+  }
+
+  return Array.from(buckets.entries())
+    .map(([year, items]) => ({
+      year,
+      projects: items.sort((a, b) => {
+        if (a.featured !== b.featured) {
+          return a.featured ? -1 : 1;
+        }
+        return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+      }),
+    }))
+    .sort((a, b) => b.year - a.year);
 }

@@ -43,10 +43,10 @@ export function ProjectDetailClient({ project }: ProjectDetailClientProps) {
       </div>
 
       <header className="mb-12 border-border/40 border-b pb-8">
-        <h1 className="mb-2 font-medium text-foreground text-xl tracking-tight">
+        <h1 className="mb-2 font-medium text-foreground text-lg tracking-tight">
           {project.website ? (
             <CustomLink
-              className="font-medium text-foreground text-xl hover:text-foreground"
+              className="font-medium text-foreground text-lg hover:text-foreground"
               external
               href={project.website}
             >

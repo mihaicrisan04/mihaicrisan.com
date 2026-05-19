@@ -14,19 +14,19 @@ export default function SetupPage() {
     <div className="mx-auto max-w-xl px-6 pt-12 pb-24">
       <div className="mb-12 flex items-center justify-between">
         <PageBack />
-        <span className="font-mono text-muted-foreground/60 text-xs">
-          {String(total).padStart(2, "0")} items
+        <span className="font-mono text-muted-foreground/50 text-xs tabular-nums">
+          {String(total).padStart(2, "0")}
         </span>
       </div>
 
       <header className="mb-12">
-        <h1 className="mb-2 font-medium text-foreground text-xl tracking-tight">
+        <h1 className="mb-3 font-medium text-foreground text-lg tracking-tight">
           my setup
         </h1>
-        <p className="font-mono text-base text-muted-foreground">
+        <p className="text-base text-muted-foreground leading-relaxed">
           tools, apps, and configs i actually use. everything else is in{" "}
           <a
-            className="text-muted-foreground/70 underline-offset-4 hover:text-foreground hover:underline"
+            className="font-medium text-foreground transition-opacity hover:opacity-70"
             href="https://github.com/mihaicrisan04/dotfiles"
             rel="noopener noreferrer"
             target="_blank"

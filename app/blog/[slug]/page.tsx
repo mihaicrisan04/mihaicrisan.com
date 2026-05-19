@@ -56,7 +56,7 @@ export default function BlogPostPage({ params }: BlogPageProps) {
           <time className="block font-mono text-muted-foreground text-sm">
             {formatDate(blogPost.date)}
           </time>
-          <h1 className="mt-3 mb-3 font-medium text-foreground text-xl tracking-tight">
+          <h1 className="mt-3 mb-3 font-medium text-foreground text-lg tracking-tight">
             {blogPost.title}
           </h1>
           {blogPost.description && (

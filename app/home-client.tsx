@@ -96,13 +96,25 @@ export function HomeClient() {
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.35}>
+        <FadeIn delay={0.32}>
+          <p className="mt-5 text-base text-muted-foreground leading-relaxed">
+            <Link
+              className="font-medium text-foreground transition-opacity hover:opacity-70"
+              href="/work"
+            >
+              /work
+            </Link>{" "}
+            for more.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.42}>
           <p className="mt-5 text-base text-muted-foreground leading-relaxed">
             reach out on{" "}
             <LinkStrikethrough href="https://x.com/mihaicrisann">
               twitter
             </LinkStrikethrough>
-            , or see what i&apos;m working on on{" "}
+            , or see what i&apos;m up to on{" "}
             <LinkGithub
               href="https://github.com/mihaicrisan04"
               username="mihaicrisan04"
@@ -115,29 +127,6 @@ export function HomeClient() {
       </div>
 
       <AvatarPeek visible={avatarVisible} />
-
-      <motion.div
-        animate={{ opacity: 1 }}
-        className="absolute bottom-6 left-6 z-10 flex items-center gap-4 font-mono text-muted-foreground/60 text-xs"
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
-      >
-        <span className="text-muted-foreground/50">© 2026</span>
-        <span aria-hidden className="text-muted-foreground/30">
-          /
-        </span>
-        <Link className="transition-colors hover:text-foreground" href="/work">
-          work
-        </Link>
-        <a
-          className="transition-colors hover:text-foreground"
-          href="/cv.pdf"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          cv
-        </a>
-      </motion.div>
     </div>
   );
 }

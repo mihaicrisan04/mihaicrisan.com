@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GeistPixelSquare } from "geist/font/pixel";
 import "./globals.css";
-import { FooterSlot } from "@/components/footer-slot";
+import { GlobalChrome } from "@/components/global-chrome";
 import { Providers } from "./providers";
 
 const geistSans = Geist({
@@ -27,13 +28,11 @@ export default function RootLayout({
   return (
     <html className="scroll-smooth" lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} min-h-screen bg-background text-foreground antialiased`}
       >
         <Providers>
-          <div className="relative z-10 flex flex-col">
-            <main className="min-h-svh">{children}</main>
-            <FooterSlot />
-          </div>
+          <main className="relative z-10 min-h-svh">{children}</main>
+          <GlobalChrome />
         </Providers>
       </body>
     </html>

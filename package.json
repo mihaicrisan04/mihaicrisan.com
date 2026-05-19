@@ -7,9 +7,12 @@
     "dev:frontend": "next dev --turbopack",
     "dev:backend": "convex dev",
     "build": "next build",
+    "postbuild": "bun run scripts/ingest-projects.ts",
     "start": "next start",
     "lint": "ultracite check",
     "lint:fix": "ultracite fix",
+    "ingest": "bun run scripts/ingest-projects.ts",
+    "upload-media": "bun run scripts/upload-media.ts",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -60,8 +63,10 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.26",
+    "geist": "^1.7.0",
     "gray-matter": "^4.0.3",
     "harden-react-markdown": "^1.1.7",
+    "imagekit": "^6.0.0",
     "katex": "^0.16.27",
     "lucide-react": "^0.562.0",
     "marked": "^17.0.1",
