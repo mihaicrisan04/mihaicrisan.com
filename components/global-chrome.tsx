@@ -131,7 +131,7 @@ export function GlobalChrome() {
 
       <motion.div
         animate={{ opacity: 1 }}
-        className="fixed right-6 bottom-[16px] z-50"
+        className="fixed right-6 bottom-[18px] z-50"
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
       >
