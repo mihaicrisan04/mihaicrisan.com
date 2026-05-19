@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { CustomLink } from "@/components/custom-link";
 import { mdxComponents } from "@/components/mdx";
 import { PageBack } from "@/components/page-back";
+import { ProjectHero } from "@/components/project-hero";
 import type { Project } from "@/lib/projects";
 
 interface ProjectDetailClientProps {
@@ -76,6 +77,8 @@ export function ProjectDetailClient({ project }: ProjectDetailClientProps) {
           ))}
         </div>
       </header>
+
+      <ProjectHero project={project} />
 
       {mdxSource && (
         <div className="prose prose-neutral dark:prose-invert max-w-none">
