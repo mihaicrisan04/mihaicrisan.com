@@ -13,19 +13,30 @@ interface ProjectDetailClientProps {
   project: Project;
 }
 
-function formatDateRange(startDate: string, endDate: string | undefined) {
-  const start = new Date(startDate).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-  });
-  if (!endDate) {
+function formatDateRange(
+  startDate: string,
+  endDate: string | undefined,
+  ongoing: boolean | undefined
+) {
+  const start = new Date(startDate)
+    .toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+    })
+    .toLowerCase();
+  if (endDate) {
+    const end = new Date(endDate)
+      .toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+      })
+      .toLowerCase();
+    return `${start} → ${end}`;
+  }
+  if (ongoing) {
     return `${start} → present`;
   }
-  const end = new Date(endDate).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-  });
-  return `${start} → ${end}`;
+  return start;
 }
 
 export function ProjectDetailClient({ project }: ProjectDetailClientProps) {
@@ -59,7 +70,7 @@ export function ProjectDetailClient({ project }: ProjectDetailClientProps) {
         </h1>
 
         <p className="mb-6 font-mono text-muted-foreground text-sm">
-          {formatDateRange(project.startDate, project.endDate)}
+          {formatDateRange(project.startDate, project.endDate, project.ongoing)}
         </p>
 
         <p className="text-base text-foreground/85 leading-relaxed">

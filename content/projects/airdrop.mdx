@@ -1,8 +1,8 @@
 ---
-name: "Airdrop CLI"
+name: "airdrop CLI"
 slug: "airdrop"
 shortDescription: "AirDrop files and URLs from the macOS terminal — multiple files in one transfer"
-fullDescription: "A tiny macOS CLI that exposes AirDrop to the terminal. Send one file, ten files, or a URL — all from a single command. Ships as a proper .app bundle so the system share daemon keeps the session alive (which is where every other CLI airdrop tool falls over)."
+fullDescription: "a tiny macOS CLI that exposes AirDrop to the terminal. send one file, ten files, or a URL — all from a single command. ships as a proper .app bundle so the system share daemon keeps the session alive (which is where every other CLI airdrop tool falls over)."
 status: "in-progress"
 category: "tool"
 featured: true
@@ -17,7 +17,7 @@ techStack:
   - name: "Homebrew"
     category: "distribution"
 links:
-  - name: "GitHub"
+  - name: "github"
     url: "https://github.com/mihaicrisan04/airdrop"
     type: "github"
 images: []
@@ -25,14 +25,14 @@ preview:
   video: "https://ik.imagekit.io/mihaicrisan/projects/airdrop/hero.mp4"
   image: "https://ik.imagekit.io/mihaicrisan/projects/airdrop/hero.mp4/ik-thumbnail.jpg"
 highlights:
-  - "Single-command AirDrop from the terminal"
-  - "Multiple files in one transfer (the picker stays open until you confirm)"
-  - "Works with URLs too — not just files"
-  - "Ships as a .app bundle so sharingd keeps the session alive"
+  - "single-command AirDrop from the terminal"
+  - "multiple files in one transfer (the picker stays open until you confirm)"
+  - "works with URLs too — not just files"
+  - "ships as a .app bundle so sharingd keeps the session alive"
   - "macOS 14+, distributed via homebrew tap"
 ---
 
-A tiny macOS CLI that AirDrops files and URLs from your terminal. Multiple files in one transfer. Developed and tested on macOS 26.
+a tiny macOS CLI that AirDrops files and URLs from your terminal. multiple files in one transfer. developed and tested on macOS 26.
 
 ```sh
 ad file.pdf
@@ -40,25 +40,25 @@ ad a.md b.png c.mov
 ad https://example.com
 ```
 
-## Why
+## why
 
-AirDrop is the fastest way to move a file off a Mac, but the share-sheet dance — focus Finder, navigate, right-click, share, pick the device — pulls you out of whatever you were doing. I'm in the terminal all day. I wanted `ad file.pdf` and done.
+AirDrop is the fastest way to move a file off a Mac, but the share-sheet dance — focus Finder, navigate, right-click, share, pick the device — pulls you out of whatever you were doing. i'm in the terminal all day. i wanted `ad file.pdf` and done.
 
-## Install
+## install
 
 ```sh
 brew install mihaicrisan04/tap/airdrop
 ```
 
-Both methods put `ad` on your `PATH`.
+both methods put `ad` on your `PATH`.
 
-## Why this one doesn't hang
+## why this one doesn't hang
 
-Every other CLI airdrop tool I tested hangs after the picker dismisses — the system kills the share session before the transfer confirms. This one ships as a proper `.app` bundle, so `sharingd` keeps the share session alive until the receiving side accepts.
+every other CLI airdrop tool i tested hangs after the picker dismisses — the system kills the share session before the transfer confirms. this one ships as a proper `.app` bundle, so `sharingd` keeps the share session alive until the receiving side accepts.
 
-## What's inside
+## what's inside
 
-The CLI is a thin shim around an `NSSharingService` with `NSSharingServiceNameSendViaAirDrop`. The hard part wasn't the API — it was figuring out the lifecycle: you need a running app process (not a one-shot CLI binary) for `sharingd` to consider the share valid.
+the CLI is a thin shim around an `NSSharingService` with `NSSharingServiceNameSendViaAirDrop`. the hard part wasn't the API — it was figuring out the lifecycle: you need a running app process (not a one-shot CLI binary) for `sharingd` to consider the share valid.
 
 <ProjectLinks>
   <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/airdrop" />

@@ -1,8 +1,8 @@
 ---
-name: "Quik"
+name: "quik"
 slug: "quik"
-shortDescription: "Inline AI prompt for your zsh session — Cmd+Enter, ask, streams in place"
-fullDescription: "A zsh plugin that turns your shell prompt into a quick AI ask. Hit Cmd+Enter, type a question, get the answer streamed back inline — without leaving your terminal or breaking your shell flow. Backed by Claude or Codex, written in Rust for instant startup."
+shortDescription: "inline AI prompt for your zsh session — Cmd+Enter, ask, streams in place"
+fullDescription: "a zsh plugin that turns your shell prompt into a quick AI ask. hit Cmd+Enter, type a question, get the answer streamed back inline — without leaving your terminal or breaking your shell flow. backed by Claude or Codex, written in Rust for instant startup."
 status: "in-progress"
 category: "tool"
 featured: true
@@ -19,7 +19,7 @@ techStack:
   - name: "Homebrew"
     category: "distribution"
 links:
-  - name: "GitHub"
+  - name: "github"
     url: "https://github.com/mihaicrisan04/quik"
     type: "github"
 images: []
@@ -28,37 +28,37 @@ preview:
   image: "https://ik.imagekit.io/mihaicrisan/projects/quik/hero.mp4/ik-thumbnail.jpg"
 highlights:
   - "Cmd+Enter from anywhere in your shell — no context switch"
-  - "Answers stream in place, no separate window or buffer"
-  - "Pluggable backend (Claude Code or OpenAI Codex on PATH)"
-  - "Native zsh plugin, distributed via homebrew tap"
+  - "answers stream in place, no separate window or buffer"
+  - "pluggable backend (Claude Code or OpenAI Codex on PATH)"
+  - "native zsh plugin, distributed via homebrew tap"
   - "Rust core for sub-100ms startup"
 ---
 
-Inline AI in your terminal. Hit `Cmd+Enter`, ask anything, get an answer streamed in place. Built because I wanted Warp's inline-AI feature without giving up my actual terminal.
+inline AI in your terminal. hit `Cmd+Enter`, ask anything, get an answer streamed in place. built because i wanted Warp's inline-AI feature without giving up my actual terminal.
 
-The friction it removes: every "quick question" — a flag I half-remember, a regex escape, a git error message I want explained — used to mean alt-tabbing to a browser, pasting, waiting, alt-tabbing back. Quik kills the round trip and keeps the answer in the same buffer as the command it's about.
+the friction it removes: every "quick question" — a flag i half-remember, a regex escape, a git error message i want explained — used to mean alt-tabbing to a browser, pasting, waiting, alt-tabbing back. quik kills the round trip and keeps the answer in the same buffer as the command it's about.
 
-## Install
+## install
 
 ```sh
 brew install mihaicrisan04/tap/quik
 ```
 
-Then add to `~/.zshrc`:
+then add to `~/.zshrc`:
 
 ```sh
 source "$(brew --prefix)/share/quik/quik.plugin.zsh"
 ```
 
-Needs [`claude`](https://docs.claude.com/en/docs/claude-code) or [`codex`](https://github.com/openai/codex) on `PATH`.
+needs [`claude`](https://docs.claude.com/en/docs/claude-code) or [`codex`](https://github.com/openai/codex) on `PATH`.
 
-## How the keybinding works
+## how the keybinding works
 
-`quik` listens for the control byte `0x1f`. You map `Cmd+Enter` → that byte in your terminal of choice (Ghostty, iTerm, Kitty, WezTerm — see the wiki). The plugin handles everything else.
+`quik` listens for the control byte `0x1f`. you map `Cmd+Enter` → that byte in your terminal of choice (Ghostty, iTerm, Kitty, WezTerm — see the wiki). the plugin handles everything else.
 
-## Design notes
+## design notes
 
-The Rust core stays out of the hot path: the zsh plugin runs entirely in your shell session, only shelling out to the inference CLI when you actually ask. That means zero overhead on shell startup and no background daemons.
+the Rust core stays out of the hot path: the zsh plugin runs entirely in your shell session, only shelling out to the inference CLI when you actually ask. that means zero overhead on shell startup and no background daemons.
 
 <ProjectLinks>
   <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/quik" />

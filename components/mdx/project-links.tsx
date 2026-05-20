@@ -90,15 +90,15 @@ export function ProjectLinkButton({
   const getDefaultLabel = () => {
     switch (type) {
       case "github":
-        return "View on GitHub";
+        return "view on GitHub";
       case "live":
-        return "Visit Site";
+        return "visit site";
       case "demo":
-        return "View Demo";
+        return "view demo";
       case "download":
-        return "Download";
+        return "download";
       default:
-        return "View";
+        return "view";
     }
   };
 

@@ -1,8 +1,8 @@
 ---
-name: "Obstruction Game"
+name: "obstruction game"
 slug: "obstruction-game"
-shortDescription: "Strategic board game with AI opponent using Minimax algorithm"
-fullDescription: "Engineered the Obstruction game with a scalable and easily modifiable codebase by employing a layered architecture, ensuring flexibility for future enhancements without compromising existing functionality. Implemented an advanced AI opponent using the Minimax algorithm with Alpha-Beta Pruning, resulting in a nearly unbeatable and highly efficient gaming experience for players."
+shortDescription: "strategic board game with AI opponent using minimax algorithm"
+fullDescription: "engineered the obstruction game with a scalable and easily modifiable codebase by employing a layered architecture, ensuring flexibility for future enhancements without compromising existing functionality. implemented an advanced AI opponent using the minimax algorithm with alpha-beta pruning, resulting in a nearly unbeatable and highly efficient gaming experience for players."
 status: "completed"
 category: "game"
 featured: false
@@ -18,10 +18,10 @@ techStack:
   - name: "Alpha-Beta Pruning"
     category: "optimization"
 links:
-  - name: "GitHub"
+  - name: "github"
     url: "https://github.com/mihaicrisan04/obstruction"
     type: "github"
-  - name: "Demo"
+  - name: "demo"
     url: "#"
     type: "demo"
 images: []
@@ -29,32 +29,32 @@ preview:
   video: "https://ik.imagekit.io/mihaicrisan/projects/obstruction-game/hero.mp4"
   image: "https://ik.imagekit.io/mihaicrisan/projects/obstruction-game/hero.mp4/ik-thumbnail.jpg"
 highlights:
-  - "Scalable layered architecture for easy modifications"
-  - "Advanced AI opponent using Minimax algorithm"
-  - "Alpha-Beta Pruning for efficient AI decision making"
-  - "Nearly unbeatable AI gaming experience"
-  - "Clean, modular codebase for future enhancements"
+  - "scalable layered architecture for easy modifications"
+  - "advanced AI opponent using minimax algorithm"
+  - "alpha-beta pruning for efficient AI decision making"
+  - "nearly unbeatable AI gaming experience"
+  - "clean, modular codebase for future enhancements"
 ---
 
-A turn-based board game with an AI opponent, built as a 1st-year university project at UBB. Two players take turns claiming cells on a grid; each claim blocks all 8 neighbouring cells. Whoever can't move loses.
+a turn-based board game with an AI opponent, built as a 1st-year university project at UBB. two players take turns claiming cells on a grid; each claim blocks all 8 neighbouring cells. whoever can't move loses.
 
-## Why
+## why
 
-The course had two goals stapled together — write something with a non-trivial architecture, and implement a game AI from scratch. Obstruction is small enough to fit a semester and deep enough that a brute-force search is unplayable, which made it the right forcing function for both.
+the course had two goals stapled together — write something with a non-trivial architecture, and implement a game AI from scratch. obstruction is small enough to fit a semester and deep enough that a brute-force search is unplayable, which made it the right forcing function for both.
 
-## How the AI works
+## how the AI works
 
-The opponent uses **minimax with alpha-beta pruning**. The pruning is what makes it usable in practice: without it, even modest board sizes blow the search tree up to seconds-per-move. With it, the AI responds in well under a second and rarely loses to a human.
+the opponent uses **minimax with alpha-beta pruning**. the pruning is what makes it usable in practice: without it, even modest board sizes blow the search tree up to seconds-per-move. with it, the AI responds in well under a second and rarely loses to a human.
 
-## Architecture
+## architecture
 
-A layered Python codebase, structured the way the course wanted us to internalise:
+a layered Python codebase, structured the way the course wanted us to internalise:
 
 - `domain/` — `Game`, `Board`, `Player`, `AI` (pure logic, no IO)
 - `ui/` — both a `pygame` GUI and a console renderer, swappable from `settings.properties`
 - `services/` — wiring between them
 
-The same domain runs untouched behind either UI, which is the whole point of the exercise. Bug-fixing the AI never touched the renderer; swapping the renderer never touched the rules.
+the same domain runs untouched behind either UI, which is the whole point of the exercise. bug-fixing the AI never touched the renderer; swapping the renderer never touched the rules.
 
 <ProjectLinks>
   <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/obstruction" />

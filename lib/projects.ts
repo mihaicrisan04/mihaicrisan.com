@@ -40,6 +40,7 @@ export interface ProjectFrontmatter {
   featured: boolean;
   startDate: string;
   endDate?: string;
+  ongoing?: boolean;
   techStack: TechStackItem[];
   links: ProjectLink[];
   images: ProjectImage[];
