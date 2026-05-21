@@ -7,6 +7,7 @@ import { CustomLink } from "@/components/custom-link";
 import { mdxComponents } from "@/components/mdx";
 import { PageBack } from "@/components/page-back";
 import { ProjectHero } from "@/components/project-hero";
+import { PromoVideoPlayer } from "@/components/promo-video-player";
 import type { Project } from "@/lib/projects";
 
 interface ProjectDetailClientProps {
@@ -89,7 +90,16 @@ export function ProjectDetailClient({ project }: ProjectDetailClientProps) {
         </div>
       </header>
 
-      <ProjectHero project={project} />
+      {project.preview?.promoVideo ? (
+        <div className="mb-12">
+          <PromoVideoPlayer
+            poster={project.preview.image}
+            src={project.preview.promoVideo}
+          />
+        </div>
+      ) : (
+        <ProjectHero project={project} />
+      )}
 
       {mdxSource && (
         <div className="prose prose-neutral dark:prose-invert max-w-none">

@@ -27,6 +27,7 @@ export interface ProjectPreview {
   video?: string;
   gif?: string;
   image?: string;
+  promoVideo?: string;
 }
 
 export interface ProjectFrontmatter {
