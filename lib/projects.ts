@@ -27,6 +27,7 @@ export interface ProjectPreview {
   video?: string;
   gif?: string;
   image?: string;
+  promoVideo?: string;
 }
 
 export interface ProjectFrontmatter {
@@ -40,6 +41,7 @@ export interface ProjectFrontmatter {
   featured: boolean;
   startDate: string;
   endDate?: string;
+  ongoing?: boolean;
   techStack: TechStackItem[];
   links: ProjectLink[];
   images: ProjectImage[];

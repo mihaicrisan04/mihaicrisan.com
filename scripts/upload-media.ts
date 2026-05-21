@@ -7,10 +7,11 @@
  *   bun run upload-media <slug>
  *
  * Expected layout under media-staging/<slug>/:
- *   hero.mp4         (optional — autoplay hover video)
- *   hero.gif         (optional — gif fallback)
+ *   hero.{mp4,webm,mov}  (optional — autoplay hover video, silent)
+ *   hero.gif             (optional — gif fallback)
  *   hero.{jpg,png,webp}  (optional — static poster, also used as preview.image)
- *   gallery/01.webp  (optional — gallery item, numbered)
+ *   promo.{mp4,webm,mov} (optional — full promo video with sound, replaces hero)
+ *   gallery/01.webp      (optional — gallery item, numbered)
  *   gallery/02.webp
  *   ...
  *
@@ -28,15 +29,16 @@ const STAGING_ROOT = path.join(process.cwd(), "media-staging");
 const REMOTE_ROOT = "/projects";
 
 const HERO_BASENAMES = ["hero"] as const;
+const PROMO_BASENAMES = ["promo"] as const;
 const STATIC_IMAGE_EXTS = [".jpg", ".jpeg", ".png", ".webp"] as const;
-const VIDEO_EXT = ".mp4";
+const VIDEO_EXTS = [".mp4", ".webm", ".mov"] as const;
 const GIF_EXT = ".gif";
 
 type UploadedFile = {
   url: string;
   remotePath: string;
   localPath: string;
-  kind: "hero-video" | "hero-gif" | "hero-image" | "gallery";
+  kind: "hero-video" | "hero-gif" | "hero-image" | "promo-video" | "gallery";
 };
 
 function loadEnv() {
@@ -96,7 +98,7 @@ function classify(
     return "gallery";
   }
   if (HERO_BASENAMES.includes(base as (typeof HERO_BASENAMES)[number])) {
-    if (ext === VIDEO_EXT) {
+    if (VIDEO_EXTS.includes(ext as (typeof VIDEO_EXTS)[number])) {
       return "hero-video";
     }
     if (ext === GIF_EXT) {
@@ -105,6 +107,12 @@ function classify(
     if (STATIC_IMAGE_EXTS.includes(ext as (typeof STATIC_IMAGE_EXTS)[number])) {
       return "hero-image";
     }
+  }
+  if (
+    PROMO_BASENAMES.includes(base as (typeof PROMO_BASENAMES)[number]) &&
+    VIDEO_EXTS.includes(ext as (typeof VIDEO_EXTS)[number])
+  ) {
+    return "promo-video";
   }
   return null;
 }
@@ -160,6 +168,7 @@ function printSnippet(uploads: UploadedFile[]) {
   const heroVideo = uploads.find((u) => u.kind === "hero-video");
   const heroGif = uploads.find((u) => u.kind === "hero-gif");
   const heroImage = uploads.find((u) => u.kind === "hero-image");
+  const promoVideo = uploads.find((u) => u.kind === "promo-video");
   const gallery = uploads
     .filter((u) => u.kind === "gallery")
     .sort((a, b) => a.localPath.localeCompare(b.localPath));
@@ -185,6 +194,9 @@ function printSnippet(uploads: UploadedFile[]) {
   }
   if (heroImage) {
     previewLines.push(`  image: "${heroImage.url}"`);
+  }
+  if (promoVideo) {
+    previewLines.push(`  promoVideo: "${promoVideo.url}"`);
   }
   if (previewLines.length === 0) {
     console.log("preview: {}");

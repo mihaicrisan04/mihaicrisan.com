@@ -1,13 +1,14 @@
 ---
-name: "Rent'n Go"
+name: "rent'n go"
 slug: "rentn-go"
-shortDescription: "Full-stack car rental platform for Romania — booking, transfers, admin dashboard"
-fullDescription: "A production car rental platform built for a Cluj-based business. Customers browse and book vehicles with tiered pricing and seasonal multipliers; business owners get a full admin dashboard for fleet, pricing, and reservations. Also handles airport transfers with Mapbox routing, all in a bilingual (RO/EN) interface."
+shortDescription: "full-stack car rental platform for romania — booking, transfers, admin dashboard"
+fullDescription: "a production car rental platform built for a cluj-based business. customers browse and book vehicles with tiered pricing and seasonal multipliers; business owners get a full admin dashboard for fleet, pricing, and reservations. also handles airport transfers with Mapbox routing, all in a bilingual (RO/EN) interface."
 status: "completed"
 category: "fullstack"
 website: "https://rngo.ro"
 featured: true
 startDate: "2025-05-09"
+ongoing: true
 techStack:
   - name: "Next.js 15"
     category: "framework"
@@ -26,46 +27,46 @@ techStack:
   - name: "Vercel"
     category: "deployment"
 links:
-  - name: "Live Site"
+  - name: "live site"
     url: "https://rngo.ro"
     type: "live"
-  - name: "GitHub"
+  - name: "github"
     url: "https://github.com/mihaicrisan04/rentngo"
     type: "github"
 images: []
 preview:
   image: "https://ik.imagekit.io/mihaicrisan/projects/rentn-go/hero.jpeg"
 highlights:
-  - "Production platform for a real Cluj-based car rental business"
-  - "Tiered pricing — longer rentals get cheaper per-day rates automatically"
-  - "Seasonal price multipliers configured from the admin dashboard"
-  - "Airport transfer routing powered by Mapbox"
-  - "Bilingual interface (Romanian / English) with full i18n"
+  - "production platform for a real cluj-based car rental business"
+  - "tiered pricing — longer rentals get cheaper per-day rates automatically"
+  - "seasonal price multipliers configured from the admin dashboard"
+  - "airport transfer routing powered by Mapbox"
+  - "bilingual interface (romanian / english) with full i18n"
   - "Convex-backed realtime — admin sees new bookings instantly"
 ---
 
-A car rental platform built for a local business in Cluj-Napoca — the goal was a complete digital storefront plus admin tools, replacing the manual phone-and-WhatsApp booking process they were running before.
+a car rental platform built for a local business in cluj-napoca — the goal was a complete digital storefront plus admin tools, replacing the manual phone-and-WhatsApp booking process they were running before.
 
-## The frontend
+## the frontend
 
-A clean, fast catalog with filtering, real-time availability, and a streamlined checkout. Pricing is dynamic: longer rentals automatically get a per-day discount, and configurable seasonal multipliers handle peak periods.
+a clean, fast catalog with filtering, real-time availability, and a streamlined checkout. pricing is dynamic: longer rentals automatically get a per-day discount, and configurable seasonal multipliers handle peak periods.
 
-## The admin dashboard
+## the admin dashboard
 
-The owner sees the full picture in one place — active rentals, upcoming reservations, fleet status, and a calendar view per vehicle. New bookings land in realtime thanks to Convex's reactive queries, so they don't have to refresh.
+the owner sees the full picture in one place — active rentals, upcoming reservations, fleet status, and a calendar view per vehicle. new bookings land in realtime thanks to Convex's reactive queries, so they don't have to refresh.
 
-## Services
+## services
 
-- **Standard rentals** — daily and weekly with flexible pickup
-- **Airport transfers** — dedicated flow with Mapbox-based routing and meet-and-greet
-- **Long-term leasing** — monthly packages at discounted rates
-- **Chauffeur services** — driver-included bookings for events and business trips
+- **standard rentals** — daily and weekly with flexible pickup
+- **airport transfers** — dedicated flow with Mapbox-based routing and meet-and-greet
+- **long-term leasing** — monthly packages at discounted rates
+- **chauffeur services** — driver-included bookings for events and business trips
 
-## Stack notes
+## stack notes
 
-Convex handles the database, backend functions, and realtime sync — no separate API layer. Clerk does auth for both customers and the admin role. The whole thing is i18n'd from day one (RO/EN) because the customer base is split.
+Convex handles the database, backend functions, and realtime sync — no separate API layer. Clerk does auth for both customers and the admin role. the whole thing is i18n'd from day one (RO/EN) because the customer base is split.
 
 <ProjectLinks>
   <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/rentngo" />
-  <ProjectLinkButton type="live" href="https://rngo.ro" label="Visit Site" />
+  <ProjectLinkButton type="live" href="https://rngo.ro" label="visit site" />
 </ProjectLinks>
