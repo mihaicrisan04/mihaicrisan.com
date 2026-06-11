@@ -117,6 +117,16 @@ export function createContextualTools(ctx: ActionCtx) {
           category: z.string(),
           shortDescription: z.string(),
           techStack: z.array(z.string()),
+          website: z.string().optional(),
+          links: z
+            .array(
+              z.object({
+                name: z.string(),
+                url: z.string(),
+                type: z.string(),
+              })
+            )
+            .optional(),
         })
       ),
       count: z.number(),
@@ -136,6 +146,8 @@ export function createContextualTools(ctx: ActionCtx) {
             category: string;
             shortDescription: string;
             techStack: string[];
+            website?: string;
+            links?: { name: string; url: string; type: string }[];
           } => Boolean(m && typeof m === "object" && "slug" in m)
         );
       return { projects, count: projects.length };
@@ -155,6 +167,16 @@ export function createContextualTools(ctx: ActionCtx) {
       name: z.string().optional(),
       content: z.string().optional(),
       slug: z.string(),
+      website: z.string().optional(),
+      links: z
+        .array(
+          z.object({
+            name: z.string(),
+            url: z.string(),
+            type: z.string(),
+          })
+        )
+        .optional(),
     }),
     execute: async ({ slug }) => {
       const doc = await ctx.runQuery(api.ingest.getDocumentBySourceId, {
@@ -163,11 +185,19 @@ export function createContextualTools(ctx: ActionCtx) {
       if (!doc) {
         return { found: false, slug };
       }
+      const metadata = doc.metadata as
+        | {
+            website?: string;
+            links?: { name: string; url: string; type: string }[];
+          }
+        | undefined;
       return {
         found: true,
         name: doc.title,
         content: doc.content,
         slug,
+        website: metadata?.website,
+        links: metadata?.links,
       };
     },
   });

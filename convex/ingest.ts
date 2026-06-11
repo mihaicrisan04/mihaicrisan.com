@@ -39,6 +39,12 @@ const projectPayload = v.object({
   status: v.optional(v.string()),
   startDate: v.string(),
   endDate: v.optional(v.string()),
+  ongoing: v.optional(v.boolean()),
+  featured: v.optional(v.boolean()),
+  website: v.optional(v.string()),
+  links: v.optional(
+    v.array(v.object({ name: v.string(), url: v.string(), type: v.string() }))
+  ),
   techStack: v.array(v.object({ name: v.string(), category: v.string() })),
   highlights: v.optional(v.array(v.string())),
   body: v.string(),
@@ -46,6 +52,7 @@ const projectPayload = v.object({
 
 // Format a project into a single string that gets embedded into RAG
 function formatProjectForRag(project: {
+  slug: string;
   name: string;
   shortDescription: string;
   fullDescription?: string;
@@ -54,7 +61,10 @@ function formatProjectForRag(project: {
   highlights?: string[];
   startDate: string;
   endDate?: string;
+  ongoing?: boolean;
   status?: string;
+  website?: string;
+  links?: { name: string; url: string; type: string }[];
   body: string;
 }): string {
   const techNames = project.techStack.map((t) => t.name).join(", ");
@@ -67,13 +77,32 @@ function formatProjectForRag(project: {
     : "";
   const body = project.body.trim() ? `\n\nFull writeup:\n${project.body}` : "";
 
+  let timeline = project.startDate;
+  if (project.endDate) {
+    timeline = `${project.startDate} to ${project.endDate}`;
+  } else if (project.ongoing) {
+    timeline = `${project.startDate} (ongoing)`;
+  } else if (project.status === "in-progress") {
+    timeline = `${project.startDate} (in progress)`;
+  }
+
+  const linkLines = [`project page: /work/${project.slug}`];
+  if (project.website) {
+    linkLines.push(`website: ${project.website}`);
+  }
+  for (const link of project.links ?? []) {
+    linkLines.push(`${link.type}: ${link.url}`);
+  }
+  const links = `\nLinks:\n${linkLines.join("\n")}`;
+
   return `Project: ${project.name}${status}
 Category: ${project.category}
 Description: ${project.shortDescription}
 ${fullDescription}
 Technologies used: ${techNames}${highlights}
 
-Timeline: ${project.startDate}${project.endDate ? ` to ${project.endDate}` : " (ongoing)"}${body}`;
+Timeline: ${timeline}
+${links}${body}`;
 }
 
 function formatBlogPostForRag(post: {
@@ -197,6 +226,8 @@ export const ingestProjects = action({
         category: project.category,
         shortDescription: project.shortDescription,
         techStack: project.techStack.map((t) => t.name),
+        ...(project.website ? { website: project.website } : {}),
+        ...(project.links?.length ? { links: project.links } : {}),
       };
 
       await ctx.runMutation(api.ingest.storeDocument, {
