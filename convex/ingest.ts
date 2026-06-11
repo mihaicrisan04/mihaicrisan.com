@@ -2,32 +2,7 @@ import { v } from "convex/values";
 import { api } from "./_generated/api";
 import { action, mutation, query } from "./_generated/server";
 import { rag } from "./rag";
-
-// Work experience data (static — not yet sourced from MDX)
-const WORK_EXPERIENCE = [
-  {
-    id: "wolfpack-digital",
-    company: "WolfPack Digital",
-    companyUrl: "https://wolfpack-digital.com",
-    position: "Fullstack Software Developer",
-    startDate: "2025-07-01",
-    endDate: null,
-    description:
-      "Building scalable web applications with deep focus on design and user experience.",
-    current: true,
-  },
-  {
-    id: "fullstack-developer",
-    company: "Freelance",
-    companyUrl: undefined,
-    position: "Fullstack Software Developer",
-    startDate: "2024-12-01",
-    endDate: null,
-    description:
-      "Developed web applications for various clients, focusing on building scalable and efficient solutions.",
-    current: false,
-  },
-];
+import { documentSource } from "./schema";
 
 // Shape of a project payload sent in by the ingest script
 const projectPayload = v.object({
@@ -48,6 +23,19 @@ const projectPayload = v.object({
   techStack: v.array(v.object({ name: v.string(), category: v.string() })),
   highlights: v.optional(v.array(v.string())),
   body: v.string(),
+});
+
+// Shape of a work experience entry sent in by the ingest script
+// (source of truth: content/knowledge/work-experience.ts)
+const workExperiencePayload = v.object({
+  id: v.string(),
+  company: v.string(),
+  companyUrl: v.optional(v.string()),
+  position: v.string(),
+  startDate: v.string(),
+  endDate: v.union(v.string(), v.null()),
+  description: v.string(),
+  current: v.boolean(),
 });
 
 // Format a project into a single string that gets embedded into RAG
@@ -120,6 +108,7 @@ ${post.content}`;
 
 function formatWorkExperienceForRag(work: {
   company: string;
+  companyUrl?: string;
   position: string;
   description: string;
   startDate: string;
@@ -130,9 +119,12 @@ function formatWorkExperienceForRag(work: {
     ? `${work.startDate} to ${work.endDate}`
     : `${work.startDate} to present`;
   const status = work.current ? " (Current Position)" : "";
+  const companyUrl = work.companyUrl
+    ? `\nCompany website: ${work.companyUrl}`
+    : "";
 
   return `Work Experience: ${work.position} at ${work.company}${status}
-Duration: ${dateRange}
+Duration: ${dateRange}${companyUrl}
 Description: ${work.description}`;
 }
 
@@ -141,12 +133,7 @@ export const storeDocument = mutation({
   args: {
     title: v.string(),
     content: v.string(),
-    source: v.union(
-      v.literal("project"),
-      v.literal("blog"),
-      v.literal("work"),
-      v.literal("custom")
-    ),
+    source: documentSource,
     sourceId: v.optional(v.string()),
     metadata: v.optional(v.any()),
   },
@@ -196,12 +183,7 @@ export const getDocumentBySourceId = query({
 
 export const getDocumentsBySource = query({
   args: {
-    source: v.union(
-      v.literal("project"),
-      v.literal("blog"),
-      v.literal("work"),
-      v.literal("custom")
-    ),
+    source: documentSource,
   },
   handler: async (ctx, { source }) => {
     return await ctx.db
@@ -282,10 +264,11 @@ export const ingestBlogPosts = action({
 });
 
 export const ingestWorkExperience = action({
-  handler: async (ctx) => {
+  args: { entries: v.array(workExperiencePayload) },
+  handler: async (ctx, { entries }) => {
     let ingested = 0;
 
-    for (const work of WORK_EXPERIENCE) {
+    for (const work of entries) {
       const content = formatWorkExperienceForRag(work);
 
       await ctx.runMutation(api.ingest.storeDocument, {
@@ -309,27 +292,68 @@ export const ingestWorkExperience = action({
   },
 });
 
+// Knowledge docs (about + setup), sent in by the ingest script.
+// Keys double as sourceIds — deterministic, so re-ingest is idempotent.
+export const ingestKnowledge = action({
+  args: {
+    docs: v.array(
+      v.object({
+        key: v.union(v.literal("about:me"), v.literal("about:setup")),
+        title: v.string(),
+        content: v.string(),
+      })
+    ),
+  },
+  handler: async (ctx, { docs }) => {
+    let ingested = 0;
+
+    for (const doc of docs) {
+      await ctx.runMutation(api.ingest.storeDocument, {
+        title: doc.title,
+        content: doc.content,
+        source: "about",
+        sourceId: doc.key,
+      });
+
+      await rag.add(ctx, {
+        namespace: "portfolio",
+        key: doc.key,
+        text: doc.content,
+        title: doc.title,
+      });
+
+      ingested++;
+    }
+
+    return { ingested, type: "about" };
+  },
+});
+
+// Dashboard-only escape hatch for one-off content. `key` is an explicit,
+// unprefixed identifier (e.g. "faq") so re-running with the same key upserts
+// instead of piling up `custom:<timestamp>` duplicates.
 export const ingestCustomContent = action({
   args: {
+    key: v.string(),
     title: v.string(),
     content: v.string(),
   },
   handler: async (
     ctx,
-    { title, content }
+    { key, title, content }
   ): Promise<{ success: boolean; documentId: string }> => {
-    const key = `custom:${Date.now()}`;
+    const sourceId = `custom:${key}`;
 
     const docId = await ctx.runMutation(api.ingest.storeDocument, {
       title,
       content,
       source: "custom" as const,
-      sourceId: key,
+      sourceId,
     });
 
     await rag.add(ctx, {
       namespace: "portfolio",
-      key,
+      key: sourceId,
       text: `${title}\n\n${content}`,
       title,
     });

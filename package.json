@@ -7,11 +7,11 @@
     "dev:frontend": "next dev --turbopack",
     "dev:backend": "convex dev",
     "build": "next build",
-    "postbuild": "bun run scripts/ingest-projects.ts",
+    "postbuild": "bun run scripts/ingest.ts",
     "start": "next start",
     "lint": "ultracite check",
     "lint:fix": "ultracite fix",
-    "ingest": "bun run scripts/ingest-projects.ts",
+    "ingest": "bun run scripts/ingest.ts",
     "upload-media": "bun run scripts/upload-media.ts",
     "prepare": "husky"
   },
