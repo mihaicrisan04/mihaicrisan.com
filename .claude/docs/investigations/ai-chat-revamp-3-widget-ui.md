@@ -1,6 +1,6 @@
 # ai chat revamp 3/4 — trigger + morphing widget UI
 
-> **Status:** ready · **Updated:** 2026-06-11
+> **Status:** done (shipped on develop) · **Updated:** 2026-06-11
 
 Part of [ai-chat-revamp.md](ai-chat-revamp.md). Depends on plan 1 (cleanup). The headline UX change: full-screen cover → bottom-right trigger that morphs into a right-side widget.
 
