@@ -19,11 +19,10 @@
     "*": "bun lint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^2.0.0",
     "@ai-sdk/react": "^2.0.0",
     "@base-ui/react": "^1.3.0",
     "@convex-dev/agent": "^0.6.1",
-    "@convex-dev/rag": "^0.6.1",
+    "@convex-dev/rag": "^0.7.5",
     "@icons-pack/react-simple-icons": "^13.8.0",
     "@imagekit/next": "^2.1.3",
     "@openrouter/ai-sdk-provider": "^2.3.3",
