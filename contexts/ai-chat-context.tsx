@@ -8,6 +8,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ interface AIChatState {
   close: () => void;
   newChat: () => void;
   sendMessage: (question: string) => void;
+  stop: () => void;
 }
 
 const AIChatContext = createContext<AIChatState | null>(null);
@@ -40,10 +42,15 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
 
   const createThread = useMutation(api.agent.createThread);
   const sendMessageAction = useAction(api.streamChat.sendMessage);
+  const stopStreaming = useMutation(api.threads.stopStreaming);
+
+  // Set when the user hits stop, so the aborted action doesn't toast an error
+  const stopRequestedRef = useRef(false);
 
   const sendMessage = useCallback(
     async (question: string) => {
       setIsLoading(true);
+      stopRequestedRef.current = false;
 
       try {
         let currentThreadId = threadId;
@@ -61,13 +68,28 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
           message: question,
         });
       } catch {
-        toast.error("Failed to get a response. Please try again.");
+        // stopping is intentional — keep the partial text, no error toast
+        if (!stopRequestedRef.current) {
+          toast.error("Failed to get a response. Please try again.");
+        }
       } finally {
         setIsLoading(false);
       }
     },
     [threadId, createThread, sendMessageAction]
   );
+
+  const stop = useCallback(() => {
+    if (!threadId) {
+      return;
+    }
+    stopRequestedRef.current = true;
+    // optimistic: the UI goes idle immediately, the abort lands server-side
+    setIsLoading(false);
+    stopStreaming({ threadId }).catch(() => {
+      // nothing to abort (already finished) — fine either way
+    });
+  }, [threadId, stopStreaming]);
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
@@ -85,8 +107,17 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ isOpen, threadId, isLoading, open, close, newChat, sendMessage }),
-    [isOpen, threadId, isLoading, open, close, newChat, sendMessage]
+    () => ({
+      isOpen,
+      threadId,
+      isLoading,
+      open,
+      close,
+      newChat,
+      sendMessage,
+      stop,
+    }),
+    [isOpen, threadId, isLoading, open, close, newChat, sendMessage, stop]
   );
 
   return <AIChatContext value={value}>{children}</AIChatContext>;

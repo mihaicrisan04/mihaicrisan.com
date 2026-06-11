@@ -54,8 +54,16 @@ function useIsDesktop(): boolean {
 }
 
 export function ChatDock() {
-  const { isOpen, open, close, newChat, threadId, isLoading, sendMessage } =
-    useAIChat();
+  const {
+    isOpen,
+    open,
+    close,
+    newChat,
+    threadId,
+    isLoading,
+    sendMessage,
+    stop,
+  } = useAIChat();
   const isDesktop = useIsDesktop();
   const [input, setInput] = useState("");
   const [optimisticMsg, setOptimisticMsg] = useState<string | null>(null);
@@ -266,6 +274,7 @@ export function ChatDock() {
                   inputRef={inputRef}
                   isStreaming={isLoading}
                   onChange={setInput}
+                  onStop={stop}
                   onSubmit={handleSubmit}
                   placeholder="ask zuzu anything..."
                   value={input}

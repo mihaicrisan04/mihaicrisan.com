@@ -69,8 +69,9 @@ export function AIChatInput({
     <div className="rounded-2xl border border-border bg-muted">
       <div className="flex items-end gap-2 p-2">
         <textarea
+          // stays enabled while streaming so the next message can be typed;
+          // submit itself is blocked until idle (Enter guard + button = stop)
           className="w-full flex-1 resize-none overflow-y-auto bg-transparent px-2 py-1.5 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none"
-          disabled={isStreaming}
           onChange={(e) => onChange(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}

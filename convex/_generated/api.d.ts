@@ -14,6 +14,7 @@ import type * as ingest from "../ingest.js";
 import type * as queries from "../queries.js";
 import type * as rag from "../rag.js";
 import type * as streamChat from "../streamChat.js";
+import type * as threads from "../threads.js";
 import type * as tools from "../tools.js";
 
 import type {
@@ -29,6 +30,7 @@ declare const fullApi: ApiFromModules<{
   queries: typeof queries;
   rag: typeof rag;
   streamChat: typeof streamChat;
+  threads: typeof threads;
   tools: typeof tools;
 }>;
 
