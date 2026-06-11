@@ -1,7 +1,6 @@
 "use client";
 
-import { memo } from "react";
-import { type Components, Streamdown } from "streamdown";
+import type { Components } from "streamdown";
 import { cn } from "@/lib/utils";
 
 // biome-ignore lint/suspicious/noExplicitAny: streamdown component props are untyped
@@ -110,24 +109,3 @@ export const streamdownComponents: Components = {
     return <hr className="my-3 border-border" />;
   },
 };
-
-export interface MarkdownProps {
-  children: string;
-  className?: string;
-}
-
-function MarkdownComponent({ children, className }: MarkdownProps) {
-  return (
-    <Streamdown
-      className={cn("flex flex-col gap-2", className)}
-      components={streamdownComponents}
-    >
-      {children}
-    </Streamdown>
-  );
-}
-
-const Markdown = memo(MarkdownComponent);
-Markdown.displayName = "Markdown";
-
-export { Markdown };
