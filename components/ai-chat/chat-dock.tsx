@@ -8,7 +8,13 @@ import {
   motion,
   type Transition,
 } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { useAIChat } from "@/contexts/ai-chat-context";
 import { api } from "@/convex/_generated/api";
 import type { UIMessage } from "@/lib/chat-types";
@@ -25,8 +31,26 @@ const MORPH_TRANSITION: Transition = {
   duration: 0.4,
 };
 
+const DESKTOP_QUERY = "(min-width: 768px)";
+
+function subscribeToDesktop(callback: () => void) {
+  const mql = window.matchMedia(DESKTOP_QUERY);
+  mql.addEventListener("change", callback);
+  return () => mql.removeEventListener("change", callback);
+}
+
+// matchMedia via useSyncExternalStore — correct from the first client frame
+function useIsDesktop(): boolean {
+  return useSyncExternalStore(
+    subscribeToDesktop,
+    () => window.matchMedia(DESKTOP_QUERY).matches,
+    () => true
+  );
+}
+
 export function ChatDock() {
   const { isOpen, open, close, threadId, isLoading, sendMessage } = useAIChat();
+  const isDesktop = useIsDesktop();
   const [input, setInput] = useState("");
   const [optimisticMsg, setOptimisticMsg] = useState<string | null>(null);
   const [lastSendTimestamp, setLastSendTimestamp] = useState<number | null>(
@@ -60,6 +84,17 @@ export function ChatDock() {
       setOptimisticMsg(null);
     }
   }, [messages, optimisticMsg]);
+
+  // Lock body scroll while open on mobile only (desktop widget is non-modal)
+  useEffect(() => {
+    if (!isOpen || isDesktop) {
+      return;
+    }
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, isDesktop]);
 
   // Handle escape key
   useEffect(() => {
@@ -114,9 +149,21 @@ export function ChatDock() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed right-6 bottom-6 z-50 flex h-[min(75svh,44rem)] w-[360px] flex-col overflow-hidden rounded-2xl border bg-background/95 shadow-lg backdrop-blur-md"
-            layoutId="chat-dock"
-            style={{ borderRadius: 16 }}
+            className="fixed top-0 right-0 bottom-0 left-0 z-50 flex h-svh w-auto flex-col overflow-hidden bg-background/95 backdrop-blur-md md:top-auto md:right-6 md:bottom-6 md:left-auto md:h-[min(75svh,44rem)] md:w-[360px] md:rounded-2xl md:border md:shadow-lg"
+            style={{ borderRadius: isDesktop ? 16 : 0 }}
+            // On mobile the button→fullscreen layout morph reads as a smear —
+            // use a slide-up fade there instead and keep the morph on desktop
+            {...(isDesktop
+              ? { layoutId: "chat-dock" }
+              : {
+                  initial: { opacity: 0, y: 24 },
+                  animate: { opacity: 1, y: 0 },
+                  exit: { opacity: 0, y: 24 },
+                  transition: {
+                    duration: 0.3,
+                    ease: [0.25, 0.1, 0.25, 1] as const,
+                  },
+                })}
           >
             <motion.div
               animate={{ opacity: 1, y: 0 }}
@@ -158,7 +205,7 @@ export function ChatDock() {
                 </div>
               </div>
 
-              <div className="px-3 pt-1 pb-3">
+              <div className="px-3 pt-1 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:pb-3">
                 <AIChatInput
                   inputRef={inputRef}
                   isStreaming={isLoading}
