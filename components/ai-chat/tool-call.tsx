@@ -7,6 +7,7 @@ import {
   FileCode,
   FolderOpen,
   Search,
+  UserRound,
   Wrench,
 } from "lucide-react";
 import type { MessagePart } from "@/lib/chat-types";
@@ -23,6 +24,8 @@ function getToolIcon(toolName: string) {
       return <FileCode className="h-3.5 w-3.5" />;
     case "getWorkExperience":
       return <Briefcase className="h-3.5 w-3.5" />;
+    case "getAboutMihai":
+      return <UserRound className="h-3.5 w-3.5" />;
     case "getBlogPosts":
       return <BookOpen className="h-3.5 w-3.5" />;
     case "getCurrentTime":
@@ -32,19 +35,17 @@ function getToolIcon(toolName: string) {
   }
 }
 
+// AI SDK v6 tool part states: input-streaming, input-available,
+// approval-requested, approval-responded, output-available, output-error,
+// output-denied. Only the two input states count as "running"; everything
+// else (including unknown future states) is terminal.
 function extractRenderState(
   part: MessagePart,
   isStreaming?: boolean
 ): ToolRenderState {
-  const state =
-    part.type === "tool-invocation"
-      ? (part as { state?: string }).state
-      : undefined;
+  const state = (part as { state?: string }).state;
   const isRunningState =
-    state === "call" ||
-    state === "partial-call" ||
-    state === "input-streaming" ||
-    state === "input-available";
+    state === "input-streaming" || state === "input-available";
 
   return {
     running: isRunningState && (isStreaming ?? true),
@@ -55,45 +56,50 @@ function extractRenderState(
   };
 }
 
+function getActiveSummary(toolName: string, part: MessagePart): string {
+  const input = (part as { input?: Record<string, unknown> }).input;
+  switch (toolName) {
+    case "searchPortfolio": {
+      const query = input?.query;
+      return typeof query === "string"
+        ? `Querying "${query}"…`
+        : "Querying knowledge base…";
+    }
+    case "listProjects":
+      return "Fetching project list…";
+    case "getProjectDetails": {
+      const slug = input?.slug;
+      return typeof slug === "string" ? `Loading ${slug}…` : "Loading project…";
+    }
+    case "getWorkExperience":
+      return "Fetching work history…";
+    case "getAboutMihai":
+      return "Fetching bio & contact info…";
+    case "getBlogPosts":
+      return "Loading articles…";
+    case "getCurrentTime":
+      return "Checking clock…";
+    default:
+      return "Processing…";
+  }
+}
+
 function getToolSummary(
   toolName: string,
   isActive: boolean,
   part: MessagePart
 ): string {
   if (isActive) {
-    switch (toolName) {
-      case "searchPortfolio": {
-        const query = (part as { args?: Record<string, unknown> }).args?.query;
-        return typeof query === "string"
-          ? `Querying "${query}"…`
-          : "Querying knowledge base…";
-      }
-      case "listProjects":
-        return "Fetching project list…";
-      case "getProjectDetails": {
-        const slug = (part as { args?: Record<string, unknown> }).args?.slug;
-        return typeof slug === "string"
-          ? `Loading ${slug}…`
-          : "Loading project…";
-      }
-      case "getWorkExperience":
-        return "Fetching work history…";
-      case "getBlogPosts":
-        return "Loading articles…";
-      case "getCurrentTime":
-        return "Checking clock…";
-      default:
-        return "Processing…";
-    }
+    return getActiveSummary(toolName, part);
   }
 
-  const result = (part as { result?: unknown }).result;
+  const output = (part as { output?: unknown }).output;
   const count =
-    result && typeof result === "object"
-      ? (((result as Record<string, unknown>).resultsCount as
+    output && typeof output === "object"
+      ? (((output as Record<string, unknown>).resultsCount as
           | number
           | undefined) ??
-        ((result as Record<string, unknown>).count as number | undefined))
+        ((output as Record<string, unknown>).count as number | undefined))
       : undefined;
 
   switch (toolName) {
@@ -106,8 +112,8 @@ function getToolSummary(
         ? `Found ${count} project${count !== 1 ? "s" : ""}`
         : "Projects loaded";
     case "getProjectDetails": {
-      if (result && typeof result === "object") {
-        const r = result as Record<string, unknown>;
+      if (output && typeof output === "object") {
+        const r = output as Record<string, unknown>;
         if (r.found === false) {
           return "Project not found";
         }
@@ -121,13 +127,17 @@ function getToolSummary(
       return count !== undefined
         ? `Found ${count} position${count !== 1 ? "s" : ""}`
         : "Work history loaded";
+    case "getAboutMihai":
+      return count !== undefined
+        ? `Loaded ${count} note${count !== 1 ? "s" : ""}`
+        : "Loaded background info";
     case "getBlogPosts":
       return count !== undefined
         ? `Found ${count} post${count !== 1 ? "s" : ""}`
         : "Blog posts loaded";
     case "getCurrentTime": {
-      if (result && typeof result === "object") {
-        const formatted = (result as Record<string, unknown>).formatted;
+      if (output && typeof output === "object") {
+        const formatted = (output as Record<string, unknown>).formatted;
         if (typeof formatted === "string") {
           return formatted;
         }
