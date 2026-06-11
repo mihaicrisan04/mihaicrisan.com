@@ -1,6 +1,6 @@
 # ai chat revamp 2/4 — knowledge base & backend
 
-> **Status:** ready · **Updated:** 2026-06-11
+> **Status:** done · **Updated:** 2026-06-11
 
 Part of [ai-chat-revamp.md](ai-chat-revamp.md). Backend/content work — can ship before or in parallel with plans 3-4. Its only FE touch is one `TOOL_LABELS` entry (step 12); all other tool-rendering files (`tool-call.tsx` etc.) belong to plan 4 — don't edit them here, or the parallel tracks will conflict.
 

@@ -15,6 +15,10 @@ export const TOOL_LABELS: Record<string, { active: string; done: string }> = {
     active: "Looking up work history",
     done: "Got work history",
   },
+  getAboutMihai: {
+    active: "Reading about Mihai",
+    done: "Read about Mihai",
+  },
   getBlogPosts: {
     active: "Checking blog posts",
     done: "Found blog posts",
