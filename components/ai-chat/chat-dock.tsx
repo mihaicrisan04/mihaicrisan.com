@@ -2,6 +2,12 @@
 
 import { useUIMessages } from "@convex-dev/agent/react";
 import { MessageCircle, X } from "lucide-react";
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  type Transition,
+} from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAIChat } from "@/contexts/ai-chat-context";
 import { api } from "@/convex/_generated/api";
@@ -11,6 +17,13 @@ import { AIChatMessages } from "./ai-chat-messages";
 
 const ICON_BUTTON_CLS =
   "inline-flex h-7 w-7 items-center justify-center text-muted-foreground transition-colors hover:text-foreground";
+
+// Same spring as motion-primitives/morphing-popover — proven morph feel in-repo
+const MORPH_TRANSITION: Transition = {
+  type: "spring",
+  bounce: 0.1,
+  duration: 0.4,
+};
 
 export function ChatDock() {
   const { isOpen, open, close, threadId, isLoading, sendMessage } = useAIChat();
@@ -86,57 +99,79 @@ export function ChatDock() {
   );
 
   return (
-    <>
-      <button
+    <MotionConfig transition={MORPH_TRANSITION}>
+      <motion.button
         aria-expanded={isOpen}
         aria-label="open chat (⌘I)"
         className={ICON_BUTTON_CLS}
+        layoutId="chat-dock"
         onClick={isOpen ? close : open}
         type="button"
       >
         <MessageCircle className="h-3.5 w-3.5" />
-      </button>
+      </motion.button>
 
-      {isOpen && (
-        <div className="fixed right-6 bottom-6 z-50 flex h-[min(75svh,44rem)] w-[360px] flex-col overflow-hidden rounded-2xl border bg-background/95 shadow-lg backdrop-blur-md">
-          <header className="flex items-center justify-between border-border/40 border-b py-1.5 pr-1.5 pl-4">
-            <span className="font-mono text-muted-foreground text-xs">
-              zuzu
-            </span>
-            <button
-              aria-label="close chat"
-              className={ICON_BUTTON_CLS}
-              onClick={close}
-              type="button"
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed right-6 bottom-6 z-50 flex h-[min(75svh,44rem)] w-[360px] flex-col overflow-hidden rounded-2xl border bg-background/95 shadow-lg backdrop-blur-md"
+            layoutId="chat-dock"
+            style={{ borderRadius: 16 }}
+          >
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              className="flex h-full min-h-0 flex-col"
+              exit={{
+                opacity: 0,
+                transition: { duration: 0.1, ease: "easeOut" },
+              }}
+              initial={{ opacity: 0, y: 8 }}
+              transition={{
+                delay: 0.08,
+                duration: 0.3,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
             >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </header>
+              <header className="flex items-center justify-between border-border/40 border-b py-1.5 pr-1.5 pl-4">
+                <span className="font-mono text-muted-foreground text-xs">
+                  zuzu
+                </span>
+                <button
+                  aria-label="close chat"
+                  className={ICON_BUTTON_CLS}
+                  onClick={close}
+                  type="button"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </header>
 
-          <div className="relative min-h-0 flex-1">
-            <div className="absolute inset-0">
-              <AIChatMessages
-                isLoading={isLoading}
-                lastSendTimestamp={lastSendTimestamp}
-                messages={messages}
-                onSuggestionClick={handleSuggestionClick}
-                optimisticMsg={optimisticMsg}
-              />
-            </div>
-          </div>
+              <div className="relative min-h-0 flex-1">
+                <div className="absolute inset-0">
+                  <AIChatMessages
+                    isLoading={isLoading}
+                    lastSendTimestamp={lastSendTimestamp}
+                    messages={messages}
+                    onSuggestionClick={handleSuggestionClick}
+                    optimisticMsg={optimisticMsg}
+                  />
+                </div>
+              </div>
 
-          <div className="px-3 pt-1 pb-3">
-            <AIChatInput
-              inputRef={inputRef}
-              isStreaming={isLoading}
-              onChange={setInput}
-              onSubmit={handleSubmit}
-              placeholder="ask zuzu anything..."
-              value={input}
-            />
-          </div>
-        </div>
-      )}
-    </>
+              <div className="px-3 pt-1 pb-3">
+                <AIChatInput
+                  inputRef={inputRef}
+                  isStreaming={isLoading}
+                  onChange={setInput}
+                  onSubmit={handleSubmit}
+                  placeholder="ask zuzu anything..."
+                  value={input}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </MotionConfig>
   );
 }
