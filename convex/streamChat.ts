@@ -1,6 +1,6 @@
 "use node";
 
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { action } from "./_generated/server";
 import { portfolioAgent } from "./agent";
 import { createContextualTools } from "./tools";
@@ -17,18 +17,28 @@ export const sendMessage = action({
       threadId: args.threadId,
     });
 
-    const result = await thread.streamText(
-      {
-        prompt: args.message,
-        tools: contextualTools,
-      },
-      {
-        saveStreamDeltas: {
-          chunking: "word",
-          throttleMs: 50,
+    try {
+      const result = await thread.streamText(
+        {
+          prompt: args.message,
+          tools: contextualTools,
         },
+        {
+          saveStreamDeltas: {
+            chunking: "word",
+            throttleMs: 50,
+          },
+        }
+      );
+      await result.consumeStream();
+    } catch (err) {
+      // ConvexError survives prod redaction, so the client can tell rate
+      // limits apart from real failures
+      const message = err instanceof Error ? err.message : String(err);
+      if (/429|rate.?limit/i.test(message)) {
+        throw new ConvexError({ code: "rate_limited" });
       }
-    );
-    await result.consumeStream();
+      throw err;
+    }
   },
 });

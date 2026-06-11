@@ -1,6 +1,7 @@
 "use client";
 
 import { useAction, useMutation, useQuery } from "convex/react";
+import { ConvexError } from "convex/values";
 import {
   createContext,
   type ReactNode,
@@ -153,10 +154,17 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
           threadId: currentThreadId,
           message: question,
         });
-      } catch {
+      } catch (err) {
         // stopping is intentional — keep the partial text, no error toast
         if (!stopRequestedRef.current) {
-          toast.error("Failed to get a response. Please try again.");
+          const rateLimited =
+            err instanceof ConvexError &&
+            (err.data as { code?: string })?.code === "rate_limited";
+          toast.error(
+            rateLimited
+              ? "the model is rate limited right now — wait a few seconds and try again"
+              : "failed to get a response. please try again."
+          );
         }
       } finally {
         setIsLoading(false);

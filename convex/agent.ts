@@ -18,6 +18,8 @@ export const portfolioAgent = new Agent(components.agent, {
   maxSteps: 10,
   providerOptions: {
     openrouter: {
+      // fallbacks when the primary model's providers are rate limited upstream
+      models: ["google/gemini-2.5-flash-lite", "google/gemini-2.0-flash-001"],
       reasoning: {
         effort: "medium",
       },
