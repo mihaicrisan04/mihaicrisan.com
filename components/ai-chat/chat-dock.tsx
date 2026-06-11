@@ -240,7 +240,8 @@ export function ChatDock() {
                 <div className="flex items-center">
                   <button
                     aria-label="new chat"
-                    className={ICON_BUTTON_CLS}
+                    className={`${ICON_BUTTON_CLS} disabled:pointer-events-none disabled:opacity-40`}
+                    disabled={isLoading}
                     onClick={handleNewChat}
                     type="button"
                   >
