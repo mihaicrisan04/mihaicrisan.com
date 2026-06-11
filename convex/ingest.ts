@@ -223,7 +223,7 @@ export const ingestProjects = action({
 
 export const ingestBlogPosts = action({
   handler: async (ctx) => {
-    const posts = await ctx.runQuery(api.blog.getPublishedPosts, {});
+    const posts = await ctx.runQuery(api.blog.getAllBlogPosts, {});
 
     let ingested = 0;
     for (const post of posts) {
