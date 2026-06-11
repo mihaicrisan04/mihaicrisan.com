@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { ChatDock } from "@/components/ai-chat/chat-dock";
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -131,10 +132,11 @@ export function GlobalChrome() {
 
       <motion.div
         animate={{ opacity: 1 }}
-        className="fixed right-6 bottom-[18px] z-50"
+        className="fixed right-6 bottom-[18px] z-50 flex items-center gap-3"
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
       >
+        <ChatDock />
         <ThemeToggle />
       </motion.div>
     </>
