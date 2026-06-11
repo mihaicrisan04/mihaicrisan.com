@@ -2,6 +2,30 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Skills & references (load the relevant one before working)
+
+Detailed, task-specific guidance lives in `.claude/skills/` — invoke the matching skill instead of relying on this file:
+
+| Skill | When |
+|---|---|
+| `working-with-plans` | starting, saving, or resuming a plan (see workflow below) |
+| `commits-and-prs` | writing any commit or PR (see quick rules below) |
+| `convex` / `convex-agents` / `convex-http-actions` | Convex functions, schema, AI agent, webhooks |
+| `frontend-design` | building or styling UI |
+| `ai-sdk` | AI chat / streaming features |
+
+Reference wiki: `.claude/docs/` (notes, `investigations/` for completed deep-dives). Heavy raw artifacts go in `.claude/scratch/`, reusable debug/seed scripts in `.claude/scripts/`.
+
+## Plans (full detail: `working-with-plans` skill)
+
+We research → write a plan md → implement later. Plans live in `.claude/plans/`: `backlog/` (raw, needs shaping) → `review/` (drafted, awaiting approval) → `ready/` (approved, queued) → `active/` (in flight); shipped plans move to `.claude/docs/investigations/`. Plan detail goes in those files, never here.
+
+## Commits & PRs (full detail: `commits-and-prs` skill)
+
+- Style: concise bullets, casual, little uppercase, no titles unless large, **no Co-Authored-By**.
+- Pre-commit runs lint-staged (husky). **Never** `--no-verify`; fix with `bun run lint:fix`.
+- Work on `develop`; PRs go `develop` → `main`. Commit/push only when asked.
+
 ## Commands
 
 ```bash
@@ -66,7 +90,7 @@ ConvexProvider → ImageKitProvider → ThemeProvider → KeyboardShortcutsProvi
 
 ## Code Standards
 
-Uses **Ultracite** (Biome preset). Run `bun run lint:fix` before committing.
+Uses **Ultracite** (Biome preset). Run `bun run lint:fix` before committing. Full standards reference: `.claude/docs/ultracite-standards.md`.
 
 Key rules:
 - React 19: Use `ref` as prop instead of `forwardRef`
