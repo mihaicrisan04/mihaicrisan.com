@@ -3,6 +3,7 @@
 import { ArrowUp, Square } from "lucide-react";
 import { type RefObject, useCallback, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { INPUT_PLACEHOLDER } from "./constants";
 
 export interface AIChatInputProps {
   value: string;
@@ -24,7 +25,7 @@ export function AIChatInput({
   isStreaming,
   onStop,
   inputRef: externalRef,
-  placeholder = "Ask Zuzu anything...",
+  placeholder = INPUT_PLACEHOLDER,
 }: AIChatInputProps) {
   const internalRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = externalRef ?? internalRef;

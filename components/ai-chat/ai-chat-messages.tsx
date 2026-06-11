@@ -1,28 +1,17 @@
 "use client";
 
-import { isReasoningUIPart, isToolUIPart } from "ai";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom";
-import type { MessagePart, UIMessage } from "@/lib/chat-types";
+import { hasRenderableAssistantPart, type UIMessage } from "@/lib/chat-types";
 import { cn } from "@/lib/utils";
 import { AIChatMessage } from "./ai-chat-message";
-import { SUGGESTIONS } from "./constants";
-
-function hasRenderableAssistantPart(part: MessagePart): boolean {
-  if (part.type === "text") {
-    return (part as { text: string }).text.length > 0;
-  }
-  if (isToolUIPart(part)) {
-    return true;
-  }
-  if (isReasoningUIPart(part)) {
-    return (
-      part.text.length > 0 || (part as { state?: string }).state === "streaming"
-    );
-  }
-  return false;
-}
+import {
+  ASSISTANT_NAME,
+  EMPTY_STATE_TAGLINE,
+  SUGGESTIONS,
+  THINKING_LABEL,
+} from "./constants";
 
 function shouldShowThinkingIndicator(options: {
   isLoading: boolean;
@@ -94,12 +83,11 @@ export function AIChatMessages({
             <div className="flex flex-1 flex-col items-center justify-center gap-4 py-16">
               <div className="text-center text-muted-foreground">
                 <p className="mx-auto mb-2 font-bold text-2xl tracking-tight opacity-15">
-                  Z
+                  {ASSISTANT_NAME.charAt(0)}
                 </p>
-                <p className="font-semibold text-sm">Zuzu</p>
+                <p className="font-semibold text-sm">{ASSISTANT_NAME}</p>
                 <p className="mt-1.5 max-w-[220px] text-xs leading-relaxed opacity-70">
-                  Mihai's AI assistant. Ask about his projects, skills,
-                  experience, or writings.
+                  {EMPTY_STATE_TAGLINE}
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-2 px-2">
@@ -159,7 +147,7 @@ export function AIChatMessages({
                 <span className="flex size-3.5 shrink-0 items-center justify-center">
                   <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-muted-foreground" />
                 </span>
-                <span className="leading-none">Thinking…</span>
+                <span className="leading-none">{THINKING_LABEL}</span>
               </div>
             </div>
           ) : null}

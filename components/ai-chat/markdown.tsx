@@ -1,10 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import type { Components } from "streamdown";
 import { cn } from "@/lib/utils";
 
 // biome-ignore lint/suspicious/noExplicitAny: streamdown component props are untyped
 type P = Record<string, any>;
+
+const LINK_CLS =
+  "text-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:decoration-foreground";
 
 export const streamdownComponents: Components = {
   code({ className, children, ...props }: P) {
@@ -36,9 +40,17 @@ export const streamdownComponents: Components = {
     );
   },
   a({ children, href, ...props }: P) {
+    // internal links (e.g. /work/<slug>) client-side navigate; external open a new tab
+    if (typeof href === "string" && href.startsWith("/")) {
+      return (
+        <Link className={LINK_CLS} href={href} {...props}>
+          {children}
+        </Link>
+      );
+    }
     return (
       <a
-        className="text-foreground underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:decoration-foreground"
+        className={LINK_CLS}
         href={href}
         rel="noopener noreferrer"
         target="_blank"

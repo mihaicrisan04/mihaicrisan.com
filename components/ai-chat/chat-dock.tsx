@@ -8,6 +8,7 @@ import {
   motion,
   type Transition,
 } from "motion/react";
+import { usePathname } from "next/navigation";
 import {
   useCallback,
   useEffect,
@@ -25,6 +26,7 @@ import { api } from "@/convex/_generated/api";
 import type { UIMessage } from "@/lib/chat-types";
 import { AIChatInput } from "./ai-chat-input";
 import { AIChatMessages } from "./ai-chat-messages";
+import { ASSISTANT_NAME } from "./constants";
 
 const ICON_BUTTON_CLS =
   "inline-flex h-7 w-7 items-center justify-center text-muted-foreground transition-colors hover:text-foreground";
@@ -129,6 +131,20 @@ export function ChatDock() {
       document.body.style.overflow = "";
     };
   }, [isOpen, isDesktop]);
+
+  // On mobile the chat covers the page — close it when a chat link navigates.
+  // Desktop widget is non-modal and stays open.
+  const pathname = usePathname();
+  const prevPathnameRef = useRef(pathname);
+  useEffect(() => {
+    if (prevPathnameRef.current === pathname) {
+      return;
+    }
+    prevPathnameRef.current = pathname;
+    if (isOpen && !isDesktop) {
+      close();
+    }
+  }, [pathname, isOpen, isDesktop, close]);
 
   // Handle escape key
   useEffect(() => {
@@ -235,7 +251,7 @@ export function ChatDock() {
             >
               <header className="flex items-center justify-between border-border/40 border-b py-1.5 pr-1.5 pl-4">
                 <span className="font-mono text-muted-foreground text-xs">
-                  zuzu
+                  {ASSISTANT_NAME}
                 </span>
                 <div className="flex items-center">
                   <button
@@ -277,7 +293,6 @@ export function ChatDock() {
                   onChange={setInput}
                   onStop={stop}
                   onSubmit={handleSubmit}
-                  placeholder="ask zuzu anything..."
                   value={input}
                 />
               </div>

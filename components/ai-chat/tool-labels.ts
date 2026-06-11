@@ -1,31 +1,31 @@
 export const TOOL_LABELS: Record<string, { active: string; done: string }> = {
   searchPortfolio: {
-    active: "Searching portfolio",
-    done: "Searched portfolio",
+    active: "searching portfolio",
+    done: "searched portfolio",
   },
   listProjects: {
-    active: "Browsing projects",
-    done: "Found projects",
+    active: "browsing projects",
+    done: "found projects",
   },
   getProjectDetails: {
-    active: "Reading project details",
-    done: "Loaded project details",
+    active: "reading project details",
+    done: "loaded project details",
   },
   getWorkExperience: {
-    active: "Looking up work history",
-    done: "Got work history",
+    active: "looking up work history",
+    done: "got work history",
   },
   getAboutMihai: {
-    active: "Reading about Mihai",
-    done: "Read about Mihai",
+    active: "reading about mihai",
+    done: "read about mihai",
   },
   getBlogPosts: {
-    active: "Checking blog posts",
-    done: "Found blog posts",
+    active: "checking blog posts",
+    done: "found blog posts",
   },
   getCurrentTime: {
-    active: "Checking the time",
-    done: "Got the time",
+    active: "checking the time",
+    done: "got the time",
   },
 };
 
@@ -35,8 +35,8 @@ export function getToolLabel(toolName: string): {
 } {
   return (
     TOOL_LABELS[toolName] ?? {
-      active: `Running ${toolName}`,
-      done: `Ran ${toolName}`,
+      active: `running ${toolName}`,
+      done: `ran ${toolName}`,
     }
   );
 }

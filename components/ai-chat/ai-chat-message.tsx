@@ -4,7 +4,11 @@ import { isReasoningUIPart, isToolUIPart } from "ai";
 import { Check, Copy } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { Streamdown } from "streamdown";
-import type { MessagePart, UIMessage } from "@/lib/chat-types";
+import {
+  hasRenderableAssistantPart,
+  type MessagePart,
+  type UIMessage,
+} from "@/lib/chat-types";
 import { cn } from "@/lib/utils";
 import { AssistantMessageGroups } from "./assistant-message-groups";
 import { streamdownComponents } from "./markdown";
@@ -48,21 +52,6 @@ function getReasoningGroupText(parts: ReasoningMessagePart[]): string {
     .map((part) => part.text)
     .filter((text) => text.trim().length > 0)
     .join("\n\n");
-}
-
-function hasRenderableAssistantPart(part: MessagePart): boolean {
-  if (part.type === "text") {
-    return (part as { text: string }).text.length > 0;
-  }
-  if (isToolUIPart(part)) {
-    return true;
-  }
-  if (isReasoningUIPart(part)) {
-    return (
-      part.text.length > 0 || (part as { state?: string }).state === "streaming"
-    );
-  }
-  return false;
 }
 
 function shouldKeepCollapsedReasoningStreaming(options: {
@@ -215,7 +204,7 @@ function AIChatMessageComponent({
         <div className="flex min-w-0 justify-end py-2">
           <div className="group relative w-fit min-w-0 max-w-[80%]">
             <div className="rounded-3xl bg-secondary px-4 py-2">
-              <p className="whitespace-pre-wrap break-words">{text}</p>
+              <p className="whitespace-pre-wrap break-words text-sm">{text}</p>
             </div>
           </div>
         </div>

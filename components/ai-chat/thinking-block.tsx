@@ -60,10 +60,10 @@ export function ThinkingBlock({
   const hasContent = text.trim().length > 0;
   const thoughtLabel =
     partCount === 1
-      ? "Thought"
+      ? "thought"
       : `${partCount} thought${partCount !== 1 ? "s" : ""}`;
 
-  const name = isStreaming ? "Thinking..." : thoughtLabel;
+  const name = isStreaming ? "thinking..." : thoughtLabel;
 
   const summary =
     !isStreaming && elapsed > 0

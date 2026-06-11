@@ -10,13 +10,13 @@ interface StatusWordPair {
 }
 
 const STATUS_WORD_PAIRS: StatusWordPair[] = [
-  { present: "Pondering", past: "Pondered" },
-  { present: "Crafting", past: "Crafted" },
-  { present: "Vibing", past: "Vibed" },
-  { present: "Simmering", past: "Simmered" },
-  { present: "Marinating", past: "Marinated" },
-  { present: "Philosophising", past: "Philosophised" },
-  { present: "Ruminating", past: "Ruminated" },
+  { present: "pondering", past: "pondered" },
+  { present: "crafting", past: "crafted" },
+  { present: "vibing", past: "vibed" },
+  { present: "simmering", past: "simmered" },
+  { present: "marinating", past: "marinated" },
+  { present: "philosophising", past: "philosophised" },
+  { present: "ruminating", past: "ruminated" },
 ];
 
 function hashString(value: string): number {

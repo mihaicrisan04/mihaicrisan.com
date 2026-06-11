@@ -51,7 +51,7 @@ function extractRenderState(
     running: isRunningState && (isStreaming ?? true),
     error:
       state === "output-error"
-        ? ((part as { errorText?: string }).errorText ?? "Error")
+        ? ((part as { errorText?: string }).errorText ?? "error")
         : undefined,
   };
 }
@@ -62,25 +62,25 @@ function getActiveSummary(toolName: string, part: MessagePart): string {
     case "searchPortfolio": {
       const query = input?.query;
       return typeof query === "string"
-        ? `Querying "${query}"…`
-        : "Querying knowledge base…";
+        ? `querying "${query}"…`
+        : "querying knowledge base…";
     }
     case "listProjects":
-      return "Fetching project list…";
+      return "fetching project list…";
     case "getProjectDetails": {
       const slug = input?.slug;
-      return typeof slug === "string" ? `Loading ${slug}…` : "Loading project…";
+      return typeof slug === "string" ? `loading ${slug}…` : "loading project…";
     }
     case "getWorkExperience":
-      return "Fetching work history…";
+      return "fetching work history…";
     case "getAboutMihai":
-      return "Fetching bio & contact info…";
+      return "fetching bio & contact info…";
     case "getBlogPosts":
-      return "Loading articles…";
+      return "loading articles…";
     case "getCurrentTime":
-      return "Checking clock…";
+      return "checking clock…";
     default:
-      return "Processing…";
+      return "processing…";
   }
 }
 
@@ -105,36 +105,36 @@ function getToolSummary(
   switch (toolName) {
     case "searchPortfolio":
       return count !== undefined
-        ? `Found ${count} result${count !== 1 ? "s" : ""}`
-        : "Search complete";
+        ? `found ${count} result${count !== 1 ? "s" : ""}`
+        : "search complete";
     case "listProjects":
       return count !== undefined
-        ? `Found ${count} project${count !== 1 ? "s" : ""}`
-        : "Projects loaded";
+        ? `found ${count} project${count !== 1 ? "s" : ""}`
+        : "projects loaded";
     case "getProjectDetails": {
       if (output && typeof output === "object") {
         const r = output as Record<string, unknown>;
         if (r.found === false) {
-          return "Project not found";
+          return "project not found";
         }
         if (typeof r.name === "string") {
-          return `Loaded ${r.name}`;
+          return `loaded ${r.name}`;
         }
       }
-      return "Loaded project details";
+      return "loaded project details";
     }
     case "getWorkExperience":
       return count !== undefined
-        ? `Found ${count} position${count !== 1 ? "s" : ""}`
-        : "Work history loaded";
+        ? `found ${count} position${count !== 1 ? "s" : ""}`
+        : "work history loaded";
     case "getAboutMihai":
       return count !== undefined
-        ? `Loaded ${count} note${count !== 1 ? "s" : ""}`
-        : "Loaded background info";
+        ? `loaded ${count} note${count !== 1 ? "s" : ""}`
+        : "loaded background info";
     case "getBlogPosts":
       return count !== undefined
-        ? `Found ${count} post${count !== 1 ? "s" : ""}`
-        : "Blog posts loaded";
+        ? `found ${count} post${count !== 1 ? "s" : ""}`
+        : "blog posts loaded";
     case "getCurrentTime": {
       if (output && typeof output === "object") {
         const formatted = (output as Record<string, unknown>).formatted;
@@ -142,10 +142,10 @@ function getToolSummary(
           return formatted;
         }
       }
-      return "Got the time";
+      return "got the time";
     }
     default:
-      return "Done";
+      return "done";
   }
 }
 
