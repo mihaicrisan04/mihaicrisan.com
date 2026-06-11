@@ -1,6 +1,6 @@
 # ai chat revamp 1/4 — dead code cleanup
 
-> **Status:** ready · **Updated:** 2026-06-11
+> **Status:** done (shipped on develop) · **Updated:** 2026-06-11
 
 Part of [ai-chat-revamp.md](ai-chat-revamp.md). No behavior changes — this commit only deletes confirmed-dead code and fixes stale docs, so the real revamp lands on a clean base.
 
