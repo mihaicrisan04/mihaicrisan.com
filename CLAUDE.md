@@ -52,7 +52,7 @@ This is a personal portfolio site built with **Next.js 16** (App Router) and **C
 ### Tech Stack
 - **Frontend**: Next.js 16, React 19, Tailwind CSS 4, Framer Motion
 - **Backend**: Convex (real-time database, serverless functions)
-- **AI Features**: Gemini Flash 2.0 via OpenRouter with RAG for portfolio assistant
+- **AI Features**: `google/gemini-2.5-flash` via OpenRouter with RAG for portfolio assistant
 - **Images**: ImageKit CDN integration
 - **Linting**: Ultracite (Biome preset)
 
@@ -71,10 +71,9 @@ This is a personal portfolio site built with **Next.js 16** (App Router) and **C
 ### Data Flow
 - **Projects**: Static MDX files in `content/projects/` parsed via `lib/projects.ts`
 - **Blog Posts**: Stored in Convex database, fetched via `convex/blog.ts`
-- **AI Chat**: Streaming via Convex HTTP endpoint (`/api/chat`) using SSE
-  - Agent configured in `convex/agent.ts` with @convex-dev/agent
-  - Stream parsing in `lib/stream-parser.ts`
-  - Client hook in `hooks/use-ai-chat-stream.ts`
+- **AI Chat**: Convex action `api.streamChat.sendMessage` (`convex/streamChat.ts`) runs the agent and persists streaming deltas — no HTTP endpoint, streaming rides the Convex websocket
+  - Agent configured in `convex/agent.ts` with @convex-dev/agent (tools in `convex/tools.ts`)
+  - Client subscribes via `useUIMessages` from `@convex-dev/agent/react` (query in `convex/queries.ts`)
 
 ### Convex Schema
 - `documents` - RAG knowledge base (projects, blog, work, custom content)
