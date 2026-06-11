@@ -4,6 +4,16 @@ import { action, mutation, query } from "./_generated/server";
 import { rag } from "./rag";
 import { documentSource } from "./schema";
 
+// Derive the RAG key for a document. Blog/about (and custom) sourceIds are
+// already the full prefixed key ("blog:<slug>", "about:me"); project/work
+// sourceIds are bare ids that need the source prefix. Single place for key
+// derivation — used by both ingest and prune.
+function ragKeyFor(source: string, sourceId: string): string {
+  return sourceId.startsWith(`${source}:`)
+    ? sourceId
+    : `${source}:${sourceId}`;
+}
+
 // Shape of a project payload sent in by the ingest script
 const projectPayload = v.object({
   slug: v.string(),
@@ -193,6 +203,48 @@ export const getDocumentsBySource = query({
   },
 });
 
+// Delete documents of a source whose sourceId is no longer in the list the
+// caller owns (deleted MDX file, unpublished blog post, ...), along with
+// their RAG embeddings. Per-source and key-scoped — never touches other
+// sources' keys.
+export const pruneDocuments = mutation({
+  args: {
+    source: documentSource,
+    keepSourceIds: v.array(v.string()),
+  },
+  handler: async (ctx, { source, keepSourceIds }) => {
+    const keep = new Set(keepSourceIds);
+    const docs = await ctx.db
+      .query("documents")
+      .withIndex("by_source", (q) => q.eq("source", source))
+      .collect();
+
+    // Deletion needs the internal namespaceId; null before the first ingest.
+    const namespace = await rag.getNamespace(ctx, { namespace: "portfolio" });
+
+    let pruned = 0;
+    for (const doc of docs) {
+      if (doc.sourceId && keep.has(doc.sourceId)) {
+        continue;
+      }
+
+      await ctx.db.delete(doc._id);
+      if (namespace && doc.sourceId) {
+        // deleteByKeyAsync (not deleteByKey, which needs an action ctx);
+        // deleting a key with no entries is a no-op, so stale rows whose
+        // RAG key never existed (e.g. old _id-keyed blog rows) are fine.
+        await rag.deleteByKeyAsync(ctx, {
+          namespaceId: namespace.namespaceId,
+          key: ragKeyFor(source, doc.sourceId),
+        });
+      }
+      pruned++;
+    }
+
+    return { pruned, source };
+  },
+});
+
 // Ingest projects passed in from the local script (reads MDX, sends here).
 // MDX is the single source of truth — this is just a derived index.
 export const ingestProjects = action({
@@ -222,7 +274,7 @@ export const ingestProjects = action({
 
       await rag.add(ctx, {
         namespace: "portfolio",
-        key: `project:${project.slug}`,
+        key: ragKeyFor("project", project.slug),
         text: content,
         title: `Project: ${project.name}`,
       });
@@ -241,17 +293,21 @@ export const ingestBlogPosts = action({
     let ingested = 0;
     for (const post of posts) {
       const content = formatBlogPostForRag(post);
+      // Full prefixed RAG key doubles as the sourceId — bare slugs would
+      // collide with project sourceIds (storeDocument upserts by sourceId
+      // alone, with no source filter).
+      const sourceId = ragKeyFor("blog", post.slug);
 
       await ctx.runMutation(api.ingest.storeDocument, {
         title: `Blog: ${post.title}`,
         content,
         source: "blog",
-        sourceId: post._id,
+        sourceId,
       });
 
       await rag.add(ctx, {
         namespace: "portfolio",
-        key: `blog:${post.slug}`,
+        key: sourceId,
         text: content,
         title: `Blog: ${post.title}`,
       });
@@ -280,7 +336,7 @@ export const ingestWorkExperience = action({
 
       await rag.add(ctx, {
         namespace: "portfolio",
-        key: `work:${work.id}`,
+        key: ragKeyFor("work", work.id),
         text: content,
         title: `Work: ${work.position} at ${work.company}`,
       });

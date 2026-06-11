@@ -77,6 +77,14 @@ async function main() {
       projects: payload,
     });
     console.log(`Done — ingested ${result.ingested} project(s).`);
+
+    const prunedProjects = await client.mutation(api.ingest.pruneDocuments, {
+      source: "project",
+      keepSourceIds: payload.map((p) => p.slug),
+    });
+    if (prunedProjects.pruned > 0) {
+      console.log(`Pruned ${prunedProjects.pruned} stale project doc(s).`);
+    }
   }
 
   // Work experience (content/knowledge/work-experience.ts)
@@ -85,6 +93,14 @@ async function main() {
     entries: workExperience,
   });
   console.log(`Done — ingested ${workResult.ingested} work entries.`);
+
+  const prunedWork = await client.mutation(api.ingest.pruneDocuments, {
+    source: "work",
+    keepSourceIds: workExperience.map((w) => w.id),
+  });
+  if (prunedWork.pruned > 0) {
+    console.log(`Pruned ${prunedWork.pruned} stale work doc(s).`);
+  }
 
   // Knowledge docs: handwritten about.md + setup generated from data/setup.ts
   const aboutPath = path.join(process.cwd(), "content/knowledge/about.md");
@@ -107,10 +123,29 @@ async function main() {
   });
   console.log(`Done — ingested ${knowledgeResult.ingested} knowledge doc(s).`);
 
+  const prunedAbout = await client.mutation(api.ingest.pruneDocuments, {
+    source: "about",
+    keepSourceIds: knowledgeDocs.map((d) => d.key),
+  });
+  if (prunedAbout.pruned > 0) {
+    console.log(`Pruned ${prunedAbout.pruned} stale knowledge doc(s).`);
+  }
+
   // Blog posts (already stored in Convex — re-embed published ones)
   console.log("Ingesting blog posts...");
   const blogResult = await client.action(api.ingest.ingestBlogPosts, {});
   console.log(`Done — ingested ${blogResult.ingested} blog post(s).`);
+
+  // Prune unpublished/deleted posts — also clears the old _id-keyed rows
+  // from before blog sourceIds were "blog:<slug>".
+  const blogSlugs = await client.query(api.blog.getAllBlogSlugs, {});
+  const prunedBlog = await client.mutation(api.ingest.pruneDocuments, {
+    source: "blog",
+    keepSourceIds: blogSlugs.map((slug) => `blog:${slug}`),
+  });
+  if (prunedBlog.pruned > 0) {
+    console.log(`Pruned ${prunedBlog.pruned} stale blog doc(s).`);
+  }
 }
 
 main().catch((err) => {
