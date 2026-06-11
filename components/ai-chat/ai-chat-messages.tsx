@@ -107,10 +107,15 @@ export function AIChatMessages({
 
           {messages.map((msg, index) => {
             const key = msg.id ?? `msg-${index}`;
+            // Prefer the per-message stream status from useUIMessages;
+            // fall back to the "last message while loading" heuristic when
+            // a message carries no status.
             const isMessageStreaming =
-              isLoading &&
-              index === messages.length - 1 &&
-              msg.role === "assistant";
+              msg.role === "assistant" &&
+              (msg.status === "streaming" ||
+                (msg.status === undefined &&
+                  isLoading &&
+                  index === messages.length - 1));
 
             const startedAt =
               isMessageStreaming && lastSendTimestamp

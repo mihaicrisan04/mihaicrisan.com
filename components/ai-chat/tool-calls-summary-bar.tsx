@@ -19,6 +19,11 @@ const STATUS_WORD_PAIRS: StatusWordPair[] = [
   { present: "ruminating", past: "ruminated" },
 ];
 
+// Session-only record of how long each message's generation took, keyed by
+// message id. Survives widget close/reopen (which unmounts this component);
+// messages from before a page reload simply show no duration.
+const FINISHED_DURATIONS = new Map<string, number>();
+
 function hashString(value: string): number {
   let hash = 0;
   for (let i = 0; i < value.length; i++) {
@@ -85,16 +90,28 @@ export function ToolCallsSummaryBar({
       return;
     }
 
-    setLiveElapsed(computeLiveElapsed());
-    const interval = setInterval(() => {
-      setLiveElapsed(computeLiveElapsed());
-    }, 1000);
+    const update = () => {
+      const elapsed = computeLiveElapsed();
+      setLiveElapsed(elapsed);
+      // record continuously so the final tick survives unmount
+      if (statusWordSeed && elapsed > 0) {
+        FINISHED_DURATIONS.set(statusWordSeed, elapsed);
+      }
+    };
+
+    update();
+    const interval = setInterval(update, 1000);
 
     return () => clearInterval(interval);
     // biome-ignore lint/correctness/useExhaustiveDependencies: stable per startMs
-  }, [isStreaming, computeLiveElapsed]);
+  }, [isStreaming, computeLiveElapsed, statusWordSeed]);
 
-  const elapsedSeconds = liveElapsed;
+  const storedElapsed = statusWordSeed
+    ? FINISHED_DURATIONS.get(statusWordSeed)
+    : undefined;
+  const elapsedSeconds = isStreaming
+    ? liveElapsed
+    : (storedElapsed ?? liveElapsed);
 
   const statusWordPair = getStatusWordPair(statusWordSeed);
   const statusLabel = isStreaming

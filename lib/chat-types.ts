@@ -5,9 +5,11 @@ import {
 } from "ai";
 
 // Re-export the AI SDK UIMessage type directly.
-// Convex Agent's useUIMessages returns messages in this format.
+// Convex Agent's useUIMessages returns messages in this format, augmented
+// with a per-message status ("streaming" while deltas are still arriving).
 export type UIMessage = AIUIMessage & {
   _creationTime?: number;
+  status?: "streaming" | "pending" | "success" | "failed";
 };
 
 // Individual message part — a union member of UIMessage["parts"]

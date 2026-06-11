@@ -1,6 +1,6 @@
 # ai chat revamp — master plan
 
-> **Status:** ready · **Updated:** 2026-06-11
+> **Status:** done · **Updated:** 2026-06-11
 
 ## Goal
 

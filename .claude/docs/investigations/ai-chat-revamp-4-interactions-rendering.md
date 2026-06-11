@@ -1,6 +1,6 @@
 # ai chat revamp 4/4 — interactions & rendering
 
-> **Status:** ready · **Updated:** 2026-06-11
+> **Status:** done · **Updated:** 2026-06-11
 
 Part of [ai-chat-revamp.md](ai-chat-revamp.md). Do after plan 3 (touches the same components). Fixes the broken bits and adds the interaction polish that makes the chat *feel* right.
 
