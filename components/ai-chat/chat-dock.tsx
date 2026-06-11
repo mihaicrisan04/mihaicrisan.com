@@ -1,7 +1,7 @@
 "use client";
 
 import { useUIMessages } from "@convex-dev/agent/react";
-import { MessageCircle, X } from "lucide-react";
+import { MessageCircle, Plus, X } from "lucide-react";
 import {
   AnimatePresence,
   MotionConfig,
@@ -15,6 +15,11 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useAIChat } from "@/contexts/ai-chat-context";
 import { api } from "@/convex/_generated/api";
 import type { UIMessage } from "@/lib/chat-types";
@@ -49,7 +54,8 @@ function useIsDesktop(): boolean {
 }
 
 export function ChatDock() {
-  const { isOpen, open, close, threadId, isLoading, sendMessage } = useAIChat();
+  const { isOpen, open, close, newChat, threadId, isLoading, sendMessage } =
+    useAIChat();
   const isDesktop = useIsDesktop();
   const [input, setInput] = useState("");
   const [optimisticMsg, setOptimisticMsg] = useState<string | null>(null);
@@ -57,6 +63,8 @@ export function ChatDock() {
     null
   );
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
 
   const messagesResult = useUIMessages(
     api.queries.listThreadMessages,
@@ -84,6 +92,24 @@ export function ChatDock() {
       setOptimisticMsg(null);
     }
   }, [messages, optimisticMsg]);
+
+  // Focus input when chat opens; return focus to the trigger on close
+  useEffect(() => {
+    if (isOpen) {
+      const timeoutId = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timeoutId);
+    }
+    if (wasOpenRef.current) {
+      triggerRef.current?.focus({ preventScroll: true });
+    }
+  }, [isOpen]);
+
+  // Track previous open state (after the focus effect reads it)
+  useEffect(() => {
+    wasOpenRef.current = isOpen;
+  }, [isOpen]);
 
   // Lock body scroll while open on mobile only (desktop widget is non-modal)
   useEffect(() => {
@@ -133,23 +159,43 @@ export function ChatDock() {
     [handleSend]
   );
 
+  const handleNewChat = useCallback(() => {
+    newChat();
+    setOptimisticMsg(null);
+    setLastSendTimestamp(null);
+    setInput("");
+    inputRef.current?.focus();
+  }, [newChat]);
+
   return (
     <MotionConfig transition={MORPH_TRANSITION}>
-      <motion.button
-        aria-expanded={isOpen}
-        aria-label="open chat (⌘I)"
-        className={ICON_BUTTON_CLS}
-        layoutId="chat-dock"
-        onClick={isOpen ? close : open}
-        type="button"
-      >
-        <MessageCircle className="h-3.5 w-3.5" />
-      </motion.button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <motion.button
+            aria-expanded={isOpen}
+            aria-label="open chat (⌘I)"
+            className={`${ICON_BUTTON_CLS} ${isOpen ? "pointer-events-none" : ""}`.trim()}
+            layoutId="chat-dock"
+            onClick={isOpen ? close : open}
+            ref={triggerRef}
+            tabIndex={isOpen ? -1 : 0}
+            type="button"
+          >
+            <MessageCircle className="h-3.5 w-3.5" />
+          </motion.button>
+        </TooltipTrigger>
+        <TooltipContent className="font-mono" side="top" sideOffset={6}>
+          chat · ⌘I
+        </TooltipContent>
+      </Tooltip>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            aria-label="chat with zuzu"
+            aria-modal={isDesktop ? undefined : true}
             className="fixed top-0 right-0 bottom-0 left-0 z-50 flex h-svh w-auto flex-col overflow-hidden bg-background/95 backdrop-blur-md md:top-auto md:right-6 md:bottom-6 md:left-auto md:h-[min(75svh,44rem)] md:w-[360px] md:rounded-2xl md:border md:shadow-lg"
+            role={isDesktop ? undefined : "dialog"}
             style={{ borderRadius: isDesktop ? 16 : 0 }}
             // On mobile the button→fullscreen layout morph reads as a smear —
             // use a slide-up fade there instead and keep the morph on desktop
@@ -183,14 +229,24 @@ export function ChatDock() {
                 <span className="font-mono text-muted-foreground text-xs">
                   zuzu
                 </span>
-                <button
-                  aria-label="close chat"
-                  className={ICON_BUTTON_CLS}
-                  onClick={close}
-                  type="button"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
+                <div className="flex items-center">
+                  <button
+                    aria-label="new chat"
+                    className={ICON_BUTTON_CLS}
+                    onClick={handleNewChat}
+                    type="button"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    aria-label="close chat"
+                    className={ICON_BUTTON_CLS}
+                    onClick={close}
+                    type="button"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </header>
 
               <div className="relative min-h-0 flex-1">
