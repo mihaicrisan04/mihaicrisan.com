@@ -9,9 +9,7 @@ import { documentSource } from "./schema";
 // sourceIds are bare ids that need the source prefix. Single place for key
 // derivation — used by both ingest and prune.
 function ragKeyFor(source: string, sourceId: string): string {
-  return sourceId.startsWith(`${source}:`)
-    ? sourceId
-    : `${source}:${sourceId}`;
+  return sourceId.startsWith(`${source}:`) ? sourceId : `${source}:${sourceId}`;
 }
 
 // Shape of a project payload sent in by the ingest script
