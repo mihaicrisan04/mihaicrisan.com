@@ -1,7 +1,12 @@
 import { v } from "convex/values";
 import { api } from "./_generated/api";
 import { action, mutation, query } from "./_generated/server";
-import { rag } from "./rag";
+
+// RAG embedding disabled for now — the AI chat is paused and the OpenAI
+// account behind OPENAI_API_KEY is inactive, which made rag.add crash the
+// postbuild ingest (and with it every Vercel deploy). Re-enable the
+// commented rag.add calls below once the key is funded again.
+// import { rag } from "./rag";
 
 // Work experience data (static — not yet sourced from MDX)
 const WORK_EXPERIENCE = [
@@ -207,12 +212,12 @@ export const ingestProjects = action({
         metadata,
       });
 
-      await rag.add(ctx, {
-        namespace: "portfolio",
-        key: `project:${project.slug}`,
-        text: content,
-        title: `Project: ${project.name}`,
-      });
+      // await rag.add(ctx, {
+      //   namespace: "portfolio",
+      //   key: `project:${project.slug}`,
+      //   text: content,
+      //   title: `Project: ${project.name}`,
+      // });
 
       ingested++;
     }
@@ -236,12 +241,12 @@ export const ingestBlogPosts = action({
         sourceId: post._id,
       });
 
-      await rag.add(ctx, {
-        namespace: "portfolio",
-        key: `blog:${post.slug}`,
-        text: content,
-        title: `Blog: ${post.title}`,
-      });
+      // await rag.add(ctx, {
+      //   namespace: "portfolio",
+      //   key: `blog:${post.slug}`,
+      //   text: content,
+      //   title: `Blog: ${post.title}`,
+      // });
 
       ingested++;
     }
@@ -264,12 +269,12 @@ export const ingestWorkExperience = action({
         sourceId: work.id,
       });
 
-      await rag.add(ctx, {
-        namespace: "portfolio",
-        key: `work:${work.id}`,
-        text: content,
-        title: `Work: ${work.position} at ${work.company}`,
-      });
+      // await rag.add(ctx, {
+      //   namespace: "portfolio",
+      //   key: `work:${work.id}`,
+      //   text: content,
+      //   title: `Work: ${work.position} at ${work.company}`,
+      // });
 
       ingested++;
     }
@@ -296,12 +301,12 @@ export const ingestCustomContent = action({
       sourceId: key,
     });
 
-    await rag.add(ctx, {
-      namespace: "portfolio",
-      key,
-      text: `${title}\n\n${content}`,
-      title,
-    });
+    // await rag.add(ctx, {
+    //   namespace: "portfolio",
+    //   key,
+    //   text: `${title}\n\n${content}`,
+    //   title,
+    // });
 
     return { success: true, documentId: docId as string };
   },
