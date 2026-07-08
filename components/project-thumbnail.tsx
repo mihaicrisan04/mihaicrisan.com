@@ -57,7 +57,8 @@ export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
   return (
     <motion.li
       animate={{ opacity: 1, y: 0 }}
-      className="list-none"
+      className="scroll-mt-16 list-none"
+      id={`work-${project.slug}`}
       initial={{ opacity: 0, y: 12 }}
       transition={{
         duration: 0.6,
