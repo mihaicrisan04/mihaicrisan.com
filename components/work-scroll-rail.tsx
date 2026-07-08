@@ -208,12 +208,30 @@ export function WorkScrollRail({ items }: WorkScrollRailProps) {
     };
   }, [items]);
 
+  // mouseleave can be dropped when the cursor exits the window fast (or on
+  // cmd-tab), leaving the preview stuck open — reset on any of these signals
+  useEffect(() => {
+    const reset = () => {
+      setHoveredSlug(null);
+      mouseY.set(Number.POSITIVE_INFINITY);
+    };
+    window.addEventListener("blur", reset);
+    document.documentElement.addEventListener("mouseleave", reset);
+    return () => {
+      window.removeEventListener("blur", reset);
+      document.documentElement.removeEventListener("mouseleave", reset);
+    };
+  }, [mouseY]);
+
   return (
     // biome-ignore lint/a11y/noNoninteractiveElementInteractions: pointer tracking only drives the decorative magnification; the buttons inside remain the interactive elements
     <nav
       aria-label="jump to project"
       className="fixed top-1/2 right-3 z-40 hidden -translate-y-1/2 flex-col items-end lg:flex"
-      onMouseLeave={() => mouseY.set(Number.POSITIVE_INFINITY)}
+      onMouseLeave={() => {
+        mouseY.set(Number.POSITIVE_INFINITY);
+        setHoveredSlug(null);
+      }}
       onMouseMove={(e) => mouseY.set(e.clientY)}
     >
       {items.map((item, i) => (
