@@ -40,15 +40,13 @@ links:
     url: "https://github.com/mihaicrisan04/zalem"
     type: "github"
 images:
-  - src: "https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/01-storefront.png"
-    alt: "zalem storefront — dark-mode catalog with hero carousel and deals"
-  - src: "https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/02-review-summary.png"
-    alt: "AI review summary — what buyers like, common complaints, and a divided-opinion bar"
-  - src: "https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/03-advisor-context.png"
-    alt: "advisor context assembled per question — current product, review themes, cart, recently viewed"
+  - src: "https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/04-reviews-ai.jpg"
+    alt: "AI review summary and the advisor breaking down what buyers think, side by side"
+  - src: "https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/05-recently-viewed.jpg"
+    alt: "personalized product rows — recently viewed and recommendations"
 preview:
   video: "https://ik.imagekit.io/mihaicrisan/projects/zalem/hero.mp4?v=2"
-  image: "https://ik.imagekit.io/mihaicrisan/projects/zalem/hero.png"
+  image: "https://ik.imagekit.io/mihaicrisan/projects/zalem/hero.jpg"
 highlights:
   - "trust is an integration problem, not a model-capability problem — the thesis in one line"
   - "hydration over generation — the LLM emits product IDs, the client renders live catalog data"
@@ -70,7 +68,7 @@ classical recommenders have the opposite weakness: they narrow a huge catalog ac
 - **two-stage recommendations** — classical algorithms (co-occurrence, attribute similarity with MMR re-ranking, time-decayed trending) generate the candidates; the LLM only re-ranks and explains, never touches the raw catalog
 - **hydration over generation** — the model outputs product *IDs*, the client hydrates them into live catalog data. every price, rating, and spec on screen is read from the database on every request, never from the model
 
-<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/01-storefront.png" alt="zalem storefront — dark-mode catalog with hero carousel and deals" caption="the storefront — even the hero copy is AI-generated, from a batch pipeline" />
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/05-recently-viewed.jpg" alt="personalized product rows — recently viewed and recommendations" caption="the classical engine at work — trending, recommended, and recently-viewed rows, recomputed nightly" />
 
 ## the advisor
 
@@ -78,13 +76,11 @@ a Convex agent with five read-only tools (product details, search, recommendatio
 
 every question gets fresh context assembled from the live session — the product you're on, its review themes, your cart, recently viewed — and a validation layer runs before anything renders: every cited product ID is verified, factual claims that can't be traced to a tool call are stripped, and claimed review themes are checked against the actual review corpus.
 
-<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/03-advisor-context.png" alt="advisor context assembled per question" caption="session state, rebuilt on every question — handed to the advisor with every message" />
-
 ## review summaries you can check
 
 a nightly pipeline summarizes reviews into structured positives, negatives, and — the headline feature — **divided opinions**, where buyers genuinely disagree ("11 say the fit is secure, 5 say they work loose"). every extracted theme is validated twice: quotes are matched back to source reviews, and embedding similarity confirms each theme appears in at least two of them. anything that fails is dropped before it ships.
 
-<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/02-review-summary.png" alt="AI review summary with divided-opinion bar" caption="what buyers say — real counts, real quotes, and a divided-opinion bar instead of a fake consensus" />
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/04-reviews-ai.jpg" alt="AI review summary and the advisor breaking down what buyers think" caption="real counts, real quotes, a divided-opinion bar — and the advisor citing the same validated themes in chat" />
 
 ## does the grounding actually matter?
 
