@@ -160,7 +160,7 @@ function RailTick({
 // Codex-style jump rail: one tick per project, dock-like magnification wave
 // under the pointer, hover shows a mini project card. Desktop only.
 export function WorkScrollRail({ items }: WorkScrollRailProps) {
-  const [active, setActive] = useState<string | null>(items[0]?.slug ?? null);
+  const [activeSlugs, setActiveSlugs] = useState<string[]>([]);
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const mouseY = useMotionValue(Number.POSITIVE_INFINITY);
 
@@ -169,16 +169,25 @@ export function WorkScrollRail({ items }: WorkScrollRailProps) {
 
     const update = () => {
       raf = 0;
-      // the item whose thumbnail last crossed the upper third is "current"
-      const line = window.innerHeight * 0.35;
-      let current = items[0]?.slug ?? null;
+      // every project with at least a third of its thumbnail on screen is "in view"
+      const vh = window.innerHeight;
+      const inView: string[] = [];
       for (const item of items) {
         const el = document.getElementById(`work-${item.slug}`);
-        if (el && el.getBoundingClientRect().top <= line) {
-          current = item.slug;
+        if (!el) {
+          continue;
+        }
+        const rect = el.getBoundingClientRect();
+        const visible = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
+        if (visible >= rect.height * 0.35) {
+          inView.push(item.slug);
         }
       }
-      setActive(current);
+      setActiveSlugs((prev) =>
+        prev.length === inView.length && prev.every((s, i) => s === inView[i])
+          ? prev
+          : inView
+      );
     };
 
     const onScroll = () => {
@@ -210,7 +219,7 @@ export function WorkScrollRail({ items }: WorkScrollRailProps) {
       {items.map((item, i) => (
         <RailTick
           hovered={hoveredSlug === item.slug}
-          isActive={item.slug === active}
+          isActive={activeSlugs.includes(item.slug)}
           item={item}
           key={item.slug}
           mouseY={mouseY}
