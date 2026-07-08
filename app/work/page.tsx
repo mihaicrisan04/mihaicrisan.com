@@ -1,5 +1,6 @@
 import { PageBack } from "@/components/page-back";
 import { ProjectThumbnail } from "@/components/project-thumbnail";
+import { WorkScrollRail } from "@/components/work-scroll-rail";
 import { getProjectsGroupedByYear } from "@/lib/projects";
 
 export const metadata = {
@@ -9,9 +10,19 @@ export const metadata = {
 export default function ProjectsPage() {
   const groups = getProjectsGroupedByYear();
   const total = groups.reduce((sum, g) => sum + g.projects.length, 0);
+  const railItems = groups.flatMap((group) =>
+    group.projects.map((project) => ({
+      slug: project.slug,
+      name: project.name,
+      year: group.year,
+      image: project.preview?.image ?? project.images[0]?.src,
+      description: project.shortDescription,
+    }))
+  );
 
   return (
     <div className="pb-32">
+      <WorkScrollRail items={railItems} />
       <div className="mx-auto max-w-2xl px-6 pt-12">
         <div className="mb-16 flex items-center justify-between">
           <PageBack />

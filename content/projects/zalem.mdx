@@ -1,0 +1,112 @@
+---
+name: "zalem"
+slug: "zalem"
+shortDescription: "AI-native ecommerce shop — a shopping advisor that grounds every claim in the live catalog"
+fullDescription: "an ecommerce store built around a grounded AI shopping advisor, developed as my bachelor thesis at babes-bolyai university. the advisor never invents product data: classical algorithms shortlist candidates, the LLM only re-ranks and explains, and every response is hydrated from the live catalog by ID — with a validation layer that verifies citations, strips unverified claims, and checks review themes against the actual review corpus. a custom eval harness picked the shipped model config on measured evidence. live at zalem.mihais-vps.xyz."
+status: "completed"
+category: "ai"
+website: "https://zalem.mihais-vps.xyz"
+featured: true
+startDate: "2026-03-07"
+endDate: "2026-07-02"
+techStack:
+  - name: "Next.js 16"
+    category: "framework"
+  - name: "React 19"
+    category: "framework"
+  - name: "TypeScript"
+    category: "language"
+  - name: "Convex"
+    category: "backend"
+  - name: "AI SDK"
+    category: "ai"
+  - name: "OpenRouter"
+    category: "ai"
+  - name: "Promptfoo"
+    category: "evals"
+  - name: "Clerk"
+    category: "auth"
+  - name: "Tailwind CSS 4"
+    category: "styling"
+  - name: "Turborepo"
+    category: "monorepo"
+  - name: "Bun"
+    category: "runtime"
+links:
+  - name: "live site"
+    url: "https://zalem.mihais-vps.xyz"
+    type: "live"
+  - name: "github"
+    url: "https://github.com/mihaicrisan04/zalem"
+    type: "github"
+images:
+  - src: "https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/01-storefront.png"
+    alt: "zalem storefront — dark-mode catalog with hero carousel and deals"
+  - src: "https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/02-review-summary.png"
+    alt: "AI review summary — what buyers like, common complaints, and a divided-opinion bar"
+  - src: "https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/03-advisor-context.png"
+    alt: "advisor context assembled per question — current product, review themes, cart, recently viewed"
+preview:
+  video: "https://ik.imagekit.io/mihaicrisan/projects/zalem/hero.mp4?v=2"
+  image: "https://ik.imagekit.io/mihaicrisan/projects/zalem/hero.png"
+highlights:
+  - "trust is an integration problem, not a model-capability problem — the thesis in one line"
+  - "hydration over generation — the LLM emits product IDs, the client renders live catalog data"
+  - "two-stage recommendations: classical algorithms shortlist, the LLM only re-ranks and explains"
+  - "validation layer verifies every cited ID and checks review themes against the real corpus"
+  - "head-to-head: removing grounding doubled the claims (83 → 162) and dropped factuality from 0.76 to 0.53"
+  - "custom Promptfoo eval harness swept 8 model configs — the cheapest model won"
+---
+
+an ecommerce store built around a grounded AI shopping advisor — my bachelor thesis at babes-bolyai university. the research question: how do you integrate an LLM into a shop so it's actually trustworthy? not a demo — it's deployed and running at [zalem.mihais-vps.xyz](https://zalem.mihais-vps.xyz).
+
+## why
+
+commercial AI shopping assistants have a documented trust problem. trade reports on Amazon's Rufus — 300M+ users — found it picks the right product ~32% of the time, quotes wrong prices in ~28% of answers, favors Amazon's own brand in 83% of comparisons, and fabricates review themes. confidently wrong, at scale.
+
+classical recommenders have the opposite weakness: they narrow a huge catalog accurately but can never tell you *why*. zalem's answer is to combine them so each side only does what it's good at — and to shape the system so the model *can't* lie unnoticed:
+
+- **reactive, not proactive** — browsing signals (dwell, scroll, review engagement) prepare context and surface a subtle "ask advisor" hint, but the AI never speaks uninvited
+- **two-stage recommendations** — classical algorithms (co-occurrence, attribute similarity with MMR re-ranking, time-decayed trending) generate the candidates; the LLM only re-ranks and explains, never touches the raw catalog
+- **hydration over generation** — the model outputs product *IDs*, the client hydrates them into live catalog data. every price, rating, and spec on screen is read from the database on every request, never from the model
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/01-storefront.png" alt="zalem storefront — dark-mode catalog with hero carousel and deals" caption="the storefront — even the hero copy is AI-generated, from a batch pipeline" />
+
+## the advisor
+
+a Convex agent with five read-only tools (product details, search, recommendations, cart contents, review summaries), streaming word-by-word into a sidebar. the model **selects and explains; it never sources a fact.**
+
+every question gets fresh context assembled from the live session — the product you're on, its review themes, your cart, recently viewed — and a validation layer runs before anything renders: every cited product ID is verified, factual claims that can't be traced to a tool call are stripped, and claimed review themes are checked against the actual review corpus.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/03-advisor-context.png" alt="advisor context assembled per question" caption="session state, rebuilt on every question — handed to the advisor with every message" />
+
+## review summaries you can check
+
+a nightly pipeline summarizes reviews into structured positives, negatives, and — the headline feature — **divided opinions**, where buyers genuinely disagree ("11 say the fit is secure, 5 say they work loose"). every extracted theme is validated twice: quotes are matched back to source reviews, and embedding similarity confirms each theme appears in at least two of them. anything that fails is dropped before it ships.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/zalem/gallery/02-review-summary.png" alt="AI review summary with divided-opinion bar" caption="what buyers say — real counts, real quotes, and a divided-opinion bar instead of a fake consensus" />
+
+## does the grounding actually matter?
+
+a controlled comparison: same model, same 34 questions, but with the catalog tools removed so it answers from memory:
+
+- **specific price/rating claims**: 83 grounded vs **162 ungrounded** — cut off from the database, the model compensates by asserting twice as much
+- **claims that fail the catalog check**: 48% vs **67%**
+- **factuality**: 0.76 vs **0.53**
+
+and the kicker: LLM judges *preferred* the ungrounded answers. fluency and truthfulness are different axes, and only one of them shows up in a demo.
+
+the shipped config came out of a custom eval harness (Promptfoo + Convex-aware scorers) sweeping 8 configurations — model × reasoning effort × step budget × prompt variant — scoring groundedness, factuality, review-theme fidelity, and tool-call efficiency. the winner was the *cheapest* model: composite 0.807, ~$0.0003 per query, 4.2s p95. more reasoning actually scored worse, and groundedness held ≥ 0.89 across all 8 configs. **trust is an integration problem, not a model-capability problem.**
+
+## honest limits
+
+no user study yet, the catalog is ~200 seeded products, and it wasn't benchmarked against a standard product-search baseline. next: a within-subjects trust study, and fine-tuning a smaller model.
+
+## stack notes
+
+turborepo + bun monorepo: Next.js 16 storefront (React 19 with the compiler enabled), Convex backend (13 tables, vector + full-text indexes, nightly recommendation crons), a shared shadcn/ui design system, and the eval package. models routed through OpenRouter — swappable because the eval harness makes regressions measurable. deployed on a self-hosted VPS, with the Convex backend auto-deployed via GitHub Actions.
+
+<ProjectLinks>
+  <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/zalem" />
+  <ProjectLinkButton type="live" href="https://zalem.mihais-vps.xyz" label="visit site" />
+</ProjectLinks>

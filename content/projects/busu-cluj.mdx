@@ -1,0 +1,80 @@
+---
+name: "busu cluj"
+slug: "busu-cluj"
+shortDescription: "live bus tracking for cluj-napoca — native iOS app with a realtime Convex backend"
+fullDescription: "a real-time public transport app for cluj-napoca: live bus, tram, and trolleybus positions on the map, route polylines, stop arrivals, and day-split timetables. native SwiftUI on the client, Convex on the backend syncing GTFS data from the Tranzy API — with a three-tier caching strategy and heartbeat-gated crons so the backend only polls while someone is actually watching."
+status: "in-progress"
+category: "mobile-app"
+featured: true
+startDate: "2026-06-12"
+ongoing: true
+techStack:
+  - name: "Swift"
+    category: "language"
+  - name: "SwiftUI"
+    category: "framework"
+  - name: "MapKit"
+    category: "maps"
+  - name: "SwiftData"
+    category: "persistence"
+  - name: "Convex"
+    category: "backend"
+  - name: "TypeScript"
+    category: "language"
+  - name: "Tranzy API"
+    category: "api"
+  - name: "XcodeGen"
+    category: "tooling"
+  - name: "iOS"
+    category: "platform"
+links:
+  - name: "github"
+    url: "https://github.com/mihaicrisan04/busu-cluj"
+    type: "github"
+images: []
+preview:
+  image: "https://ik.imagekit.io/mihaicrisan/projects/busu-cluj/hero.png"
+highlights:
+  - "live positions for ~430 vehicles, refreshed every ~20 seconds"
+  - "heartbeat-gated crons — the backend only polls the transit feed while a client is watching"
+  - "three-tier data strategy: live vehicles in memory, routes in SwiftData, heavy shapes cached forever"
+  - "hand-rolled MapKit clustering with differential annotation updates"
+  - "purple design system — every line a shade of cluj's color, shade encodes the transport mode"
+  - "Xcode-free workflow: XcodeGen + terminal builds"
+---
+
+a real-time public transport app for cluj-napoca — live bus, tram, and trolleybus positions, routes, stops, and timetables. it's the successor to the bus tracker i built while commuting to UBB, rebuilt from scratch as a native SwiftUI app on top of a realtime Convex backend.
+
+## what it does
+
+- **live map** — every vehicle in the city as a moving dot, refreshed every ~20 seconds, with custom clustering so dense downtown stops stay readable
+- **routes** — tap a line and get its polyline on the map plus a stops timeline; big, bold, color-coded line numbers inspired by the Transit app
+- **stop arrivals** — zoom in, tap a station, see which lines are coming
+- **schedules** — day-split timetables (weekday / saturday / sunday) per line
+- **search & favorites** — find a line fast, pin the ones you ride
+
+everything is purple: cluj's identity color, with the shade encoding the mode — trams darkest, buses lightest.
+
+## the data problem
+
+the feed is big and fast-moving: ~169 routes, ~913 stops, ~110k shape points, and ~430 live vehicles updating every 20 seconds. persisting all of that naively would mean over a thousand database writes per minute just for vehicle dots. the app splits data into three tiers instead:
+
+- **live vehicles** stay in memory only — subscribed via Convex, never written to disk
+- **routes** are cached in SwiftData with a 2-minute sync window
+- **shapes and stops** (the heavy stuff) are lazy-loaded per route and cached forever
+
+the backend is just as lazy: realtime crons are **heartbeat-gated**, so Convex only polls the Tranzy API while a client is actively watching the map, and disarms itself a few minutes after the last heartbeat. no users, no polling, no wasted quota.
+
+## stack notes
+
+native SwiftUI talking to Convex through the Swift SDK — the same reactive-query model i use on web projects, but driving MapKit annotations. the map itself is a hand-written `MKMapView` wrapper doing custom clustering, differential annotation updates, and colored polylines, because the stock SwiftUI map couldn't keep up.
+
+the repo is a bun + turborepo monorepo (iOS app, Convex backend, Next.js landing page), and the iOS project is **Xcode-free**: the `.xcodeproj` is gitignored and generated from `project.yml` with XcodeGen, built from the terminal.
+
+## status
+
+in active development — the core experience (live map, routes, arrivals, schedules) works on device; accounts, notifications, and the App Store release are next.
+
+<ProjectLinks>
+  <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/busu-cluj" />
+</ProjectLinks>
