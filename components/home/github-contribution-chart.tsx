@@ -26,11 +26,16 @@ interface GithubUser {
 const contributionsCache = new Map<string, Activity[]>();
 const userCache = new Map<string, GithubUser>();
 
-async function fetchContributions(username: string): Promise<Activity[]> {
-  const cached = contributionsCache.get(username);
-  if (cached) {
-    return cached;
+async function fetchFromOwnApi(username: string): Promise<Activity[]> {
+  const res = await fetch(`/api/github/${username}/contributions`);
+  if (!res.ok) {
+    throw new Error(`github contributions: ${res.status}`);
   }
+  const json: { contributions: Activity[] } = await res.json();
+  return json.contributions;
+}
+
+async function fetchFromJogruber(username: string): Promise<Activity[]> {
   const res = await fetch(
     `https://github-contributions-api.jogruber.de/v4/${username}?y=last`
   );
@@ -38,8 +43,19 @@ async function fetchContributions(username: string): Promise<Activity[]> {
     throw new Error(`github contributions: ${res.status}`);
   }
   const json: ApiResponse = await res.json();
-  contributionsCache.set(username, json.contributions);
   return json.contributions;
+}
+
+async function fetchContributions(username: string): Promise<Activity[]> {
+  const cached = contributionsCache.get(username);
+  if (cached) {
+    return cached;
+  }
+  const contributions = await fetchFromOwnApi(username).catch(() =>
+    fetchFromJogruber(username)
+  );
+  contributionsCache.set(username, contributions);
+  return contributions;
 }
 
 async function fetchUser(username: string): Promise<GithubUser> {

@@ -117,7 +117,7 @@ export function HomeClient() {
             , or see what i&apos;m up to on{" "}
             <LinkGithub
               href="https://github.com/mihaicrisan04"
-              username="mihaicrisan04"
+              usernames={["mihaicrisan04", "mihaicrisann"]}
             >
               github
             </LinkGithub>
