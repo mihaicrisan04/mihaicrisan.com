@@ -8,12 +8,13 @@ import {
 import { GithubContributionChart } from "./github-contribution-chart";
 
 interface LinkGithubProps {
-  username: string;
+  usernames: string[];
   href: string;
   children: React.ReactNode;
 }
 
-export function LinkGithub({ username, href, children }: LinkGithubProps) {
+export function LinkGithub({ usernames, href, children }: LinkGithubProps) {
+  const weeks = usernames.length > 1 ? 16 : 20;
   return (
     <HoverCard closeDelay={120} openDelay={150}>
       <HoverCardTrigger asChild>
@@ -33,7 +34,16 @@ export function LinkGithub({ username, href, children }: LinkGithubProps) {
         side="top"
         sideOffset={10}
       >
-        <GithubContributionChart username={username} />
+        <div className="flex items-stretch gap-2.5">
+          {usernames.map((username, i) => (
+            <div
+              className={i > 0 ? "border-border/50 border-l pl-2.5" : undefined}
+              key={username}
+            >
+              <GithubContributionChart username={username} weeks={weeks} />
+            </div>
+          ))}
+        </div>
       </HoverCardContent>
     </HoverCard>
   );
