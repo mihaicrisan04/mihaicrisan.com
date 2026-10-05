@@ -34,18 +34,6 @@ export default function ProjectsPage() {
         <h1 className="font-medium text-foreground text-lg tracking-tight">
           work
         </h1>
-        <p className="mt-3 text-base text-muted-foreground leading-relaxed">
-          have a project in mind, or just want to talk shop? grab a{" "}
-          <a
-            className="font-medium text-foreground transition-opacity hover:opacity-70"
-            href="https://cal.com/mihai-crisan/30min"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            30 min intro call
-          </a>
-          .
-        </p>
       </div>
 
       <div className="relative">
