@@ -2,13 +2,13 @@ export const dynamic = "force-static";
 
 const content = `# mihai crisan
 
-> software engineer based in cluj-napoca, romania. currently building things at wolfpack digital and studying computer science at babeș-bolyai university. cares a lot about software in general, and lately a lot about AI.
+> software engineer based in cluj-napoca, romania. currently building things at wolfpack digital and doing a masters in software engineering at babeș-bolyai university. cares a lot about software in general, and lately a lot about AI.
 
 ## about
 
 - fullstack software developer at [wolfpack digital](https://wolfpack-digital.com) since july 2025 — scalable web applications with a deep focus on design and user experience
 - previously freelance fullstack developer (since december 2024)
-- computer science student at [babeș-bolyai university](https://www.ubbcluj.ro/en/), cluj-napoca
+- MSc software engineering student at [babeș-bolyai university](https://www.ubbcluj.ro/en/), cluj-napoca (BSc computer science, 2026)
 
 ## projects
 

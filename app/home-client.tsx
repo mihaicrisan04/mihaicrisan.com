@@ -81,7 +81,7 @@ export function HomeClient() {
             <LinkShimmer href="https://wolfpack-digital.com">
               wolfpack digital
             </LinkShimmer>
-            , and studying computer science at{" "}
+            , and doing a masters in software engineering at{" "}
             <LinkWave href="https://www.ubbcluj.ro/en/">
               bbu university
             </LinkWave>
