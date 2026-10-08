@@ -1,8 +1,5 @@
-"use client";
-
-import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import type { CSSProperties } from "react";
 
 function RaycastIcon() {
   return (
@@ -127,68 +124,33 @@ interface LinkSetupProps {
   children: React.ReactNode;
 }
 
+// Hover reveals a small card of app icons popping in one by one.
+// Choreography lives in .link-setup (globals.css).
 export function LinkSetup({ href, children }: LinkSetupProps) {
-  const [visible, setVisible] = useState(false);
-  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const show = () => {
-    if (hideTimer.current) {
-      clearTimeout(hideTimer.current);
-      hideTimer.current = null;
-    }
-    setVisible(true);
-  };
-
-  const scheduleHide = () => {
-    if (hideTimer.current) {
-      clearTimeout(hideTimer.current);
-    }
-    hideTimer.current = setTimeout(() => setVisible(false), 120);
-  };
-
   return (
-    <span className="relative inline-block">
+    <span className="link-setup relative inline-block">
       <Link
         className="font-medium text-foreground transition-opacity hover:opacity-70"
         href={href}
-        onBlur={scheduleHide}
-        onFocus={show}
-        onMouseEnter={show}
-        onMouseLeave={scheduleHide}
       >
         {children}
       </Link>
-      <AnimatePresence>
-        {visible && (
-          <motion.span
-            animate={{ opacity: 1, y: 0 }}
-            aria-hidden
-            className="pointer-events-none absolute bottom-full left-1/2 z-50 -translate-x-1/2 pb-2"
-            exit={{ opacity: 0, y: 4, transition: { duration: 0.15 } }}
-            initial={{ opacity: 0, y: 4 }}
-            transition={{ duration: 0.18 }}
-          >
-            <span className="flex items-center gap-1.5 rounded-xl border border-border/60 bg-popover px-2.5 py-2 shadow-lg">
-              {ICONS.map(({ name, Icon }, i) => (
-                <motion.span
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  className="inline-flex h-7 w-7 items-center justify-center"
-                  initial={{ opacity: 0, y: 10, scale: 0.5 }}
-                  key={name}
-                  transition={{
-                    type: "spring",
-                    stiffness: 420,
-                    damping: 14,
-                    delay: 0.04 + i * 0.06,
-                  }}
-                >
-                  <Icon />
-                </motion.span>
-              ))}
+      <span
+        aria-hidden
+        className="setup-card pointer-events-none absolute bottom-full left-1/2 z-50 pb-2"
+      >
+        <span className="flex items-center gap-1.5 rounded-xl border border-border/60 bg-popover px-2.5 py-2 shadow-lg">
+          {ICONS.map(({ name, Icon }, i) => (
+            <span
+              className="setup-icon inline-flex h-7 w-7 items-center justify-center"
+              key={name}
+              style={{ "--i": i } as CSSProperties}
+            >
+              <Icon />
             </span>
-          </motion.span>
-        )}
-      </AnimatePresence>
+          ))}
+        </span>
+      </span>
     </span>
   );
 }

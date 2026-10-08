@@ -14,7 +14,7 @@ const content = `# mihai crisan
 
 - [zalem](https://mihaicrisan.com/work/zalem): AI-native ecommerce shop — a grounded shopping advisor that never invents product data (bachelor thesis)
 - [busu cluj](https://mihaicrisan.com/work/busu-cluj): live bus tracking for cluj-napoca — native iOS app with a realtime Convex backend
-- [mihaicrisan.com](https://mihaicrisan.com/work/mihaicrisan-com): this site — a portfolio with a built-in AI assistant (zuzu) backed by a Convex RAG pipeline
+- [mihaicrisan.com](https://mihaicrisan.com/work/mihaicrisan-com): this site — a static next.js portfolio with mdx content and css-only micro-interactions
 - [rent'n go](https://mihaicrisan.com/work/rentn-go): full-stack car rental platform for romania — booking, transfers, admin dashboard
 - [quik](https://mihaicrisan.com/work/quik): inline AI prompt for your zsh session — Cmd+Enter, ask, streams in place. written in Rust
 - [airdrop CLI](https://mihaicrisan.com/work/airdrop): AirDrop files and URLs from the macOS terminal

@@ -1,10 +1,8 @@
-"use client";
-
-import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { HoverVideo } from "@/components/hover-video";
 import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";
+import { Reveal } from "@/components/reveal";
 import type { Project } from "@/lib/projects";
 
 interface ProjectThumbnailProps {
@@ -22,7 +20,7 @@ const FALLBACK_MESSAGES = [
 function fallbackMessageFor(slug: string) {
   let hash = 0;
   for (const ch of slug) {
-    hash = (hash * 31 + ch.charCodeAt(0)) | 0;
+    hash = (hash * 31 + ch.charCodeAt(0)) % 2_147_483_647;
   }
   return FALLBACK_MESSAGES[Math.abs(hash) % FALLBACK_MESSAGES.length];
 }
@@ -31,49 +29,28 @@ function getYear(date: string) {
   return new Date(date).getFullYear();
 }
 
-export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
-  const [hovered, setHovered] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+const HOVER_FADE =
+  "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100";
+const MEDIA_FADE = `${HOVER_FADE} transition-opacity duration-500`;
+const OVERLAY_TIMING = "duration-300 ease-snappy";
+const OVERLAY_FADE = `${HOVER_FADE} transition-opacity ${OVERLAY_TIMING}`;
 
+export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
   const posterSrc = project.preview?.image ?? project.images[0]?.src ?? null;
   const videoSrc = project.preview?.video;
   const gifSrc = project.preview?.gif;
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!(video && videoSrc)) {
-      return;
-    }
-    if (hovered) {
-      video.play().catch(() => {
-        /* autoplay blocked, no-op */
-      });
-    } else {
-      video.pause();
-      video.currentTime = 0;
-    }
-  }, [hovered, videoSrc]);
-
   return (
-    <motion.li
-      animate={{ opacity: 1, y: 0 }}
+    <Reveal
+      as="li"
       className="scroll-mt-16 list-none"
+      delay={Math.min(index, 6) * 0.05}
       id={`work-${project.slug}`}
-      initial={{ opacity: 0, y: 12 }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.05,
-        ease: [0.22, 1, 0.36, 1],
-      }}
     >
       <Link
         aria-label={project.name}
         className="group relative block aspect-[3/2] overflow-hidden bg-muted/30"
         href={`/work/${project.slug}`}
-        onBlur={() => setHovered(false)}
-        onFocus={() => setHovered(true)}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
       >
         {posterSrc ? (
           <Image
@@ -93,16 +70,8 @@ export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
         )}
 
         {videoSrc && (
-          <video
-            aria-hidden
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
-              hovered ? "opacity-100" : "opacity-0"
-            }`}
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            ref={videoRef}
+          <HoverVideo
+            className={`absolute inset-0 h-full w-full object-cover ${MEDIA_FADE}`}
             src={videoSrc}
           />
         )}
@@ -111,9 +80,7 @@ export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
           <Image
             alt=""
             aria-hidden
-            className={`object-cover transition-opacity duration-500 ${
-              hovered ? "opacity-100" : "opacity-0"
-            }`}
+            className={`object-cover ${MEDIA_FADE}`}
             fill
             sizes="(min-width: 768px) 640px, 100vw"
             src={gifSrc}
@@ -122,26 +89,19 @@ export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
         )}
 
         <ProgressiveBlur
-          animate={{ opacity: hovered ? 1 : 0 }}
           blurIntensity={0.7}
           className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2"
           direction="bottom"
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          layerClassName={OVERLAY_FADE}
         />
 
-        <motion.div
-          animate={{ opacity: hovered ? 1 : 0 }}
+        <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/30 to-transparent"
-          initial={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className={`pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/30 to-transparent ${OVERLAY_FADE}`}
         />
 
-        <motion.div
-          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 8 }}
-          className="pointer-events-none absolute right-5 bottom-5 left-5 [text-shadow:_0_1px_3px_rgba(0,0,0,0.45)]"
-          initial={{ opacity: 0, y: 8 }}
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        <div
+          className={`pointer-events-none absolute right-5 bottom-5 left-5 translate-y-2 transition-[opacity,translate] ${OVERLAY_TIMING} [text-shadow:_0_1px_3px_rgba(0,0,0,0.45)] group-hover:translate-y-0 group-focus-visible:translate-y-0 ${HOVER_FADE}`}
         >
           <div className="flex items-baseline justify-between gap-4">
             <h2 className="font-medium text-base text-white">{project.name}</h2>
@@ -152,8 +112,8 @@ export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
           <p className="mt-1 text-sm text-white/85 leading-snug">
             {project.shortDescription}
           </p>
-        </motion.div>
+        </div>
       </Link>
-    </motion.li>
+    </Reveal>
   );
 }

@@ -34,12 +34,12 @@ const STATIC_IMAGE_EXTS = [".jpg", ".jpeg", ".png", ".webp"] as const;
 const VIDEO_EXTS = [".mp4", ".webm", ".mov"] as const;
 const GIF_EXT = ".gif";
 
-type UploadedFile = {
+interface UploadedFile {
   url: string;
   remotePath: string;
   localPath: string;
   kind: "hero-video" | "hero-gif" | "hero-image" | "promo-video" | "gallery";
-};
+}
 
 function loadEnv() {
   const envLocal = path.join(process.cwd(), ".env.local");

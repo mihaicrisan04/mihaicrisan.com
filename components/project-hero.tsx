@@ -1,49 +1,27 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { HoverVideo } from "@/components/hover-video";
 import type { Project } from "@/lib/projects";
 
 interface ProjectHeroProps {
   project: Project;
 }
 
-export function ProjectHero({ project }: ProjectHeroProps) {
-  const [hovered, setHovered] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+const HOVER_FADE =
+  "opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100";
 
+export function ProjectHero({ project }: ProjectHeroProps) {
   const posterSrc = project.preview?.image ?? project.images[0]?.src ?? null;
   const videoSrc = project.preview?.video;
   const gifSrc = project.preview?.gif;
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!(video && videoSrc)) {
-      return;
-    }
-    if (hovered) {
-      video.play().catch(() => {
-        /* autoplay blocked, no-op */
-      });
-    } else {
-      video.pause();
-      video.currentTime = 0;
-    }
-  }, [hovered, videoSrc]);
 
   if (!(posterSrc || videoSrc || gifSrc)) {
     return null;
   }
 
   return (
-    // biome-ignore lint/a11y/noNoninteractiveElementInteractions: decorative hover-to-play on a media container, no actionable behavior
     <div
       aria-label={`${project.name} hero`}
       className="group relative mb-12 aspect-[3/2] overflow-hidden bg-muted/30"
-      onBlur={() => setHovered(false)}
-      onFocus={() => setHovered(true)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       role="img"
     >
       {posterSrc && (
@@ -58,16 +36,8 @@ export function ProjectHero({ project }: ProjectHeroProps) {
       )}
 
       {videoSrc && (
-        <video
-          aria-hidden
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
-            hovered ? "opacity-100" : "opacity-0"
-          }`}
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          ref={videoRef}
+        <HoverVideo
+          className={`absolute inset-0 h-full w-full object-cover ${HOVER_FADE}`}
           src={videoSrc}
         />
       )}
@@ -76,9 +46,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
         <Image
           alt=""
           aria-hidden
-          className={`object-cover transition-opacity duration-500 ${
-            hovered ? "opacity-100" : "opacity-0"
-          }`}
+          className={`object-cover ${HOVER_FADE}`}
           fill
           sizes="(min-width: 768px) 640px, 100vw"
           src={gifSrc}
