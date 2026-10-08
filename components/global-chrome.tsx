@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -34,29 +34,13 @@ function EmailCopy() {
   );
 
   return (
-    <span className="relative inline-block">
-      <button
-        className="cursor-pointer transition-colors hover:text-foreground"
-        onClick={handleClick}
-        type="button"
-      >
-        email
-      </button>
-      <AnimatePresence>
-        {copied && (
-          <motion.span
-            animate={{ opacity: 1, y: 0 }}
-            aria-hidden
-            className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg border border-border/60 bg-popover px-2 py-1 text-foreground shadow-lg"
-            exit={{ opacity: 0, y: 4, transition: { duration: 0.15 } }}
-            initial={{ opacity: 0, y: 4 }}
-            transition={{ duration: 0.18 }}
-          >
-            email copied
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </span>
+    <button
+      className="cursor-pointer transition-colors hover:text-foreground"
+      onClick={handleClick}
+      type="button"
+    >
+      {copied ? "copied" : "email"}
+    </button>
   );
 }
 
@@ -104,38 +88,37 @@ export function GlobalChrome() {
 
       <motion.div
         animate={{ opacity: 1 }}
-        className="fixed bottom-6 left-6 z-50 flex items-center gap-4 font-mono text-muted-foreground/60 text-xs"
+        className="pointer-events-none fixed inset-x-6 bottom-6 z-50 flex items-center justify-between font-mono text-xs"
         initial={{ opacity: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
       >
-        <span className="text-muted-foreground/50">© 2026</span>
-        <span aria-hidden className="text-muted-foreground/30">
-          /
-        </span>
-        <Link className="transition-colors hover:text-foreground" href="/work">
-          work
-        </Link>
-        <Link className="transition-colors hover:text-foreground" href="/setup">
-          setup
-        </Link>
-        <a
-          className="transition-colors hover:text-foreground"
-          href="/cv.pdf"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          cv
-        </a>
-        <EmailCopy />
-      </motion.div>
+        <nav className="pointer-events-auto flex items-center gap-4 text-muted-foreground/60">
+          <Link
+            className="transition-colors hover:text-foreground"
+            href="/work"
+          >
+            work
+          </Link>
+          <Link
+            className="transition-colors hover:text-foreground"
+            href="/setup"
+          >
+            setup
+          </Link>
+          <a
+            className="transition-colors hover:text-foreground"
+            href="/cv.pdf"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            cv
+          </a>
+          <EmailCopy />
+        </nav>
 
-      <motion.div
-        animate={{ opacity: 1 }}
-        className="fixed right-6 bottom-[18px] z-50 lg:right-4"
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      >
-        <ThemeToggle />
+        <div className="pointer-events-auto">
+          <ThemeToggle />
+        </div>
       </motion.div>
     </>
   );
