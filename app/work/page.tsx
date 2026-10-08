@@ -1,6 +1,8 @@
+import { geistPixel } from "@/app/fonts";
 import { PageBack } from "@/components/page-back";
 import { ProjectThumbnail } from "@/components/project-thumbnail";
-import { WorkScrollRail } from "@/components/work-scroll-rail";
+import { Reveal } from "@/components/reveal";
+import { WorkScrollRailLazy } from "@/components/work-scroll-rail-lazy";
 import { getProjectsGroupedByYear } from "@/lib/projects";
 
 export const metadata = {
@@ -21,19 +23,21 @@ export default function ProjectsPage() {
   );
 
   return (
-    <div className="pb-32">
-      <WorkScrollRail items={railItems} />
+    <div className={`${geistPixel.variable} pb-32`}>
+      <WorkScrollRailLazy items={railItems} />
       <div className="mx-auto max-w-2xl px-6 pt-12">
-        <div className="mb-16 flex items-center justify-between">
+        <Reveal className="mb-16 flex items-center justify-between">
           <PageBack />
           <span className="font-mono text-muted-foreground/50 text-xs tabular-nums">
             {String(total).padStart(2, "0")}
           </span>
-        </div>
+        </Reveal>
 
-        <h1 className="font-medium text-foreground text-lg tracking-tight">
-          work
-        </h1>
+        <Reveal delay={0.05}>
+          <h1 className="font-medium text-foreground text-lg tracking-tight">
+            work
+          </h1>
+        </Reveal>
       </div>
 
       <div className="relative">

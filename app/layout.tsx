@@ -1,4 +1,3 @@
-import { GeistPixelSquare } from "geist/font/pixel";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -26,10 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="scroll-smooth" lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} min-h-screen bg-background text-foreground antialiased`}
-      >
+    <html
+      className={`${geistSans.variable} ${geistMono.variable} scroll-smooth`}
+      lang="en"
+      suppressHydrationWarning
+    >
+      <body className="min-h-screen bg-background text-foreground antialiased">
         <Providers>
           <main className="relative z-10 min-h-svh">{children}</main>
           <GlobalChrome />

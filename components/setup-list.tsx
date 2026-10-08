@@ -1,7 +1,5 @@
-"use client";
-
 import { ArrowUpRight } from "lucide-react";
-import { motion } from "motion/react";
+import { Reveal } from "@/components/reveal";
 import type { SetupGroup } from "@/data/setup";
 
 interface SetupListProps {
@@ -12,12 +10,7 @@ export function SetupList({ groups }: SetupListProps) {
   return (
     <div className="space-y-12">
       {groups.map((group, gi) => (
-        <motion.section
-          animate={{ opacity: 1, y: 0 }}
-          initial={{ opacity: 0, y: 8 }}
-          key={group.title}
-          transition={{ duration: 0.5, delay: 0.1 + gi * 0.05 }}
-        >
+        <Reveal as="section" delay={0.1 + gi * 0.05} key={group.title}>
           <div className="mb-3 flex items-baseline justify-between border-border/40 border-b pb-2">
             <h2 className="font-mono text-muted-foreground text-xs uppercase tracking-wider">
               {group.title}
@@ -68,7 +61,7 @@ export function SetupList({ groups }: SetupListProps) {
               {group.footer}
             </p>
           )}
-        </motion.section>
+        </Reveal>
       ))}
     </div>
   );

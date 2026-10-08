@@ -1,0 +1,3 @@
+GeistPixel-Square.woff2 is part of the Geist font family by Vercel,
+licensed under the SIL Open Font License 1.1.
+https://github.com/vercel/geist-font/blob/main/LICENSE.TXT
