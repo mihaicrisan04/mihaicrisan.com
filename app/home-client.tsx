@@ -99,7 +99,7 @@ export function HomeClient() {
         <FadeIn delay={0.32}>
           <p className="mt-5 text-base text-muted-foreground leading-relaxed">
             <Link
-              className="font-medium text-foreground transition-opacity hover:opacity-70"
+              className="inline-block bg-foreground text-background"
               href="/work"
             >
               /work

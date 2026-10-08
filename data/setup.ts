@@ -14,7 +14,7 @@ export const setupGroups: SetupGroup[] = [
   {
     title: "hardware",
     items: [
-      { name: "macbook pro m1", note: "still works fine to this day" },
+      { name: "macbook pro m5 pro", note: "daily driver" },
       { name: "airpods", note: "a must" },
     ],
   },
@@ -26,7 +26,7 @@ export const setupGroups: SetupGroup[] = [
       { name: "brew", note: "goated", href: "https://brew.sh" },
       {
         name: "claude code",
-        note: "main ai",
+        note: "main ai, runs in t3 code",
         href: "https://claude.com/claude-code",
       },
       { name: "codex", note: "", href: "https://github.com/openai/codex" },
@@ -38,13 +38,14 @@ export const setupGroups: SetupGroup[] = [
     title: "apps",
     items: [
       { name: "raycast", note: "the goat", href: "https://raycast.com" },
-      {
-        name: "cmux",
-        note: "terminal",
-        href: "https://github.com/manaflow-ai/cmux",
-      },
+      { name: "ghostty", note: "terminal", href: "https://ghostty.org" },
       { name: "dia", note: "browser", href: "https://www.diabrowser.com" },
       { name: "shottr", note: "screenshots", href: "https://shottr.cc" },
+      {
+        name: "t3 code",
+        note: "where i code now",
+        href: "https://github.com/pingdotgg/t3code",
+      },
       { name: "zed", note: "code editor", href: "https://zed.dev" },
       { name: "cursor", note: "ai code editor", href: "https://cursor.com" },
       {
