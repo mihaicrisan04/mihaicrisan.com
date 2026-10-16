@@ -1,0 +1,109 @@
+---
+name: "plugbay"
+slug: "plugbay"
+shortDescription: "mise for MCP servers: the right servers, logged in to the right account, in every directory and every agent"
+fullDescription: "a Rust CLI and per-user daemon that gives every AI agent (Claude Code, Codex, T3 Code through them) exactly the MCP servers a directory needs, logged in to the right account. small committable plugbay.toml files resolve like mise config, deeper wins, and tokens stay in the OS keychain. one MCP entry per agent, one shared connection per server and account."
+status: "in-progress"
+category: "tool"
+featured: true
+startDate: "2026-10-13"
+ongoing: true
+techStack:
+  - name: "Rust"
+    category: "language"
+  - name: "Tokio"
+    category: "runtime"
+  - name: "MCP"
+    category: "protocol"
+  - name: "OAuth"
+    category: "auth"
+  - name: "Keychain"
+    category: "security"
+links:
+  - name: "github"
+    url: "https://github.com/mihaicrisan04/plugbay"
+    type: "github"
+images:
+  - src: "https://ik.imagekit.io/mihaicrisan/projects/plugbay/gallery/01-why.png"
+    alt: "plugbay resolving a different Sentry account in two client repos"
+preview:
+  video: "https://ik.imagekit.io/mihaicrisan/projects/plugbay/hero.mp4"
+  image: "https://ik.imagekit.io/mihaicrisan/projects/plugbay/hero.jpg"
+highlights:
+  - "per-directory MCP servers and accounts, resolved like mise config"
+  - "one MCP entry per agent, one shared connection per server + account"
+  - "tokens in the OS keychain, bound to server identity and account"
+  - "running Claude Code sessions pick up config changes live"
+  - "built twice (Rust and TypeScript + Effect), Rust won on footprint"
+---
+
+i work across clients at an agency, and each one has its own Sentry, PostHog and Linear. my agents didn't know that: they got every MCP server i ever configured, logged in to whichever account i used last. plugbay fixes it the way mise fixes tool versions.
+
+## two files instead of five configs
+
+before, the same servers lived in `~/.claude.json`, `~/.codex/config.toml` and a `.mcp.json` per repo, with tokens pasted into JSON. now:
+
+```toml
+# ~/work/plugbay.toml: every repo under ~/work
+[servers]
+linear = "agency"
+
+# ~/work/acme/plugbay.toml: every acme repo
+account = "acme"
+
+[servers]
+sentry = true      # sentry:acme
+posthog = true     # posthog:acme
+```
+
+start an agent anywhere under `~/work/acme` and it gets acme's Sentry and PostHog plus the agency Linear. nothing else.
+
+## how it works
+
+<PlugbayFlow />
+
+- `plugbay setup` registers one entry in Claude Code and Codex. you never touch their MCP config again
+- the shim tells the daemon where the agent started; it merges every `plugbay.toml` from `/` down, deeper wins
+- each server + account connects once and is shared by every agent that needs it
+- edit a file and the tools change in the running session
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/plugbay/gallery/01-why.png" alt="plugbay why sentry, showing which plugbay.toml set each field" caption="plugbay why: which file set what" />
+
+## like mise, for MCP
+
+| mise | plugbay |
+| --- | --- |
+| tools | MCP servers |
+| versions (`node@22`) | accounts (`sentry:acme`) |
+| `mise.toml` | `plugbay.toml` |
+| `mise use node@22` | `plugbay use sentry:acme` |
+| shims on `PATH` | one MCP entry per agent |
+
+## built it twice
+
+i wrote the first slice in Rust and in TypeScript + Effect side by side, planning to keep whichever was nicer to build and debug with agents. that came out about even, so footprint decided it. it matters for something that sits in front of every agent.
+
+<BarCompare
+  highlight="rust"
+  caption="lower is better"
+  metrics={[
+    { label: "binary", unit: "MB", values: [{ name: "rust", value: 20 }, { name: "ts + effect", value: 74 }] },
+    { label: "idle daemon memory", unit: "MB", values: [{ name: "rust", value: 11 }, { name: "ts + effect", value: 64 }] },
+    { label: "warm shim start", unit: "ms", values: [{ name: "rust", value: 3 }, { name: "ts + effect", value: 55 }] },
+  ]}
+/>
+
+## security, short version
+
+- config never holds secrets. logins and tokens live in the OS keychain
+- a token is bound to the server's identity and the account, so a repo that redefines `linear` to point somewhere else gets nothing
+- agents can switch known servers on for a session, but can't add a URL or a command
+
+```sh
+cargo install --locked --git https://github.com/mihaicrisan04/plugbay
+plugbay migrate --apply   # brings your existing servers over
+```
+
+<ProjectLinks>
+  <ProjectLinkButton type="github" href="https://github.com/mihaicrisan04/plugbay" />
+</ProjectLinks>
