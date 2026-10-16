@@ -433,6 +433,26 @@
     margin-bottom: 2em;
   }
 
+  .prose table {
+    width: 100%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    font-size: 0.875em;
+    border-collapse: collapse;
+  }
+
+  .prose th,
+  .prose td {
+    padding: 0.5em 0.75em 0.5em 0;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prose th {
+    font-weight: 500;
+    color: var(--muted-foreground);
+  }
+
   .prose hr {
     border-color: var(--border);
     border-top-width: 1px;

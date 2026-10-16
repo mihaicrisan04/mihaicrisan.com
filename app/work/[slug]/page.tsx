@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import { mdxComponents } from "@/components/mdx";
 import { PageBack } from "@/components/page-back";
 import { ProjectHero } from "@/components/project-hero";
@@ -125,7 +126,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </Reveal>
 
       <Reveal className="prose max-w-none" delay={0.15}>
-        <MDXRemote components={mdxComponents} source={project.content} />
+        <MDXRemote
+          components={mdxComponents}
+          options={{
+            blockJS: false,
+            mdxOptions: { remarkPlugins: [remarkGfm] },
+          }}
+          source={project.content}
+        />
       </Reveal>
     </div>
   );
