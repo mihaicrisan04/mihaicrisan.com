@@ -48,7 +48,7 @@ function BottomFade() {
     <>
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-32 sm:hidden"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-40 h-32 lg:hidden"
       >
         <ProgressiveBlur
           blurIntensity={1.1}
@@ -61,7 +61,7 @@ function BottomFade() {
 
       <div
         aria-hidden
-        className="pointer-events-none fixed bottom-0 left-0 z-40 hidden h-32 w-[480px] sm:block"
+        className="pointer-events-none fixed bottom-0 left-0 z-40 hidden h-32 w-[480px] lg:block"
         style={{
           WebkitMaskImage:
             "linear-gradient(to right, black 55%, transparent 100%)",
