@@ -17,6 +17,7 @@ const content = `# mihai crisan
 - [mihaicrisan.com](https://mihaicrisan.com/work/mihaicrisan-com): this site — a static next.js portfolio with mdx content and css-only micro-interactions
 - [rent'n go](https://mihaicrisan.com/work/rentn-go): full-stack car rental platform for romania — booking, transfers, admin dashboard
 - [plugbay](https://mihaicrisan.com/work/plugbay): mise for MCP servers — the right servers and accounts per directory, for every AI agent. written in Rust
+- [aws saa](https://mihaicrisan.com/work/aws-saa): study platform for the AWS Solutions Architect Associate exam — lectures, drills, mock exams, architecture maps, plus an offline mobile app
 - [quik](https://mihaicrisan.com/work/quik): inline AI prompt for your zsh session — Cmd+Enter, ask, streams in place. written in Rust
 - [airdrop CLI](https://mihaicrisan.com/work/airdrop): AirDrop files and URLs from the macOS terminal
 - [WhatsApp bookmark](https://mihaicrisan.com/work/whatsapp-bookmark): Raycast extension that turns WhatsApp into a personal bookmarking inbox

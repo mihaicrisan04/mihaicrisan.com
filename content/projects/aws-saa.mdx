@@ -1,0 +1,108 @@
+---
+name: "aws saa"
+slug: "aws-saa"
+shortDescription: "the study platform i built to pass AWS Solutions Architect Associate: lectures, drills, mock exams and an offline mobile app"
+fullDescription: "a full learning platform for the AWS Certified Solutions Architect Associate (SAA-C03) exam: 21 lectures, 468 exam-style questions across two banks, 162 spaced-repetition flashcards, timed mock exams drawn to the real domain weights, interactive architecture maps and a mistakes log. a Next.js web app with account-backed progress, self-hosted on my VPS, plus an Expo app that works fully offline and syncs when it can."
+status: "completed"
+category: "fullstack"
+featured: true
+startDate: "2026-08-20"
+endDate: "2026-09-28"
+techStack:
+  - name: "Next.js 16"
+    category: "framework"
+  - name: "React 19"
+    category: "framework"
+  - name: "TypeScript"
+    category: "language"
+  - name: "PostgreSQL"
+    category: "database"
+  - name: "Drizzle"
+    category: "orm"
+  - name: "Better Auth"
+    category: "auth"
+  - name: "React Flow"
+    category: "ui"
+  - name: "Tailwind CSS 4"
+    category: "styling"
+  - name: "Expo"
+    category: "mobile"
+  - name: "React Native"
+    category: "mobile"
+  - name: "SQLite"
+    category: "database"
+  - name: "Dokploy"
+    category: "infra"
+links: []
+images:
+  - src: "https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/01-overview.jpg"
+    alt: "overview: the readiness gauge, curriculum progress and the next thing to do"
+  - src: "https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/08-mobile.jpg"
+    alt: "the offline mobile app: overview, a lecture and a drill question"
+preview:
+  video: "https://ik.imagekit.io/mihaicrisan/projects/aws-saa/hero.mp4"
+  image: "https://ik.imagekit.io/mihaicrisan/projects/aws-saa/hero.jpg"
+highlights:
+  - "21 lectures, 468 exam-style questions, 162 flashcards, 6 architecture maps"
+  - "mock exams drawn to the real domain weights, not the bank's distribution"
+  - "confidence on every answer: being sure and wrong is tracked on its own"
+  - "readiness gauge on the exam's own 100-1000 scale, arcs sized by domain weight"
+  - "offline-first mobile app: content in the bundle, edits queued, latest wins on sync"
+  - "self-hosted on my VPS with Postgres, daily verified backups"
+---
+
+i was preparing for AWS Solutions Architect Associate and wanted one place that took me from zero to exam-ready without burying me in material. so i built it: four zones, **read**, **recall**, **test**, **fix what you got wrong**, and nothing else.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/01-overview.jpg" alt="overview page with the readiness gauge, curriculum progress and today's goals" caption="overview: one next action, the readiness gauge, the whole curriculum at a glance" />
+
+## read
+
+21 lectures, about five hours of reading, ordered so each one only assumes the ones before it. they lead with the distinction that earns marks, not with what the service is for, and each has a couple of architecture diagrams, self-checks and six takeaways. `/` searches every section and jumps straight to it.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/03-lecture.jpg" alt="the VPC lecture with an on-this-page outline and a CIDR table" caption="lectures are real HTML: the app reads the same files that open standalone in a browser" />
+
+## test
+
+**drills** are short sets with the full reasoning right after each answer, including why every wrong option is wrong. before checking, you say how sure you are. "sure and wrong" is tracked separately, because it's the most dangerous kind of miss.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/02-drill.jpg" alt="a drill question answered, with the explanation and why each other option is wrong" caption="the answer, why it's right, and why each distractor is wrong" />
+
+the **mock exam** is the real thing: 65 questions in 130 minutes, a question navigator, flags, no feedback until you submit. questions are drawn to the exam's actual domain weights (30 / 26 / 24 / 20), so a lucky mix can't flatter you. a second **hard** bank of 100 nastier scenarios, each with a sourced explanation, keeps its results apart from the main one.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/05-exam.jpg" alt="a mock exam in progress with the countdown and question navigator" caption="mock exam: countdown, navigator, flags, review at the end" />
+
+## see the architecture
+
+six reference architectures on a pan-and-zoom canvas. click a service to see what it does there and what it costs you, trace a request through the whole path, then toggle the bad version of the design to see exactly where it breaks. every claim links to the AWS docs.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/04-map.jpg" alt="the online shop architecture map with the bad synchronous design highlighted" caption="architecture maps: the good design, the bad one, and why" />
+
+## fix what you got wrong
+
+every wrong answer lands in the mistakes log. you tag *why* you missed it (knowledge gap, misread the qualifier, fell for a distractor, guessed) and retry it blind. the progress page ranks lectures by how often your mistakes point at them, which turns into your re-reading order.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/07-mistakes.jpg" alt="the mistakes log with reason filters and a question being retried" caption="mistakes, tagged by why they happened" />
+
+the readiness gauge isn't decoration: each arc is one exam domain, its **length** is that domain's real weight, its **fill** is your accuracy, and the tick is the 720 pass line. the number in the middle is your accuracy mapped onto the exam's 100-1000 scale. calibration shows whether "sure" actually means anything.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/06-progress.jpg" alt="progress page with accuracy, level, daily goal, readiness gauge, activity and calibration" caption="progress: readiness by domain, activity and confidence calibration" />
+
+## offline, on the phone
+
+studying shouldn't need a laptop or a signal, so there's an Expo app with the same lectures, drills, cards and mock exams. the curriculum, both question banks and all 21 lectures are compiled into the bundle, so content is never fetched and the app works in airplane mode.
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/08-mobile.jpg" alt="the mobile app: overview, a lecture and an answered drill question" caption="the mobile app works with no connection at all" />
+
+- every edit is written locally first and queued as one operation, so nothing waits on the network
+- sync runs on launch, on reconnect and shortly after each edit; the queue survives a restart
+- same key changed on both sides? the latest edit wins, no dialog. attempts and mocks are unioned, so history never loses
+- the first sign-in on a phone that already has progress merges instead of replacing
+
+<ProjectImage src="https://ik.imagekit.io/mihaicrisan/projects/aws-saa/gallery/09-mobile-study.jpg" alt="the mobile app: lecture list, a drill question with confidence, the mock exam setup" caption="learn, drill and mock exams, all on device" />
+
+## under the hood
+
+- **web**: Next.js 16 and React 19 on [coss ui](https://coss.com/ui), Postgres through Drizzle, Better Auth with a single private account. unsaved changes are held in the browser until written, so a dropped connection doesn't lose answers
+- **content is data**: curriculum, both banks, cards, maps and the cheat sheet are plain JSON, and a checker validates ids, lecture anchors, distractor coverage and per-lecture minimums before anything ships
+- **hosting**: a standalone Docker image on my Hetzner VPS through Dokploy, with daily `pg_dump` backups that are verified before they're kept
+- **Claude Code skills**: eight small study skills (`/explain`, `/quiz-me`, `/whiteboard`, `/study-plan`...) that compose into whatever flow i needed. every drill question has an "ask Claude about this" button that copies a ready prompt
