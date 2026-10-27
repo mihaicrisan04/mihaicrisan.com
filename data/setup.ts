@@ -38,16 +38,19 @@ export const setupGroups: SetupGroup[] = [
     title: "apps",
     items: [
       { name: "raycast", note: "the goat", href: "https://raycast.com" },
-      { name: "ghostty", note: "terminal", href: "https://ghostty.org" },
-      { name: "dia", note: "browser", href: "https://www.diabrowser.com" },
-      { name: "shottr", note: "screenshots", href: "https://shottr.cc" },
+      {
+        name: "rex",
+        note: "terminal by superlogical",
+        href: "https://superlogical.com",
+      },
       {
         name: "t3 code",
-        note: "where i code now",
+        note: "agentic development",
         href: "https://github.com/pingdotgg/t3code",
       },
-      { name: "zed", note: "code editor", href: "https://zed.dev" },
-      { name: "cursor", note: "ai code editor", href: "https://cursor.com" },
+      { name: "zed", note: "when i need to see code", href: "https://zed.dev" },
+      { name: "dia", note: "browser", href: "https://www.diabrowser.com" },
+      { name: "shottr", note: "screenshots", href: "https://shottr.cc" },
       {
         name: "yaak",
         note: "postman alternative",
