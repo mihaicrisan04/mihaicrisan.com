@@ -39,6 +39,7 @@ export interface ProjectFrontmatter {
   status?: "completed" | "in-progress" | "planning";
   category: string;
   featured: boolean;
+  pinned?: boolean;
   startDate: string;
   endDate?: string;
   ongoing?: boolean;
@@ -105,7 +106,7 @@ export interface ProjectYearGroup {
   projects: Project[];
 }
 
-// Groups projects by start-year, with featured first then by date desc within each year.
+// Groups projects by start-year, with pinned, then featured, then by date desc within each year.
 // Year groups themselves are sorted newest-first for the work timeline.
 export function getProjectsGroupedByYear(): ProjectYearGroup[] {
   const buckets = new Map<number, Project[]>();
@@ -121,6 +122,9 @@ export function getProjectsGroupedByYear(): ProjectYearGroup[] {
     .map(([year, items]) => ({
       year,
       projects: items.sort((a, b) => {
+        if (Boolean(a.pinned) !== Boolean(b.pinned)) {
+          return a.pinned ? -1 : 1;
+        }
         if (a.featured !== b.featured) {
           return a.featured ? -1 : 1;
         }
