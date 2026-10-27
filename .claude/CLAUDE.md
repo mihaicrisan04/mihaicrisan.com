@@ -50,6 +50,8 @@ route is prerendered at build time, there is no backend or database.
   and applied on `/work` only.
 - Greys: `text-muted-foreground` at full strength for anything you need to read
   (footer, theme toggle). Opacity modifiers are for decoration only.
+- `components/dev/style-lab.tsx`: dev-only palette/font tuner, loaded from
+  `app/providers.tsx` in development only.
 
 ### Environment Variables
 - `GITHUB_TOKEN` - optional, for the contribution chart API routes

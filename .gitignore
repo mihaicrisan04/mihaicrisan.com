@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local media staging (uploaded to ImageKit, not committed)
 /media-staging
+
+# dev-only fonts for the style lab (unlicensed trial copies, never commit)
+/public/dev-fonts
