@@ -45,8 +45,11 @@ route is prerendered at build time, there is no backend or database.
 - Nothing in the root layout besides `next-themes` and the keyboard shortcuts.
   No providers that open connections or fetch on load.
 - Pass only the fields a client component needs; never the full project body.
-- Fonts: Geist Sans/Mono via `next/font/google` in the layout; the pixel font
-  is vendored in `app/fonts/` and applied on `/work` only.
+- Fonts: the whole site is Geist Mono (`--font-sans` points at it), loaded via
+  `next/font/google` in the layout; the pixel font is vendored in `app/fonts/`
+  and applied on `/work` only.
+- Greys: `text-muted-foreground` at full strength for anything you need to read
+  (footer, theme toggle). Opacity modifiers are for decoration only.
 
 ### Environment Variables
 - `GITHUB_TOKEN` - optional, for the contribution chart API routes

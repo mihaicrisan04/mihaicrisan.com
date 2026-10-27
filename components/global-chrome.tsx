@@ -91,7 +91,7 @@ export function GlobalChrome() {
         className="fade pointer-events-none fixed inset-x-6 bottom-6 z-50 flex items-center justify-between font-mono text-xs"
         style={{ "--reveal-delay": "0.3s" } as React.CSSProperties}
       >
-        <nav className="pointer-events-auto flex items-center gap-4 text-muted-foreground/60">
+        <nav className="pointer-events-auto flex items-center gap-4 text-muted-foreground">
           <Link
             className="transition-colors hover:text-foreground"
             href="/work"

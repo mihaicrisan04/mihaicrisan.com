@@ -54,7 +54,7 @@ export default function BlogPage() {
         </div>
       ) : (
         <Reveal delay={0.1}>
-          <p className="font-mono text-muted-foreground/60 text-sm">empty.</p>
+          <p className="font-mono text-muted-foreground text-sm">empty.</p>
         </Reveal>
       )}
     </div>

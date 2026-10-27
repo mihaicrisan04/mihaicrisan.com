@@ -63,7 +63,7 @@ export function ProjectThumbnail({ project, index }: ProjectThumbnailProps) {
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted/50 via-muted/30 to-muted/50">
-            <span className="px-6 text-center font-mono text-muted-foreground/60 text-xs italic">
+            <span className="px-6 text-center font-mono text-muted-foreground text-xs italic">
               {fallbackMessageFor(project.slug)}
             </span>
           </div>
