@@ -43,7 +43,7 @@ export default function Home() {
         <Reveal delay={0.32}>
           <p className="mt-5 text-base text-muted-foreground leading-relaxed">
             <Link
-              className="inline-block bg-foreground text-background"
+              className="font-medium text-foreground transition-opacity hover:opacity-70"
               href="/work"
             >
               /work
